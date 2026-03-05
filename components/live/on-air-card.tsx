@@ -1,0 +1,209 @@
+// On Air card component
+// Displays currently running sessions with live indicator
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Radio, MapPin, User, Clock, Hourglass } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
+interface OnAirSession {
+  id: string;
+  title: string;
+  speakerName: string;
+  startAt: string;
+  endAt: string;
+  tags: string[];
+  livestreamUrl?: string;
+  venue: {
+    id: string;
+    name: string;
+  };
+  progress: number;
+}
+
+interface OnAirCardProps {
+  session: OnAirSession;
+}
+
+interface TimeRemaining {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  total: number;
+}
+
+function calculateTimeRemaining(endAt: string): TimeRemaining {
+  const now = new Date().getTime();
+  const end = new Date(endAt).getTime();
+  const total = end - now;
+
+  if (total <= 0) {
+    return { hours: 0, minutes: 0, seconds: 0, total: 0 };
+  }
+
+  const hours = Math.floor(total / (1000 * 60 * 60));
+  const minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((total % (1000 * 60)) / 1000);
+
+  return { hours, minutes, seconds, total };
+}
+
+function formatTimeUnit(value: number): string {
+  return value.toString().padStart(2, "0");
+}
+
+export function OnAirCard({ session }: OnAirCardProps) {
+  const [isMounted, setIsMounted] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<TimeRemaining>({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    total: 0,
+  });
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Update immediately on mount
+    setTimeRemaining(calculateTimeRemaining(session.endAt));
+
+    // Update every second
+    const interval = setInterval(() => {
+      const remaining = calculateTimeRemaining(session.endAt);
+      setTimeRemaining(remaining);
+
+      // Stop interval when countdown reaches zero
+      if (remaining.total <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [session.endAt]);
+
+  const formatTime = (dateStr: string) => {
+    return new Date(dateStr).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  const formatTimeRemaining = () => {
+    if (timeRemaining.total <= 0) {
+      return "Ending now";
+    }
+
+    const parts: string[] = [];
+    if (timeRemaining.hours > 0) {
+      parts.push(`${timeRemaining.hours}h`);
+    }
+    parts.push(`${formatTimeUnit(timeRemaining.minutes)}m`);
+    parts.push(`${formatTimeUnit(timeRemaining.seconds)}s`);
+    return parts.join(" ");
+  };
+
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 15, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <Card className="relative overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+        {/* Live indicator pulse */}
+        <div className="absolute top-3 right-3 flex items-center gap-2">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+          </span>
+          <span className="text-xs font-bold text-red-500 uppercase tracking-wider">
+            Live
+          </span>
+        </div>
+
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 shadow-sm">
+                <Radio className="h-5 w-5 text-slate-500" />
+              </div>
+            </div>
+
+            <div className="flex-1 min-w-0">
+              {/* Title */}
+              <h3 className="text-lg font-bold leading-tight mb-2 pr-16 font-display text-[#1E293B] tracking-tight">
+                {session.title}
+              </h3>
+
+              {/* Time Badge + Countdown in one row */}
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-ocean/10 border border-ocean/20">
+                  <Clock className="h-3.5 w-3.5 text-ocean-dark" />
+                  <span className="text-xs font-semibold text-ocean-dark">
+                    {isMounted ? `${formatTime(session.startAt)} - ${formatTime(session.endAt)}` : '--:-- - --:--'}
+                  </span>
+                </div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sunset-orange/10 border border-sunset-orange/20">
+                  <Hourglass className="h-3 w-3 text-sunset-orange" />
+                  <span className="text-xs font-semibold text-sunset-orange tabular-nums">
+                    {isMounted ? formatTimeRemaining() : '--h --m --s'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Speaker and Venue */}
+              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 mb-2">
+                <div className="flex items-center gap-1.5">
+                  <User className="h-3.5 w-3.5 text-slate-400" />
+                  <span className="font-medium text-slate-600">
+                    {session.speakerName}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                  <span className="font-medium text-slate-600">
+                    {session.venue.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                {session.tags.slice(0, 2).map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="text-xs bg-sand/20 text-sand-dark hover:bg-sand/30"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+                {session.tags.length > 2 && (
+                  <Badge variant="secondary" className="text-xs bg-muted">
+                    +{session.tags.length - 2}
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {session.livestreamUrl && (
+            <a
+              href={session.livestreamUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2 text-sm text-ocean-dark hover:text-ocean font-medium transition-colors"
+            >
+              <Radio className="h-4 w-4" />
+              Watch Livestream
+            </a>
+          )}
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}

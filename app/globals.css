@@ -1,0 +1,531 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* React Datepicker Custom Styles - Sunset Beach Theme */
+
+/* Base datepicker */
+.react-datepicker {
+  background-color: #1a1f2e !important;
+  border: 1px solid rgba(246, 183, 60, 0.3) !important;
+  border-radius: 0.75rem !important;
+  font-family: inherit !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Header styling - sunset gradient feel */
+.react-datepicker__header {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(246, 183, 60, 0.15) 100%) !important;
+  border-bottom: 1px solid rgba(246, 183, 60, 0.2) !important;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+  padding-top: 12px !important;
+}
+
+/* Current month/year text */
+.react-datepicker__current-month {
+  color: #f6b73c !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+}
+
+/* Day names (Su, Mo, Tu...) */
+.react-datepicker__day-names {
+  margin-top: 8px !important;
+}
+
+.react-datepicker__day-name {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  width: 2.2rem !important;
+  line-height: 2.2rem !important;
+}
+
+/* Calendar days */
+.react-datepicker__day {
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 0.5rem !important;
+  width: 2.2rem !important;
+  line-height: 2.2rem !important;
+  margin: 0.15rem !important;
+  font-size: 0.875rem !important;
+  transition: all 0.15s ease !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: rgba(249, 115, 22, 0.25) !important;
+  color: #f6b73c !important;
+}
+
+/* Selected day - sunset orange */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4) !important;
+}
+
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--keyboard-selected:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  color: white !important;
+}
+
+/* Today's date */
+.react-datepicker__day--today {
+  font-weight: 600 !important;
+  color: #f6b73c !important;
+  border: 1px solid rgba(246, 183, 60, 0.5) !important;
+}
+
+/* Disabled days */
+.react-datepicker__day--disabled {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Navigation arrows */
+.react-datepicker__navigation {
+  top: 12px !important;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  border-width: 2px 2px 0 0 !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: #f6b73c !important;
+}
+
+/* ========================
+   TIME PICKER STYLES
+   ======================== */
+
+/* Time container - fix width and borders */
+.react-datepicker__time-container {
+  border-left: 1px solid rgba(246, 183, 60, 0.2) !important;
+  width: 85px !important;
+}
+
+/* Time header */
+.react-datepicker__header--time {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(246, 183, 60, 0.15) 100%) !important;
+  border-bottom: 1px solid rgba(246, 183, 60, 0.2) !important;
+}
+
+.react-datepicker-time__header {
+  color: #f6b73c !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+}
+
+/* Time list container - CRITICAL: Proper scrolling setup */
+.react-datepicker__time {
+  background-color: #1a1f2e !important;
+  border-radius: 0 0 0.75rem 0 !important;
+  overflow: hidden !important;
+}
+
+.react-datepicker__time-box {
+  background-color: transparent !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+/* Time list - CRITICAL FIX: Proper scrollable list */
+.react-datepicker__time-list {
+  height: 240px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(246, 183, 60, 0.5) transparent !important;
+}
+
+/* Custom scrollbar for webkit */
+.react-datepicker__time-list::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.react-datepicker__time-list::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.react-datepicker__time-list::-webkit-scrollbar-thumb {
+  background-color: rgba(246, 183, 60, 0.5) !important;
+  border-radius: 2px !important;
+}
+
+/* Individual time items */
+.react-datepicker__time-list-item {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background-color: transparent !important;
+  padding: 10px 8px !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.2 !important;
+  height: auto !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.react-datepicker__time-list-item:hover {
+  background-color: rgba(249, 115, 22, 0.25) !important;
+  color: #f6b73c !important;
+}
+
+/* Selected time item - MUST BE VISIBLE */
+.react-datepicker__time-list-item--selected {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.react-datepicker__time-list-item--selected:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  color: white !important;
+}
+
+/* Disabled time items */
+.react-datepicker__time-list-item--disabled {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ========================
+   MONTH/YEAR DROPDOWNS
+   ======================== */
+
+.react-datepicker__month-dropdown,
+.react-datepicker__year-dropdown {
+  background-color: #1a1f2e !important;
+  border: 1px solid rgba(246, 183, 60, 0.3) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.react-datepicker__month-option,
+.react-datepicker__year-option {
+  color: rgba(255, 255, 255, 0.85) !important;
+  padding: 8px 12px !important;
+  font-size: 0.875rem !important;
+  transition: all 0.15s ease !important;
+}
+
+.react-datepicker__month-option:hover,
+.react-datepicker__year-option:hover {
+  background-color: rgba(249, 115, 22, 0.25) !important;
+  color: #f6b73c !important;
+}
+
+.react-datepicker__month-option--selected,
+.react-datepicker__year-option--selected {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Triangle arrow - hide it */
+.react-datepicker__triangle {
+  display: none !important;
+}
+
+/* Popper z-index */
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
+/* Inline wrapper fixes */
+.custom-datepicker {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.custom-datepicker.react-datepicker--inline {
+  background-color: transparent !important;
+}
+
+/* Time-only picker */
+.react-datepicker--time-only {
+  background-color: #1a1f2e !important;
+  border: 1px solid rgba(246, 183, 60, 0.3) !important;
+  border-radius: 0.75rem !important;
+}
+
+/* ========================
+   INLINE MODE SPECIFIC
+   ======================== */
+
+/* When inline with time, fix layout */
+.react-datepicker--inline .react-datepicker__time-container {
+  border-left: 1px solid rgba(246, 183, 60, 0.2) !important;
+}
+
+/* Custom class for our datepicker */
+.custom-datepicker .react-datepicker__header {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25) 0%, rgba(246, 183, 60, 0.15) 100%) !important;
+}
+
+.custom-datepicker .react-datepicker__current-month {
+  color: #f6b73c !important;
+}
+
+/* Ensure proper text contrast in all states */
+.custom-datepicker .react-datepicker__day {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.custom-datepicker .react-datepicker__day--selected {
+  color: white !important;
+}
+
+.custom-datepicker .react-datepicker__time-list-item {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.custom-datepicker .react-datepicker__time-list-item--selected {
+  color: white !important;
+}
+
+@layer base {
+  :root {
+    /* Sunset Beach Theme - Light Mode */
+    --background: 45 100% 95%;
+    --foreground: 220 26% 14%;
+
+    --card: 45 60% 97%;
+    --card-foreground: 220 26% 14%;
+
+    --popover: 45 60% 97%;
+    --popover-foreground: 220 26% 14%;
+
+    /* Primary: Teal Ocean */
+    --primary: 172 67% 56%;
+    --primary-foreground: 220 26% 14%;
+
+    /* Secondary: Sand */
+    --secondary: 30 50% 65%;
+    --secondary-foreground: 220 26% 14%;
+
+    /* Muted: Light sand */
+    --muted: 45 50% 90%;
+    --muted-foreground: 220 16% 35%;
+
+    /* Accent: Sunset Orange */
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive: Coral red */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 45 30% 85%;
+    --input: 45 30% 85%;
+    --ring: 172 67% 56%;
+
+    --radius: 0.75rem;
+
+    /* Custom Sunset Colors */
+    --sunset-gold: 38 90% 60%;
+    --sunset-orange: 24 95% 53%;
+    --sunset-coral: 350 89% 70%;
+    --sunset-pink: 330 80% 75%;
+
+    /* Ocean Colors */
+    --ocean-light: 172 67% 68%;
+    --ocean: 172 67% 56%;
+    --ocean-dark: 176 82% 27%;
+    --ocean-deep: 180 90% 15%;
+
+    /* Sand Colors */
+    --sand-light: 45 90% 80%;
+    --sand: 30 50% 65%;
+    --sand-dark: 30 40% 45%;
+
+    /* Silhouette */
+    --silhouette: 220 26% 14%;
+    --silhouette-light: 220 13% 30%;
+  }
+
+  .dark {
+    /* Night Beach Theme - Dark Mode */
+    --background: 220 26% 10%;
+    --foreground: 45 100% 95%;
+
+    --card: 220 20% 14%;
+    --card-foreground: 45 100% 95%;
+
+    --popover: 220 20% 14%;
+    --popover-foreground: 45 100% 95%;
+
+    /* Primary: Ocean glow */
+    --primary: 172 67% 45%;
+    --primary-foreground: 220 26% 10%;
+
+    /* Secondary: Moonlit sand */
+    --secondary: 30 30% 40%;
+    --secondary-foreground: 45 100% 95%;
+
+    /* Muted: Dark ocean */
+    --muted: 220 20% 20%;
+    --muted-foreground: 45 30% 70%;
+
+    /* Accent: Sunset glow */
+    --accent: 24 95% 60%;
+    --accent-foreground: 220 26% 10%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 20% 25%;
+    --input: 220 20% 25%;
+    --ring: 172 67% 45%;
+
+    /* Night Sunset Colors */
+    --sunset-gold: 38 80% 50%;
+    --sunset-orange: 24 90% 55%;
+    --sunset-coral: 350 70% 60%;
+    --sunset-pink: 330 60% 65%;
+
+    /* Night Ocean */
+    --ocean-light: 172 50% 40%;
+    --ocean: 172 60% 35%;
+    --ocean-dark: 176 70% 20%;
+    --ocean-deep: 180 80% 10%;
+
+    /* Night Sand */
+    --sand-light: 30 30% 35%;
+    --sand: 30 25% 30%;
+    --sand-dark: 30 20% 25%;
+
+    /* Night Silhouette */
+    --silhouette: 45 100% 95%;
+    --silhouette-light: 45 50% 80%;
+  }
+
+  /* Admin Theme - Cream & Navy */
+  .admin-theme {
+    --background: 48 86% 94%;
+    /* Cream #FDF8E4 */
+    --foreground: 220 26% 14%;
+    /* Navy #1A202C */
+
+    --card: 0 0% 100%;
+    /* White cards for contrast */
+    --card-foreground: 220 26% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
+
+    --primary: 220 26% 14%;
+    /* Navy primary */
+    --primary-foreground: 48 86% 94%;
+    /* Cream text on navy */
+
+    --secondary: 48 40% 90%;
+    /* Beige secondary */
+    --secondary-foreground: 220 26% 14%;
+
+    --muted: 48 40% 85%;
+    --muted-foreground: 220 20% 40%;
+
+    --accent: 29 49% 67%;
+    /* Tan #D3AA84 */
+    --accent-foreground: 220 26% 14%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 48 30% 80%;
+    --input: 48 30% 80%;
+    --ring: 220 26% 14%;
+
+    /* Disable dark mode overrides inside admin */
+    color-scheme: light;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Gradient Utilities */
+@layer utilities {
+  .bg-sunset-gradient {
+    background: linear-gradient(180deg,
+        hsl(var(--sunset-gold)) 0%,
+        hsl(var(--sunset-orange)) 50%,
+        hsl(var(--sunset-coral)) 100%);
+  }
+
+  .bg-ocean-gradient {
+    background: linear-gradient(180deg,
+        hsl(var(--ocean-light)) 0%,
+        hsl(var(--ocean)) 50%,
+        hsl(var(--ocean-dark)) 100%);
+  }
+
+  .bg-beach-gradient {
+    background: linear-gradient(180deg,
+        hsl(var(--sand-light)) 0%,
+        hsl(var(--sand)) 50%,
+        hsl(var(--sand-dark)) 100%);
+  }
+
+  .bg-sky-gradient {
+    background: linear-gradient(180deg,
+        hsl(218 16% 35%) 0%,
+        hsl(38 90% 60%) 40%,
+        hsl(45 100% 89%) 100%);
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-card {
+    background: rgba(26, 32, 44, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Custom thin scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--foreground) / 0.3) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--foreground) / 0.3);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--foreground) / 0.5);
+  }
+}

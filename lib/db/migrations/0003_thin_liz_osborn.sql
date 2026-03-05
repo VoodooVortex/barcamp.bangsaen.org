@@ -1,0 +1,1 @@
+ALTER TABLE "event_years" ADD COLUMN "is_current_year" boolean DEFAULT false NOT NULL;
