@@ -90,6 +90,10 @@ export default function VenuesClient({ initialVenues, slug }: VenuesClientProps)
   const handleDelete = async () => {
     if (!venueToDelete) return;
 
+    const previousVenues = [...venues];
+    // Optimistic Update
+    setVenues(prev => prev.filter(v => v.id !== venueToDelete));
+
     try {
       const response = await fetch(`/api/admin/venues/${venueToDelete}`, {
         method: "DELETE",
@@ -97,13 +101,15 @@ export default function VenuesClient({ initialVenues, slug }: VenuesClientProps)
 
       if (response.ok) {
         toast.success("Venue deleted successfully");
-        fetchVenues();
+        fetchVenues(); // re-fetch to sync
       } else {
         const data = await response.json();
+        setVenues(previousVenues);
         toast.error(data.error || "Failed to delete venue");
       }
     } catch (error) {
       console.error("Failed to delete venue:", error);
+      setVenues(previousVenues);
       toast.error("An unexpected error occurred");
     } finally {
       setVenueToDelete(null);

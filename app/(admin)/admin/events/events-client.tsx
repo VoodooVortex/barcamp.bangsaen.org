@@ -84,6 +84,9 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
     const handleDelete = async () => {
         if (!eventToDelete) return;
 
+        const previousEvents = [...events];
+        setEvents(prev => prev.filter(e => e.id !== eventToDelete));
+
         try {
             const response = await fetch(`/api/admin/events/${eventToDelete}`, {
                 method: "DELETE",
@@ -94,10 +97,12 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
                 fetchEvents();
             } else {
                 const data = await response.json();
+                setEvents(previousEvents);
                 toast.error(data.details || data.error || "Failed to delete event");
             }
         } catch (error) {
             console.error("Failed to delete event:", error);
+            setEvents(previousEvents);
             toast.error("An unexpected error occurred");
         } finally {
             setEventToDelete(null);
@@ -105,6 +110,9 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
     };
 
     const handleTogglePublished = async (event: EventYear) => {
+        const previousEvents = [...events];
+        setEvents(prev => prev.map(e => e.id === event.id ? { ...e, published: !e.published } : e));
+
         try {
             const response = await fetch(`/api/admin/events/${event.id}`, {
                 method: "PATCH",
@@ -116,9 +124,11 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
                 toast.success(`Event ${!event.published ? "published" : "unpublished"} successfully`);
                 fetchEvents();
             } else {
+                setEvents(previousEvents);
                 toast.error("Failed to update event status");
             }
         } catch {
+            setEvents(previousEvents);
             toast.error("An error occurred");
         }
     };

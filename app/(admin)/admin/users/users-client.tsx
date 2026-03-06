@@ -93,8 +93,11 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
     const handleDelete = async () => {
         if (!userToDelete) return;
 
+        const previousUsers = [...users];
+        // Optimistic UI toggle could be added here
+        setUsers(prev => prev.filter(u => u.id !== userToDelete));
+
         try {
-            // Optimistic UI toggle could be added here
             const response = await fetch(`/api/admin/users/${userToDelete}`, {
                 method: "DELETE",
             });
@@ -103,10 +106,12 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
                 toast.success("User removed from whitelist");
                 fetchUsers();
             } else {
+                setUsers(previousUsers);
                 toast.error("Failed to delete user");
             }
         } catch (error) {
             console.error("Failed to delete user:", error);
+            setUsers(previousUsers);
             toast.error("An unexpected error occurred");
         } finally {
             setUserToDelete(null);

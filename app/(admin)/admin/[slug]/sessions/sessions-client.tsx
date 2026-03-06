@@ -95,10 +95,22 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
 
   useEffect(() => {
     fetchSessions();
+    
+    // ตั้งเวลา Fetch ข้อมูลใหม่ทุกๆ 5 วินาที (Polling) เพื่อให้อัปเดตแบบ quasi-realtime บน Vercel
+    const interval = setInterval(() => {
+      fetchSessions();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [fetchSessions]);
 
   const handleDelete = async () => {
     if (!sessionToDelete) return;
+
+    // เก็บค่าเก่าไว้เผื่อ error จะได้ revert กลับ
+    const previousSessions = [...sessions];
+    // ทำ Optimistic Update อัปเดต UI ทันทีก่อนรอตัว Server
+    setSessions(prev => prev.filter(s => s.id !== sessionToDelete));
 
     try {
       const response = await fetch(`/api/admin/sessions/${sessionToDelete}`, {
@@ -107,12 +119,14 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
 
       if (response.ok) {
         toast.success("Session deleted successfully");
-        fetchSessions();
+        fetchSessions(); // fetch ข้อมูลจริงมาทับอีกทีเพื่อความชัวร์
       } else {
+        setSessions(previousSessions); // revert กลับ
         toast.error("Failed to delete session");
       }
     } catch (error) {
       console.error("Failed to delete session:", error);
+      setSessions(previousSessions); // revert กลับ
       toast.error("An unexpected error occurred");
     } finally {
       setSessionToDelete(null);
@@ -172,6 +186,19 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
   };
 
   const handleSessionControl = async (sessionId: string, action: "start" | "end" | "reset") => {
+    // เก็บค่าเก่าไว้ก่อน
+    const previousSessions = [...sessions];
+    
+    // ทำ Optimistic Update ให้ UI ตอบสนองทันที
+    setSessions(prev => prev.map(s => {
+      if (s.id !== sessionId) return s;
+      const now = new Date().toISOString();
+      if (action === "start") return { ...s, actualStartAt: now, actualEndAt: null };
+      if (action === "end") return { ...s, actualEndAt: now };
+      if (action === "reset") return { ...s, actualStartAt: null, actualEndAt: null };
+      return s;
+    }));
+
     try {
       const response = await fetch(`/api/admin/sessions/${sessionId}/control`, {
         method: "POST",
@@ -182,12 +209,14 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
       if (response.ok) {
         const actionText = action === "reset" ? "reset" : action === "start" ? "started" : "ended";
         toast.success(`Session ${actionText} successfully`);
-        fetchSessions();
+        fetchSessions(); // อัปเดต state ตัวจริงจาก server ให้ตรงกัน
       } else {
         const data = await response.json();
+        setSessions(previousSessions); // revert ถ้า request fail
         toast.error(data.error || `Failed to ${action} session`);
       }
     } catch {
+      setSessions(previousSessions); // revert ถ้า request fail
       toast.error("An unexpected error occurred");
     }
   };
