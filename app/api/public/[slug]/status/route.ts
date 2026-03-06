@@ -76,17 +76,10 @@ export async function GET(
             return new Date(session.startAt) <= now && new Date(session.endAt) > now;
         });
 
-        // Calculate Up Next sessions (next session in each venue)
-        // A session is up-next if it hasn't started yet (no actualStartAt and startAt > now)
-        const upNext: typeof allSessions = [];
-        for (const venue of venuesList) {
-            const venueSessions = allSessions.filter(
-                (s) => s.venueId === venue.id && !s.actualStartAt && !s.actualEndAt && new Date(s.startAt) > now
-            );
-            if (venueSessions.length > 0) {
-                upNext.push(venueSessions[0]);
-            }
-        }
+        // Calculate Up Next sessions (all sessions that haven't started yet)
+        const upNext = allSessions.filter(
+            (s) => !s.actualStartAt && !s.actualEndAt && new Date(s.startAt) > now
+        );
 
         return NextResponse.json({
             serverTime: now.toISOString(),

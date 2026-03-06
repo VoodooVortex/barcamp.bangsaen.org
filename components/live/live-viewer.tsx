@@ -188,14 +188,7 @@ export function LiveViewer({
     onDisconnect: () => setIsConnected(false),
   });
 
-  // Periodic refresh (every 60 seconds)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchStatus();
-    }, 15000);
 
-    return () => clearInterval(interval);
-  }, [fetchStatus]);
 
   // Tag toggle handler
   const handleTagToggle = (tag: string) => {

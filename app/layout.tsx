@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Barcamp Bangsaen - Beach meets Technology",
+  title: "Barcamp Bangsaen",
   description:
     "An unconference by the sea where ideas flow freely. Join us for talks, workshops, and networking at Bangsaen beach.",
 };

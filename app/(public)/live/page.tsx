@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { eventYears } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 export default async function LiveIndexPage() {
     // First try to find the explicitly marked active year
     const activeEvent = await db.query.eventYears.findFirst({

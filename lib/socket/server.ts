@@ -2,20 +2,22 @@
 import { Server as NetServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 
-// Global socket.io instance
-let io: SocketIOServer | null = null;
+// Store on globalThis so it survives Next.js HMR reloads
+const globalForSocket = globalThis as typeof globalThis & {
+  _io?: SocketIOServer;
+};
 
 /**
  * Initialize Socket.io server
  * Should be called once when the HTTP server starts
  */
 export function initSocketServer(server: NetServer): SocketIOServer {
-  if (io) {
+  if (globalForSocket._io) {
     console.log("Socket.io already initialized");
-    return io;
+    return globalForSocket._io;
   }
 
-  io = new SocketIOServer(server, {
+  const io = new SocketIOServer(server, {
     path: "/api/socket",
     addTrailingSlash: false,
     cors: {
@@ -48,6 +50,7 @@ export function initSocketServer(server: NetServer): SocketIOServer {
     });
   });
 
+  globalForSocket._io = io;
   console.log("Socket.io server initialized");
   return io;
 }
@@ -57,23 +60,23 @@ export function initSocketServer(server: NetServer): SocketIOServer {
  * Throws if not initialized
  */
 export function getSocketServer(): SocketIOServer {
-  if (!io) {
+  if (!globalForSocket._io) {
     throw new Error("Socket.io server not initialized. Call initSocketServer first.");
   }
-  return io;
+  return globalForSocket._io;
 }
 
 /**
  * Broadcast schedule update to all clients watching a specific slug
  */
 export function broadcastScheduleUpdate(slug: string): void {
-  if (!io) {
+  if (!globalForSocket._io) {
     console.warn("Socket.io not initialized, cannot broadcast");
     return;
   }
 
   const room = `live:${slug}`;
-  io.to(room).emit("schedule:updated", { slug, timestamp: new Date().toISOString() });
+  globalForSocket._io.to(room).emit("schedule:updated", { slug, timestamp: new Date().toISOString() });
   console.log(`Broadcast schedule update to room ${room}`);
 }
 
@@ -81,9 +84,9 @@ export function broadcastScheduleUpdate(slug: string): void {
  * Broadcast time sync to all connected clients
  */
 export function broadcastTimeSync(serverNow: string, timezone: string): void {
-  if (!io) {
+  if (!globalForSocket._io) {
     return;
   }
 
-  io.emit("time:sync", { serverNow, timezone });
+  globalForSocket._io.emit("time:sync", { serverNow, timezone });
 }

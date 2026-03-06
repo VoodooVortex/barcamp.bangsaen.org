@@ -9,6 +9,8 @@ import { eventYears, venues, sessions } from "@/lib/db/schema";
 import { getCurrentServerTime } from "@/lib/time/ntp";
 import { eq, and, asc, lte, gt } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 interface LivePageProps {
   params: Promise<{ slug: string }>;
 }
@@ -127,16 +129,9 @@ async function getStatus(slug: string) {
       return new Date(session.startAt) <= now && new Date(session.endAt) > now;
     });
 
-    const upNext: typeof allSessions = [];
-    for (const venue of venuesList) {
-      const venueSessions = allSessions.filter(
-        (session) =>
-          session.venueId === venue.id && !session.actualStartAt && !session.actualEndAt && new Date(session.startAt) > now,
-      );
-      if (venueSessions.length > 0) {
-        upNext.push(venueSessions[0]);
-      }
-    }
+    const upNext = allSessions.filter(
+      (s) => !s.actualStartAt && !s.actualEndAt && new Date(s.startAt) > now
+    );
 
     return {
       serverTime: now.toISOString(),
@@ -189,7 +184,7 @@ export async function generateMetadata({
   const { slug } = await params;
 
   return {
-    title: `Barcamp Bangsaen ${slug} - Live Schedule`,
+    title: `Barcamp Bangsaen`,
     description: `View live sessions and schedule for Barcamp Bangsaen ${slug}`,
   };
 }
@@ -264,7 +259,7 @@ function calculateTimeUntil(startAt: Date | string, now: Date): string {
 function LivePageFallback() {
   return (
     <div className="rounded-lg border bg-card p-6">
-      <p className="text-muted-foreground">Loading live schedule...</p>
+      <p className="text-muted-foreground">Loading live Sessions...</p>
     </div>
   );
 }

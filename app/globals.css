@@ -448,6 +448,30 @@
     /* Disable dark mode overrides inside admin */
     color-scheme: light;
   }
+
+  /* Ensure admin-theme overrides dark mode (e.g. in Dialog portals) */
+  .dark .admin-theme {
+    --background: 48 86% 94%;
+    --foreground: 220 26% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 26% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
+    --primary: 220 26% 14%;
+    --primary-foreground: 48 86% 94%;
+    --secondary: 48 40% 90%;
+    --secondary-foreground: 220 26% 14%;
+    --muted: 48 40% 85%;
+    --muted-foreground: 220 20% 40%;
+    --accent: 29 49% 67%;
+    --accent-foreground: 220 26% 14%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 48 30% 80%;
+    --input: 48 30% 80%;
+    --ring: 220 26% 14%;
+    color-scheme: light;
+  }
 }
 
 @layer base {

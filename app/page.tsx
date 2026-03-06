@@ -1,10 +1,12 @@
 // Home page for Barcamp Bangsaen
-// Landing page with event info and links to live schedule
+// Landing page with event info and links to live sessions
 import { db } from "@/lib/db";
 import { eventYears, sessions } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
 // import Link from "next/link";
 import { Hero } from "@/components/hero";
+
+export const dynamic = "force-dynamic";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 // import {
@@ -54,7 +56,7 @@ export default async function HomePage() {
                 <div className="w-14 h-14 rounded-2xl bg-sunset-orange/10 flex items-center justify-center mb-4">
                   <Radio className="h-7 w-7 text-sunset-orange" />
                 </div>
-                <CardTitle className="font-display">Live Schedule</CardTitle>
+                <CardTitle className="font-display">Live Sessions</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed">
