@@ -184,7 +184,7 @@ export function ScheduleGrid({
         >
           {/* Header row */}
           <div className="sticky top-0 z-10 bg-[#FFFDF5]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FFFDF5]/60 border-b border-r border-slate-200 dark:border-border">
-            <div className="h-10"></div>
+            <div className="h-10 bg-white dark:bg-card"></div>
           </div>
           {venues.map((venue, index) => (
             <div
