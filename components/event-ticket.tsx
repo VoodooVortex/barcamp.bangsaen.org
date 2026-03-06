@@ -85,18 +85,18 @@ export function EventTicket({ event }: EventTicketProps) {
     }
 
     return (
-        <div className={`mt-8 overflow-hidden rounded-2xl border-0 shadow-xl flex flex-col md:flex-row transition-all ${isLive ? "bg-white/90 shadow-navy/5" : "bg-card/70"
+        <div className={`mt-8 overflow-hidden rounded-2xl border-0 shadow-xl flex flex-col md:flex-row transition-all ${isLive ? "bg-white/90 dark:bg-card/90 shadow-navy/5" : "bg-card/70"
             }`}
         >
             {/* Left part: Countdown / Status - Cream styling */}
-            <div className={`p-8 md:p-10 flex-col justify-center items-center text-center flex md:w-5/12 ${isLive ? "bg-sand-light/60 text-foreground" : "bg-background/40"
+            <div className={`p-8 md:p-10 flex-col justify-center items-center text-center flex md:w-5/12 ${isLive ? "bg-sand-light/60 dark:bg-muted/40 text-foreground" : "bg-background/40"
                 } border-b md:border-b-0 md:border-r border-dashed border-border/50 relative`}
             >
                 {/* Visual dashed line dots (ticket tear-off) */}
-                <div className="hidden md:block absolute -top-3 -right-3 w-6 h-6 rounded-full bg-theme-cream/50 shadow-inner z-10" />
-                <div className="hidden md:block absolute -bottom-3 -right-3 w-6 h-6 rounded-full bg-theme-cream/50 shadow-inner z-10" />
-                <div className="block md:hidden absolute -left-3 -bottom-3 w-6 h-6 rounded-full bg-theme-cream/50 shadow-inner z-10" />
-                <div className="block md:hidden absolute -right-3 -bottom-3 w-6 h-6 rounded-full bg-theme-cream/50 shadow-inner z-10" />
+                <div className="hidden md:block absolute -top-3 -right-3 w-6 h-6 rounded-full bg-[#FFFDF5]/50 dark:bg-background/50 shadow-inner z-10" />
+                <div className="hidden md:block absolute -bottom-3 -right-3 w-6 h-6 rounded-full bg-[#FFFDF5]/50 dark:bg-background/50 shadow-inner z-10" />
+                <div className="block md:hidden absolute -left-3 -bottom-3 w-6 h-6 rounded-full bg-[#FFFDF5]/50 dark:bg-background/50 shadow-inner z-10" />
+                <div className="block md:hidden absolute -right-3 -bottom-3 w-6 h-6 rounded-full bg-[#FFFDF5]/50 dark:bg-background/50 shadow-inner z-10" />
 
                 {countdownText ? (
                     <>
@@ -127,7 +127,7 @@ export function EventTicket({ event }: EventTicketProps) {
             </div>
 
             {/* Right part: event specifics grid */}
-            <div className={`p-8 md:p-10 flex-1 grid grid-cols-2 gap-y-8 gap-x-6 ${isLive ? "bg-sand-light/30" : "bg-card/40"}`}>
+            <div className={`p-8 md:p-10 flex-1 grid grid-cols-2 gap-y-8 gap-x-6 ${isLive ? "bg-sand-light/30 dark:bg-card/40" : "bg-card/40"}`}>
                 <div>
                     <div className="flex items-center gap-2 mb-2 text-muted-foreground">
                         <Calendar className="h-5 w-5 text-sunset-orange" />

@@ -12,7 +12,7 @@ interface Venue {
   id: string;
   name: string;
   order: number;
-  capacity?: number;
+  capacity?: number | null;
   isActive: boolean;
 }
 
