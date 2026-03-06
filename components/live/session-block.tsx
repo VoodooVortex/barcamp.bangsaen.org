@@ -56,8 +56,8 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
             className={`
               relative p-3 rounded-lg cursor-pointer transition-all shadow-sm
               ${isPast
-                ? "border border-slate-200 bg-slate-50/50 opacity-75 grayscale-[0.2]"
-                : "bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md"
+                ? "border border-slate-200 dark:border-border bg-slate-50 dark:bg-muted/50 dark:bg-muted/20 opacity-75 grayscale-[0.2]"
+                : "bg-white dark:bg-card border border-slate-200 dark:border-border hover:border-slate-300 hover:shadow-md"
               }
             `}
           >
@@ -82,14 +82,14 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
                   </Badge>
                 )}
                 {isPast && (
-                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-slate-200 text-slate-600 shrink-0">
+                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-slate-200 text-slate-600 dark:text-slate-300 shrink-0">
                     Ended
                   </Badge>
                 )}
               </div>
 
               {/* Speaker */}
-              <div className="flex items-center gap-1 text-xs font-medium text-slate-600">
+              <div className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-slate-300">
                 <User className="h-3 w-3 text-slate-400" />
                 <span className="truncate">{session.speakerName}</span>
               </div>
@@ -100,13 +100,13 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
                   <Badge
                     key={tag}
                     variant="outline"
-                    className="text-[10px] px-1 py-0 bg-slate-50 text-slate-600 border-slate-200"
+                    className="text-[10px] px-1 py-0 bg-slate-50 dark:bg-muted text-slate-600 dark:text-slate-300 border-slate-200 dark:border-border"
                   >
                     {tag}
                   </Badge>
                 ))}
                 {session.tags.length > 2 && (
-                  <Badge variant="outline" className="text-[10px] px-1 py-0 bg-slate-50 text-slate-600 border-slate-200">
+                  <Badge variant="outline" className="text-[10px] px-1 py-0 bg-slate-50 dark:bg-muted text-slate-600 dark:text-slate-300 border-slate-200 dark:border-border">
                     +{session.tags.length - 2}
                   </Badge>
                 )}

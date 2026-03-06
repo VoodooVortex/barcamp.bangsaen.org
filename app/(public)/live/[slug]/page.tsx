@@ -266,7 +266,7 @@ function LivePageFallback() {
 
 export default function LivePage({ params }: LivePageProps) {
   return (
-    <div className="min-h-screen bg-[#FFFDF5]">
+    <div className="min-h-screen bg-[#FFFDF5] dark:bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 w-full max-w-[2560px]">
         <Suspense fallback={<LivePageFallback />}>
           <LivePageRouteContent params={params} />

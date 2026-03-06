@@ -113,7 +113,7 @@ export function OnAirCard({ session }: OnAirCardProps) {
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     >
-      <Card className="relative overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+      <Card className="relative overflow-hidden border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm hover:shadow-md transition-shadow">
         {/* Live indicator pulse */}
         <div className="absolute top-3 right-3 flex items-center gap-2">
           <span className="relative flex h-3 w-3">
@@ -128,7 +128,7 @@ export function OnAirCard({ session }: OnAirCardProps) {
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
-              <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 shadow-sm">
+              <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 dark:border-border shadow-sm">
                 <Radio className="h-5 w-5 text-slate-500" />
               </div>
             </div>
@@ -159,13 +159,13 @@ export function OnAirCard({ session }: OnAirCardProps) {
               <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 mb-2">
                 <div className="flex items-center gap-1.5">
                   <User className="h-3.5 w-3.5 text-slate-400" />
-                  <span className="font-medium text-slate-600">
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
                     {session.speakerName}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                  <span className="font-medium text-slate-600">
+                  <span className="font-medium text-slate-600 dark:text-slate-300">
                     {session.venue.name}
                   </span>
                 </div>

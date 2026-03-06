@@ -183,13 +183,13 @@ export function ScheduleGrid({
           style={{ gridTemplateColumns: `100px repeat(${venues.length}, 1fr)` }}
         >
           {/* Header row */}
-          <div className="sticky top-0 z-10 bg-[#FFFDF5]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FFFDF5]/60 border-b border-r border-slate-200">
+          <div className="sticky top-0 z-10 bg-[#FFFDF5]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FFFDF5]/60 border-b border-r border-slate-200 dark:border-border">
             <div className="h-10"></div>
           </div>
           {venues.map((venue, index) => (
             <div
               key={venue.id}
-              className={`sticky top-0 z-10 bg-white shadow-sm p-3 border-b border-slate-200 ${index > 0 ? "border-l border-slate-200" : ""}`}
+              className={`sticky top-0 z-10 bg-white dark:bg-card shadow-sm p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l border-slate-200 dark:border-border" : ""}`}
             >
               <div className="flex items-center gap-1 text-sm font-bold text-[#1E293B]">
                 <MapPin className="h-3.5 w-3.5 text-[#B45309]" />
@@ -221,7 +221,7 @@ export function ScheduleGrid({
                   className="contents"
                 >
                   {/* Time label */}
-                  <div className="text-sm font-bold text-slate-500 py-3 pr-4 border-r border-slate-200 border-b flex items-start">
+                  <div className="text-sm font-bold text-slate-500 py-3 pr-4 border-r border-slate-200 dark:border-border border-b flex items-start">
                     {formatTimeSlot(timeSlot)}
                   </div>
 
@@ -232,7 +232,7 @@ export function ScheduleGrid({
                     );
 
                     return (
-                      <div key={venue.id} className={`p-3 border-b border-slate-200 ${index > 0 ? "border-l" : ""}`}>
+                      <div key={venue.id} className={`p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l" : ""}`}>
                         {venueSessions?.map((session) => (
                           <SessionBlock
                             key={session.id}

@@ -404,8 +404,8 @@
     --sand-dark: 30 20% 25%;
 
     /* Night Silhouette */
-    --silhouette: 45 100% 95%;
-    --silhouette-light: 45 50% 80%;
+    --silhouette: 220 26% 6%;
+    --silhouette-light: 220 13% 15%;
   }
 
   /* Admin Theme - Cream & Navy */
@@ -447,6 +447,8 @@
 
     /* Disable dark mode overrides inside admin */
     color-scheme: light;
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--background));
   }
 
   /* Ensure admin-theme overrides dark mode (e.g. in Dialog portals) */
@@ -471,6 +473,8 @@
     --input: 48 30% 80%;
     --ring: 220 26% 14%;
     color-scheme: light;
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--background));
   }
 }
 
