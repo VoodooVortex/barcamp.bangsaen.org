@@ -101,8 +101,8 @@ export function FilterBar({
               <Badge
                 variant={selectedTags.includes(tag) ? "default" : "outline"}
                 className={`cursor-pointer text-xs ${selectedTags.includes(tag)
-                    ? "bg-ocean hover:bg-ocean-dark text-white border-ocean"
-                    : "hover:bg-ocean/10 hover:text-ocean-dark hover:border-ocean/30"
+                  ? "bg-ocean dark:bg-ocean-dark hover:bg-ocean-dark dark:hover:bg-ocean text-white dark:text-ocean-light border-ocean dark:border-ocean-dark"
+                  : "hover:bg-ocean/10 dark:hover:bg-ocean/20 hover:text-ocean-dark dark:hover:text-ocean-light hover:border-ocean/30 dark:hover:border-ocean/40"
                   }`}
               >
                 {tag}
@@ -119,7 +119,7 @@ export function FilterBar({
             variant="ghost"
             size="sm"
             onClick={onClearFilters}
-            className="text-xs text-ocean-dark hover:text-ocean hover:bg-ocean/10"
+            className="text-xs text-ocean-dark dark:text-ocean-light hover:text-ocean dark:hover:text-ocean hover:bg-ocean/10 dark:hover:bg-ocean/20"
           >
             Clear all filters
           </Button>

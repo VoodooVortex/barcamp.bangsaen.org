@@ -226,7 +226,7 @@ export function LiveViewer({
                   <Radio className="h-5 w-5 text-[#D4A373]" />
                 </div>
                 <div>
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold font-display text-[#1E293B] tracking-tight">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold font-display text-[#1E293B] dark:text-foreground tracking-tight">
                     {schedule.eventYear.name}
                   </h1>
                   <p className="hidden sm:block text-xs lg:text-sm text-slate-500 font-medium">
@@ -343,7 +343,7 @@ export function LiveViewer({
         <TabsContent value="live" className="space-y-6">
           {/* On Air section */}
           <section>
-            <h2 className="text-base sm:text-lg font-bold mb-3 flex items-center gap-2 font-display text-[#1E293B]">
+            <h2 className="text-base sm:text-lg font-bold mb-3 flex items-center gap-2 font-display text-[#1E293B] dark:text-foreground">
               <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-red-500"></span>
@@ -362,11 +362,11 @@ export function LiveViewer({
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-12 bg-gradient-to-br from-[#FEFAE0]/80 to-white rounded-xl border border-[#D4A373]/20"
+                  className="text-center py-12 bg-gradient-to-br from-[#FEFAE0]/80 to-white dark:from-muted/40 dark:to-card rounded-xl border border-[#D4A373]/20 dark:border-border"
                 >
-                  <Timer className="h-8 w-8 text-[#D4A373] mx-auto mb-3" />
-                  <p className="text-sm text-slate-500 mb-1">Event starts in</p>
-                  <p className="text-4xl font-bold text-[#1E293B] tracking-tight" suppressHydrationWarning>
+                  <Timer className="h-8 w-8 text-[#D4A373] dark:text-[#D4A373]/80 mx-auto mb-3" />
+                  <p className="text-sm text-slate-500 dark:text-muted-foreground mb-1">Event starts in</p>
+                  <p className="text-4xl font-bold text-[#1E293B] dark:text-foreground tracking-tight" suppressHydrationWarning>
                     {countdownText}
                   </p>
                   <p className="text-sm text-slate-500 mt-2">
@@ -401,7 +401,7 @@ export function LiveViewer({
 
           {/* Up Next section */}
           <section>
-            <h2 className="text-base sm:text-lg font-bold mb-3 font-display text-[#1E293B]">
+            <h2 className="text-base sm:text-lg font-bold mb-3 font-display text-[#1E293B] dark:text-foreground">
               Up Next
             </h2>
 

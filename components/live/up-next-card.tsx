@@ -55,7 +55,7 @@ export function UpNextCard({ session }: UpNextCardProps) {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-2">
-                <h4 className="text-base sm:text-lg font-bold leading-tight font-display text-[#1E293B] tracking-tight flex-1">
+                <h4 className="text-base sm:text-lg font-bold leading-tight font-display text-[#1E293B] dark:text-foreground tracking-tight flex-1">
                   {session.title}
                 </h4>
                 <CountdownTimer targetTime={session.startAt} />
@@ -63,9 +63,9 @@ export function UpNextCard({ session }: UpNextCardProps) {
 
               {/* Time Badge - More prominent */}
               <div className="flex items-center gap-2 mb-2">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sand/10 border border-sand/20">
-                  <Clock className="h-3.5 w-3.5 text-sand-dark" />
-                  <span className="text-xs font-semibold text-sand-dark">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sand/10 dark:bg-sand/20 border border-sand/20 dark:border-sand/30">
+                  <Clock className="h-3.5 w-3.5 text-sand-dark dark:text-sand-light" />
+                  <span className="text-xs font-semibold text-sand-dark dark:text-sand-light">
                     {formatTime(session.startAt)} - {formatTime(session.endAt)}
                   </span>
                 </div>
@@ -91,7 +91,7 @@ export function UpNextCard({ session }: UpNextCardProps) {
                   <Badge
                     key={tag}
                     variant="secondary"
-                    className="text-xs bg-ocean/10 text-ocean-dark"
+                    className="text-xs bg-ocean/10 dark:bg-ocean/20 text-ocean-dark dark:text-ocean-light"
                   >
                     {tag}
                   </Badge>

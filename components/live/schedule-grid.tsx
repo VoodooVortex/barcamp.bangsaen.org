@@ -191,8 +191,8 @@ export function ScheduleGrid({
               key={venue.id}
               className={`sticky top-0 z-10 bg-white dark:bg-card shadow-sm p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l border-slate-200 dark:border-border" : ""}`}
             >
-              <div className="flex items-center gap-1 text-sm font-bold text-[#1E293B]">
-                <MapPin className="h-3.5 w-3.5 text-[#B45309]" />
+              <div className="flex items-center gap-1 text-sm font-bold text-[#1E293B] dark:text-foreground">
+                <MapPin className="h-3.5 w-3.5 text-[#B45309] dark:text-[#D4A373]" />
                 {venue.name}
               </div>
             </div>
@@ -207,7 +207,7 @@ export function ScheduleGrid({
                   className="py-2 border-b border-[#D4A373]/30"
                   style={{ gridColumn: `1 / -1` }}
                 >
-                  <span className="text-sm font-bold text-[#B45309] bg-[#FEFAE0] px-3 py-1 rounded-full">
+                  <span className="text-sm font-bold text-[#B45309] dark:text-[#D4A373] bg-[#FEFAE0] dark:bg-[#D4A373]/20 px-3 py-1 rounded-full">
                     {dateGroup.dateLabel}
                   </span>
                 </div>
@@ -258,7 +258,7 @@ export function ScheduleGrid({
             {/* Date header - only show if multiple days */}
             {hasMultipleDays && (
               <div className="py-1">
-                <span className="text-sm font-bold text-[#B45309] bg-[#FEFAE0] px-3 py-1 rounded-full">
+                <span className="text-sm font-bold text-[#B45309] dark:text-[#D4A373] bg-[#FEFAE0] dark:bg-[#D4A373]/20 px-3 py-1 rounded-full">
                   {dateGroup.dateLabel}
                 </span>
               </div>
@@ -273,8 +273,8 @@ export function ScheduleGrid({
 
               return (
                 <div key={venue.id} className="space-y-2">
-                  <h3 className="font-bold text-sm flex items-center gap-1 px-2 text-[#1E293B]">
-                    <MapPin className="h-3.5 w-3.5 text-[#B45309]" />
+                  <h3 className="font-bold text-sm flex items-center gap-1 px-2 text-[#1E293B] dark:text-foreground">
+                    <MapPin className="h-3.5 w-3.5 text-[#B45309] dark:text-[#D4A373]" />
                     {venue.name}
                   </h3>
                   <div className="space-y-2">

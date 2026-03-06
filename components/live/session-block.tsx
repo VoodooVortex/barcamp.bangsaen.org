@@ -73,7 +73,7 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
 
               {/* Title & Status Badge */}
               <div className="flex items-start gap-2">
-                <h4 className={`font-bold text-sm leading-tight line-clamp-2 ${isPast ? "text-slate-500 line-through decoration-slate-300" : "text-[#1E293B]"}`}>
+                <h4 className={`font-bold text-sm leading-tight line-clamp-2 ${isPast ? "text-slate-500 line-through decoration-slate-300" : "text-[#1E293B] dark:text-foreground"}`}>
                   {session.title}
                 </h4>
                 {isOnAir && (
@@ -82,7 +82,7 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
                   </Badge>
                 )}
                 {isPast && (
-                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-slate-200 text-slate-600 dark:text-slate-300 shrink-0">
+                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 shrink-0">
                     Ended
                   </Badge>
                 )}
