@@ -157,7 +157,7 @@ export function Hero({ latestSlug }: HeroProps) {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
               <Button
                 size="lg"
-                className="bg-sunset-orange hover:bg-sunset-coral text-white border-0 shadow-lg shadow-sunset-orange/30 text-lg px-8 py-6"
+                className="bg-sunset-orange hover:bg-sunset-orange/80 text-white border-0 shadow-lg shadow-sunset-orange/30 text-lg px-8 py-6"
                 asChild
               >
                 <Link href={`/live/${latestSlug}`}>

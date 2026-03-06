@@ -115,7 +115,7 @@ export function EventTicket({ event }: EventTicketProps) {
                         {isLive && (
                             <Link
                                 href={`/live/${event.slug}`}
-                                className="mt-6 px-6 py-2.5 text-white font-semibold rounded-full bg-sunset-orange hover:bg-sunset-coral transition-colors text-sm shadow-md flex items-center gap-2"
+                                className="mt-6 px-6 py-2.5 text-white font-semibold rounded-full bg-sunset-orange hover:bg-sunset-orange/80 transition-colors text-sm shadow-md flex items-center gap-2"
                             >
                                 Watch Live Session
                                 <span className="text-lg leading-none">→</span>
