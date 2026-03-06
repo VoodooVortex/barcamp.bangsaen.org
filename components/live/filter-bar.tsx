@@ -44,7 +44,7 @@ export function FilterBar({
   const hasFilters = selectedVenue || searchQuery || selectedTags.length > 0;
 
   return (
-    <div className="space-y-3 p-4 bg-white shadow-sm rounded-lg border border-slate-200">
+    <div className="space-y-3 p-4 bg-white dark:bg-card shadow-sm rounded-lg border border-slate-200 dark:border-border">
       {/* Search and Venue row */}
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}

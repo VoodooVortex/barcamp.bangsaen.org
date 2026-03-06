@@ -13,7 +13,7 @@ import {
   Mic2,
   Timer,
 } from "lucide-react";
-import { useSocket } from "@/lib/socket/client";
+
 import { ServerTimeDisplay } from "./server-time-display";
 import { OnAirCard } from "./on-air-card";
 import { UpNextCard } from "./up-next-card";
@@ -98,9 +98,13 @@ export function LiveViewer({
 }: LiveViewerProps) {
   const [schedule, setSchedule] = useState<ScheduleData>(initialData);
   const [status, setStatus] = useState<LiveStatus>(initialStatus);
-  const [isConnected, setIsConnected] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date(initialStatus.serverTime));
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Filters
   const [selectedVenue, setSelectedVenue] = useState<string | null>(null);
@@ -177,16 +181,15 @@ export function LiveViewer({
     }
   }, [slug]);
 
-  // Socket.io connection
-  useSocket({
-    slug,
-    onScheduleUpdate: () => {
+  // Polling fallback instead of WebSocket for serverless environments
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
       fetchSchedule();
       fetchStatus();
-    },
-    onConnect: () => setIsConnected(true),
-    onDisconnect: () => setIsConnected(false),
-  });
+    }, 10000); // Poll every 10 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [fetchSchedule, fetchStatus]);
 
 
 
@@ -209,7 +212,7 @@ export function LiveViewer({
   return (
     <div className="space-y-6">
       {/* Header - Light theme */}
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-sm">
+      <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#D4A373]/5 via-transparent to-[#1B222C]/5" />
 
@@ -234,24 +237,24 @@ export function LiveViewer({
 
               {/* Event metadata */}
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
                   <Calendar className="h-3.5 w-3.5 text-[#D4A373]" />
-                  <span className="text-slate-700 font-medium">{slug}</span>
+                  <span className="text-slate-700 dark:text-slate-200 font-medium">{slug}</span>
                 </div>
                 {schedule.eventYear.location && (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
                     <MapPin className="h-3.5 w-3.5 text-[#14B8A6]" />
-                    <span className="text-slate-600">{schedule.eventYear.location}</span>
+                    <span className="text-slate-600 dark:text-slate-300">{schedule.eventYear.location}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200">
-                  <span className="text-slate-600">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
+                  <span className="text-slate-600 dark:text-slate-300">
                     {schedule.venues.length} Venues
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
                   <Mic2 className="h-3.5 w-3.5 text-[#D4A373]" />
-                  <span className="text-slate-600">
+                  <span className="text-slate-600 dark:text-slate-300">
                     {schedule.sessions.length} Sessions
                   </span>
                 </div>
@@ -261,7 +264,7 @@ export function LiveViewer({
             {/* Right: Time and Connection status */}
             <div className="flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-3 mt-3 lg:mt-0">
               {/* Server time display */}
-              <div className="bg-white rounded-xl px-4 py-1.5 border border-slate-200 shadow-sm text-slate-800 flex items-center min-h-[42px]">
+              <div className="bg-white dark:bg-card rounded-xl px-4 py-1.5 border border-slate-200 dark:border-border shadow-sm text-slate-800 flex items-center min-h-[42px]">
                 <ServerTimeDisplay
                   initialTime={status.serverTime}
                   timezone="Asia/Bangkok"
@@ -270,35 +273,24 @@ export function LiveViewer({
 
               {/* Connection status and refresh */}
               <div className="flex items-center gap-2">
-                {isConnected ? (
-                  <Badge
-                    variant="outline"
-                    className="bg-emerald-50 text-emerald-600 border-emerald-200 px-2 lg:px-3 py-1 h-[38px] flex items-center"
-                  >
-                    <span className="relative flex h-2 w-2 mr-1.5 lg:mr-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span className="hidden sm:inline">Live Updates</span>
-                    <span className="sm:hidden">Live</span>
-                  </Badge>
-                ) : (
-                  <Badge
-                    variant="outline"
-                    className="bg-amber-50 text-amber-600 border-amber-200 px-2 lg:px-3 py-1 h-[38px] flex items-center"
-                  >
-                    <WifiOff className="h-3 w-3 mr-1.5" />
-                    <span className="hidden sm:inline">Reconnecting...</span>
-                    <span className="sm:hidden">Offline</span>
-                  </Badge>
-                )}
+                <Badge
+                  variant="outline"
+                  className="bg-emerald-50 text-emerald-600 border-emerald-200 px-2 lg:px-3 py-1 h-[38px] flex items-center"
+                >
+                  <span className="relative flex h-2 w-2 mr-1.5 lg:mr-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="hidden sm:inline">Auto-syncing</span>
+                  <span className="sm:hidden">Auto</span>
+                </Badge>
 
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={fetchSchedule}
                   disabled={isRefreshing}
-                  className="border-slate-200 bg-white text-slate-700 hover:text-slate-700 hover:bg-slate-50 h-[38px]"
+                  className="border-slate-200 dark:border-border bg-white dark:bg-card text-slate-700 dark:text-slate-200 hover:text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:bg-muted h-[38px]"
                 >
                   <RefreshCw
                     className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
@@ -313,15 +305,19 @@ export function LiveViewer({
           <div className="mt-3 pt-3 border-t border-slate-100">
             <p className="text-[10px] sm:text-xs text-slate-400">
               Last updated:{" "}
-              <span suppressHydrationWarning>
-                {lastUpdated.toLocaleTimeString("en-US", {
-                  timeZone: "Asia/Bangkok",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: false,
-                })}
-              </span>
+              {isClient ? (
+                <span>
+                  {lastUpdated.toLocaleTimeString("en-US", {
+                    timeZone: "Asia/Bangkok",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                  })}
+                </span>
+              ) : (
+                <span>--:--:--</span>
+              )}
             </p>
           </div>
         </div>
@@ -329,16 +325,16 @@ export function LiveViewer({
 
       {/* Main content tabs */}
       <Tabs defaultValue="live" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-flex bg-white border border-slate-200 shadow-sm rounded-lg p-1">
+        <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-flex bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm rounded-lg p-1">
           <TabsTrigger
             value="live"
-            className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 rounded-md"
+            className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 dark:text-slate-300 rounded-md"
           >
             Live Now
           </TabsTrigger>
           <TabsTrigger
             value="schedule"
-            className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 rounded-md"
+            className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 dark:text-slate-300 rounded-md"
           >
             Full Schedule
           </TabsTrigger>
@@ -381,7 +377,7 @@ export function LiveViewer({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center py-8 bg-muted/50 rounded-lg"
+                  className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
                 >
                   <p className="text-lg font-semibold text-muted-foreground">🏁 Event has ended</p>
                   <p className="text-sm text-muted-foreground">Thank you for joining!</p>
@@ -390,7 +386,7 @@ export function LiveViewer({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center py-8 bg-muted/50 rounded-lg"
+                  className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
                 >
                   <p className="text-muted-foreground">
                     No sessions currently on air
@@ -423,7 +419,7 @@ export function LiveViewer({
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center py-8 bg-muted/50 rounded-lg"
+                  className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
                 >
                   <p className="text-muted-foreground">No upcoming sessions</p>
                 </motion.div>

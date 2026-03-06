@@ -56,7 +56,7 @@ export function EventTicket({ event }: EventTicketProps) {
     }
 
     // Formatting dates
-    const formatOptions: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
+    const formatOptions: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", timeZone: "Asia/Bangkok" };
     const getFormattedDate = () => {
         const startStr = new Intl.DateTimeFormat("en-US", formatOptions).format(start);
         if (end && start.getDate() !== end.getDate()) {
@@ -69,7 +69,7 @@ export function EventTicket({ event }: EventTicketProps) {
     const formattedDate = getFormattedDate();
 
     const getFormattedTime = () => {
-        const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", minute: "2-digit" };
+        const timeOptions: Intl.DateTimeFormatOptions = { hour: "numeric", minute: "2-digit", timeZone: "Asia/Bangkok" };
         const startStr = new Intl.DateTimeFormat("en-US", timeOptions).format(start);
         if (end) {
             const endStr = new Intl.DateTimeFormat("en-US", timeOptions).format(end);
@@ -81,7 +81,7 @@ export function EventTicket({ event }: EventTicketProps) {
 
     // If not mounted yet, render identical shell without the exact time counting to prevent hydration mismatch
     if (!isClient) {
-        countdownText = countdownText || "...";
+        countdownText = "";
     }
 
     return (
