@@ -79,10 +79,10 @@ export function ServerTimeDisplay({
     <div className={`flex items-center gap-2.5 ${className}`}>
       <Clock className="h-4 w-4 opacity-75" />
       <div className="flex items-baseline gap-2.5">
-        <span className="font-mono text-[0.95rem] md:text-[1.05rem] font-bold tracking-tight">
+        <span className="font-mono text-sm md:text-[1.05rem] font-bold tracking-tight">
           {formatTime(displayTime)}
         </span>
-        <span className="text-[13px] font-medium opacity-60 mt-0.5">
+        <span className="text-xs min-[1920px]:text-[13px] font-medium opacity-60 mt-0.5">
           {formatDate(displayTime)}
         </span>
       </div>

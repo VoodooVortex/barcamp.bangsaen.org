@@ -99,7 +99,9 @@ export function CountdownTimer({
 
   if (!isMounted) {
     return (
-      <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border whitespace-nowrap opacity-0 ${className}`}>
+      <div
+        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border whitespace-nowrap opacity-0 ${className}`}
+      >
         <span>00h 00m 00s</span>
       </div>
     );
@@ -110,7 +112,7 @@ export function CountdownTimer({
       className={`
         inline-flex items-center gap-1 px-2.5 py-1 rounded-full
         text-xs font-semibold border whitespace-nowrap
-        transition-colors duration-300
+        transition-colors duration-300 min-[1920px]:text-sm
         ${getUrgencyColor()}
         ${className}
       `}

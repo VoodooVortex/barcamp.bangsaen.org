@@ -98,7 +98,9 @@ export function LiveViewer({
 }: LiveViewerProps) {
   const [schedule, setSchedule] = useState<ScheduleData>(initialData);
   const [status, setStatus] = useState<LiveStatus>(initialStatus);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date(initialStatus.serverTime));
+  const [lastUpdated, setLastUpdated] = useState<Date>(
+    new Date(initialStatus.serverTime),
+  );
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
@@ -120,8 +122,18 @@ export function LiveViewer({
 
   // Event countdown state
   const [countdownText, setCountdownText] = useState("");
-  const eventStartDate = useMemo(() => schedule.eventYear.startDate ? new Date(schedule.eventYear.startDate) : null, [schedule.eventYear.startDate]);
-  const eventEndDate = useMemo(() => schedule.eventYear.endDate ? new Date(schedule.eventYear.endDate) : null, [schedule.eventYear.endDate]);
+  const eventStartDate = useMemo(
+    () =>
+      schedule.eventYear.startDate
+        ? new Date(schedule.eventYear.startDate)
+        : null,
+    [schedule.eventYear.startDate],
+  );
+  const eventEndDate = useMemo(
+    () =>
+      schedule.eventYear.endDate ? new Date(schedule.eventYear.endDate) : null,
+    [schedule.eventYear.endDate],
+  );
 
   const eventStatus = useMemo(() => {
     if (!eventStartDate) return "unknown";
@@ -137,9 +149,14 @@ export function LiveViewer({
     const update = () => {
       const now = new Date();
       const diffMs = eventStartDate.getTime() - now.getTime();
-      if (diffMs <= 0) { setCountdownText("Starting now!"); return; }
+      if (diffMs <= 0) {
+        setCountdownText("Starting now!");
+        return;
+      }
       const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const hours = Math.floor(
+        (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
       const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
       if (days > 0) setCountdownText(`${days}d ${hours}h ${minutes}m`);
@@ -191,8 +208,6 @@ export function LiveViewer({
     return () => clearInterval(pollInterval);
   }, [fetchSchedule, fetchStatus]);
 
-
-
   // Tag toggle handler
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) =>
@@ -216,12 +231,12 @@ export function LiveViewer({
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#D4A373]/5 via-transparent to-[#1B222C]/5" />
 
-        <div className="relative p-4 sm:px-6 sm:py-5">
+        <div className="relative p-3 sm:px-3 sm:py-3">
           {/* Top row: Event title and Live indicator */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
             {/* Left: Event info */}
             <div className="space-y-2">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 min-[1920px]:gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1E293B]/5 dark:bg-muted border border-[#1E293B]/10 dark:border-border">
                   <Radio className="h-5 w-5 text-[#D4A373] dark:text-[#D4A373]/90" />
                 </div>
@@ -239,12 +254,16 @@ export function LiveViewer({
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
                   <Calendar className="h-3.5 w-3.5 text-[#D4A373]" />
-                  <span className="text-slate-700 dark:text-slate-200 font-medium">{slug}</span>
+                  <span className="text-slate-700 dark:text-slate-200 font-medium">
+                    {slug}
+                  </span>
                 </div>
                 {schedule.eventYear.location && (
                   <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
                     <MapPin className="h-3.5 w-3.5 text-[#14B8A6]" />
-                    <span className="text-slate-600 dark:text-slate-300">{schedule.eventYear.location}</span>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      {schedule.eventYear.location}
+                    </span>
                   </div>
                 )}
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
@@ -262,9 +281,9 @@ export function LiveViewer({
             </div>
 
             {/* Right: Time and Connection status */}
-            <div className="flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-3 mt-3 lg:mt-0">
+            <div className="flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-2 lg:mt-0">
               {/* Server time display */}
-              <div className="bg-white dark:bg-card rounded-xl px-4 py-1.5 border border-slate-200 dark:border-border shadow-sm text-slate-800 dark:text-slate-200 flex items-center min-h-[42px]">
+              <div className="bg-white dark:bg-card rounded-xl px-2 min-[1920px]:px-6 py-1.5 border border-slate-200 dark:border-border shadow-sm text-slate-800 dark:text-slate-200 flex items-center min-h-[42px]">
                 <ServerTimeDisplay
                   initialTime={status.serverTime}
                   timezone="Asia/Bangkok"
@@ -302,7 +321,7 @@ export function LiveViewer({
           </div>
 
           {/* Last updated */}
-          <div className="mt-3 pt-3 border-t border-slate-100">
+          <div className="mt-2 border-slate-100">
             <p className="text-[10px] sm:text-xs text-slate-400">
               Last updated:{" "}
               {isClient ? (
@@ -353,7 +372,7 @@ export function LiveViewer({
 
             <AnimatePresence mode="popLayout">
               {status.onAir.length > 0 ? (
-                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-4">
+                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-3">
                   {status.onAir.map((session) => (
                     <OnAirCard key={session.id} session={session} />
                   ))}
@@ -365,12 +384,22 @@ export function LiveViewer({
                   className="text-center py-12 bg-gradient-to-br from-[#FEFAE0]/80 to-white dark:from-muted/40 dark:to-card rounded-xl border border-[#D4A373]/20 dark:border-border"
                 >
                   <Timer className="h-8 w-8 text-[#D4A373] dark:text-[#D4A373]/80 mx-auto mb-3" />
-                  <p className="text-sm text-slate-500 dark:text-muted-foreground mb-1">Event starts in</p>
-                  <p className="text-4xl font-bold text-[#1E293B] dark:text-foreground tracking-tight" suppressHydrationWarning>
+                  <p className="text-sm text-slate-500 dark:text-muted-foreground mb-1">
+                    Event starts in
+                  </p>
+                  <p
+                    className="text-4xl font-bold text-[#1E293B] dark:text-foreground tracking-tight"
+                    suppressHydrationWarning
+                  >
                     {countdownText}
                   </p>
                   <p className="text-sm text-slate-500 mt-2">
-                    {eventStartDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}
+                    {eventStartDate.toLocaleDateString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                   </p>
                 </motion.div>
               ) : eventStatus === "ended" ? (
@@ -379,8 +408,12 @@ export function LiveViewer({
                   animate={{ opacity: 1 }}
                   className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
                 >
-                  <p className="text-lg font-semibold text-muted-foreground">🏁 Event has ended</p>
-                  <p className="text-sm text-muted-foreground">Thank you for joining!</p>
+                  <p className="text-lg font-semibold text-muted-foreground">
+                    🏁 Event has ended
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Thank you for joining!
+                  </p>
                 </motion.div>
               ) : (
                 <motion.div
@@ -407,12 +440,9 @@ export function LiveViewer({
 
             <AnimatePresence mode="popLayout">
               {status.upNext.length > 0 ? (
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[1920px]:grid-cols-5">
+                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-3">
                   {status.upNext.map((session) => (
-                    <UpNextCard
-                      key={session.id}
-                      session={session}
-                    />
+                    <UpNextCard key={session.id} session={session} />
                   ))}
                 </div>
               ) : (

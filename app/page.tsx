@@ -24,9 +24,9 @@ export default async function HomePage() {
     with: {
       venues: true,
       sessions: {
-        where: eq(sessions.isPublished, true)
-      }
-    }
+        where: eq(sessions.isPublished, true),
+      },
+    },
   });
 
   const latestYear = publishedYears[0]?.slug;
@@ -105,11 +105,11 @@ export default async function HomePage() {
       {currentEvent && (
         <section className="py-20 px-4 bg-gradient-to-b from-sand-light/30 to-background">
           <div className="container mx-auto max-w-4xl">
-            <div className="text-center mb-12">
+            <div className="text-center mb-5 min-[1920px]:mb-12">
               <Badge variant="secondary" className="mb-4 text-base px-4 py-1">
                 {currentEvent.slug} Event
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">
+              <h2 className="text-2xl md:text-4xl font-display font-bold text-foreground">
                 {currentEvent.name}
               </h2>
             </div>
@@ -152,7 +152,7 @@ export default async function HomePage() {
           <p className="text-sand-light/70 mb-6">
             Beach meets technology. An unconference by the sea.
           </p>
-          <div className="flex justify-center gap-6 text-sm text-sand-light/50">
+          <div className="flex justify-center gap-3 md:gap-4 min-[1920px]:gap-6 text-sm text-sand-light/50">
             <span>Bangsaen, Thailand</span>
             <span>•</span>
             <span>Unconference</span>

@@ -104,7 +104,6 @@ export function OnAirCard({ session }: OnAirCardProps) {
     return parts.join(" ");
   };
 
-
   return (
     <motion.div
       layout
@@ -128,14 +127,14 @@ export function OnAirCard({ session }: OnAirCardProps) {
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
-              <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-muted flex items-center justify-center border border-slate-200 dark:border-border shadow-sm">
-                <Radio className="h-5 w-5 text-slate-500 dark:text-slate-400" />
+              <div className="h-11 w-11 rounded-full bg-slate-100 dark:bg-muted flex items-center justify-center border border-slate-200 dark:border-border shadow-sm">
+                <Radio className="h-6 w-6 text-slate-500 dark:text-slate-400" />
               </div>
             </div>
 
             <div className="flex-1 min-w-0">
               {/* Title */}
-              <h3 className="text-lg font-bold leading-tight mb-2 pr-16 font-display text-[#1E293B] dark:text-foreground tracking-tight">
+              <h3 className="text-lg font-bold min-[1920px]:text-2xl leading-tight mb-2 pr-16 font-display text-[#1E293B] dark:text-foreground tracking-tight">
                 {session.title}
               </h3>
 
@@ -143,28 +142,30 @@ export function OnAirCard({ session }: OnAirCardProps) {
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-ocean/10 dark:bg-ocean/20 border border-ocean/20 dark:border-ocean/30">
                   <Clock className="h-3.5 w-3.5 text-ocean-dark dark:text-ocean-light" />
-                  <span className="text-xs font-semibold text-ocean-dark dark:text-ocean-light">
-                    {isMounted ? `${formatTime(session.startAt)} - ${formatTime(session.endAt)}` : '--:-- - --:--'}
+                  <span className="text-xs font-semibold min-[1920px]:text-sm text-ocean-dark dark:text-ocean-light">
+                    {isMounted
+                      ? `${formatTime(session.startAt)} - ${formatTime(session.endAt)}`
+                      : "--:-- - --:--"}
                   </span>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sunset-orange/10 dark:bg-sunset-orange/20 border border-sunset-orange/20 dark:border-sunset-orange/30">
                   <Hourglass className="h-3 w-3 text-sunset-orange dark:text-sunset-gold" />
-                  <span className="text-xs font-semibold text-sunset-orange tabular-nums">
-                    {isMounted ? formatTimeRemaining() : '--h --m --s'}
+                  <span className="text-xs font-semibold min-[1920px]:text-sm text-sunset-orange tabular-nums">
+                    {isMounted ? formatTimeRemaining() : "--h --m --s"}
                   </span>
                 </div>
               </div>
 
               {/* Speaker and Venue */}
-              <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 mb-2">
+              <div className="flex flex-wrap items-center gap-3 text-sm min-[1920px]:text-base text-slate-500 mb-2">
                 <div className="flex items-center gap-1.5">
-                  <User className="h-3.5 w-3.5 text-slate-400" />
+                  <User className="h-4 w-4 text-slate-400" />
                   <span className="font-medium text-slate-600 dark:text-slate-300">
                     {session.speakerName}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                  <MapPin className="h-4 w-4 text-slate-400" />
                   <span className="font-medium text-slate-600 dark:text-slate-300">
                     {session.venue.name}
                   </span>
