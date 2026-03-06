@@ -3,15 +3,15 @@
 import { db } from "@/lib/db";
 import { eventYears, sessions } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
-import Link from "next/link";
+// import Link from "next/link";
 import { Hero } from "@/components/hero";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Radio,
-  Wifi,
-  Sparkles,
-} from "lucide-react";
+// import {
+//   Radio,
+//   Wifi,
+//   Sparkles,
+// } from "lucide-react";
 import { EventTicket } from "@/components/event-ticket";
 
 export default async function HomePage() {
@@ -36,7 +36,7 @@ export default async function HomePage() {
       <Hero latestSlug={latestYear} />
 
       {/* Features Section */}
-      <section className="py-20 px-4 bg-background">
+      {/*<section className="py-20 px-4 bg-background">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
@@ -97,7 +97,7 @@ export default async function HomePage() {
             </Card>
           </div>
         </div>
-      </section>
+      </section>*/}
 
       {/* Event Details Section */}
       {currentEvent && (
@@ -119,7 +119,7 @@ export default async function HomePage() {
       )}
 
       {/* Past Events Section */}
-      {publishedYears.length > 1 && (
+      {/*{publishedYears.length > 1 && (
         <section className="py-16 px-4 bg-muted/50">
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-2xl font-display font-bold text-center mb-8">
@@ -139,13 +139,13 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
-      )}
+      )}*/}
 
       {/* Footer */}
       <footer className="py-12 px-4 bg-silhouette text-sand-light">
         <div className="container mx-auto max-w-4xl text-center">
           <p className="font-display text-2xl font-bold mb-4">
-            barcamp Bangsaen
+            Barcamp Bangsaen
           </p>
           <p className="text-sand-light/70 mb-6">
             Beach meets technology. An unconference by the sea.

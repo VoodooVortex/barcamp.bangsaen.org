@@ -137,7 +137,7 @@ export function Hero({ latestSlug }: HeroProps) {
           {/* Title */}
           <div className="space-y-2">
             <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold text-white text-shadow tracking-tight">
-              barcamp
+              Barcamp
             </h1>
             <div className="flex items-center justify-center gap-4">
               <span className="text-2xl md:text-3xl font-display font-semibold text-white/90 tracking-widest uppercase text-shadow">
@@ -162,7 +162,7 @@ export function Hero({ latestSlug }: HeroProps) {
               >
                 <Link href={`/live/${latestSlug}`}>
                   <Radio className="h-5 w-5 mr-2" />
-                  View Sessions
+                  View Live Sessions
                 </Link>
               </Button>
             </div>
