@@ -157,6 +157,7 @@ export function SessionForm({
           id="title"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          placeholder="e.g. Introduction to AI"
           required
         />
       </div>
@@ -169,6 +170,7 @@ export function SessionForm({
           onChange={(e) =>
             setFormData({ ...formData, speakerName: e.target.value })
           }
+          placeholder="e.g. สมชาย ใจดี"
           required
         />
       </div>
@@ -203,7 +205,7 @@ export function SessionForm({
           <DateTimePicker
             date={formData.startAt}
             setDate={(date) => setFormData({ ...formData, startAt: date })}
-            placeholder="Select start time"
+            placeholder="DD/MM/YYYY HH:mm"
           />
         </div>
 
@@ -212,7 +214,7 @@ export function SessionForm({
           <DateTimePicker
             date={formData.endAt}
             setDate={(date) => setFormData({ ...formData, endAt: date })}
-            placeholder="Select end time"
+            placeholder="DD/MM/YYYY HH:mm"
           />
         </div>
       </div>

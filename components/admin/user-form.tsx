@@ -90,6 +90,7 @@ export function UserForm({
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="user@example.com"
                     disabled={!!user} // Email cannot be changed after creation
                     required
                 />

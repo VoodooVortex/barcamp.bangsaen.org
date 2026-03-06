@@ -91,6 +91,7 @@ export function VenueForm({
           id="name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          placeholder="e.g. ห้อง A"
           required
         />
       </div>
@@ -106,6 +107,7 @@ export function VenueForm({
             onChange={(e) =>
               setFormData({ ...formData, order: parseInt(e.target.value) || 0 })
             }
+            placeholder="0"
           />
         </div>
 
