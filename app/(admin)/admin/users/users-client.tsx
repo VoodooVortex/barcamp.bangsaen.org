@@ -1,7 +1,7 @@
 // Admin user management page
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
     Table,
     TableBody,
@@ -68,12 +68,17 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
     const [roleFilter, setRoleFilter] = useState("all");
     const [statusFilter, setStatusFilter] = useState("all");
 
+    const lastMutationRef = useRef<number>(0);
+
     const fetchUsers = useCallback(async () => {
+        const fetchTime = Date.now();
         try {
-            const response = await fetch(`/api/admin/users`);
+            const response = await fetch(`/api/admin/users?_t=${fetchTime}`, { cache: "no-store" });
             if (response.ok) {
                 const data = await response.json();
-                setUsers(data.users);
+                if (fetchTime >= lastMutationRef.current) {
+                    setUsers(data.users);
+                }
             } else {
                 const data = await response.json();
                 setError(data.error || "Failed to fetch users");
@@ -93,6 +98,7 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
     const handleDelete = async () => {
         if (!userToDelete) return;
 
+        lastMutationRef.current = Date.now();
         const previousUsers = [...users];
         // Optimistic UI toggle could be added here
         setUsers(prev => prev.filter(u => u.id !== userToDelete));
@@ -104,6 +110,7 @@ export default function UsersClient({ initialUsers }: UsersClientProps) {
 
             if (response.ok) {
                 toast.success("User removed from whitelist");
+                lastMutationRef.current = Date.now();
                 fetchUsers();
             } else {
                 setUsers(previousUsers);

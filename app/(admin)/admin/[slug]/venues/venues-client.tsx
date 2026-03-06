@@ -1,7 +1,7 @@
 // Admin venues management page
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 // React imports
 import {
   Table,
@@ -69,12 +69,17 @@ export default function VenuesClient({ initialVenues, slug }: VenuesClientProps)
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  const lastMutationRef = useRef<number>(0);
+
   const fetchVenues = useCallback(async () => {
+    const fetchTime = Date.now();
     try {
-      const response = await fetch(`/api/admin/${slug}/venues`);
+      const response = await fetch(`/api/admin/${slug}/venues?_t=${fetchTime}`, { cache: "no-store" });
       if (response.ok) {
         const data = await response.json();
-        setVenues(data.venues);
+        if (fetchTime >= lastMutationRef.current) {
+          setVenues(data.venues);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch venues:", error);
@@ -90,6 +95,7 @@ export default function VenuesClient({ initialVenues, slug }: VenuesClientProps)
   const handleDelete = async () => {
     if (!venueToDelete) return;
 
+    lastMutationRef.current = Date.now();
     const previousVenues = [...venues];
     // Optimistic Update
     setVenues(prev => prev.filter(v => v.id !== venueToDelete));
@@ -101,6 +107,7 @@ export default function VenuesClient({ initialVenues, slug }: VenuesClientProps)
 
       if (response.ok) {
         toast.success("Venue deleted successfully");
+        lastMutationRef.current = Date.now();
         fetchVenues(); // re-fetch to sync
       } else {
         const data = await response.json();

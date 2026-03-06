@@ -1,7 +1,7 @@
 // Admin sessions management page
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useParams } from "next/navigation";
 import {
   Table,
@@ -79,12 +79,19 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
   const [venueFilter, setVenueFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  const lastMutationRef = useRef<number>(0);
+
   const fetchSessions = useCallback(async () => {
+    const fetchTime = Date.now();
     try {
-      const response = await fetch(`/api/admin/${slug}/sessions`);
+      const response = await fetch(`/api/admin/${slug}/sessions?_t=${fetchTime}`, {
+        cache: "no-store"
+      });
       if (response.ok) {
         const data = await response.json();
-        setSessions(data.sessions);
+        if (fetchTime >= lastMutationRef.current) {
+          setSessions(data.sessions);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch sessions:", error);
@@ -107,6 +114,7 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
   const handleDelete = async () => {
     if (!sessionToDelete) return;
 
+    lastMutationRef.current = Date.now();
     // เก็บค่าเก่าไว้เผื่อ error จะได้ revert กลับ
     const previousSessions = [...sessions];
     // ทำ Optimistic Update อัปเดต UI ทันทีก่อนรอตัว Server
@@ -119,6 +127,7 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
 
       if (response.ok) {
         toast.success("Session deleted successfully");
+        lastMutationRef.current = Date.now();
         fetchSessions(); // fetch ข้อมูลจริงมาทับอีกทีเพื่อความชัวร์
       } else {
         setSessions(previousSessions); // revert กลับ
@@ -186,6 +195,7 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
   };
 
   const handleSessionControl = async (sessionId: string, action: "start" | "end" | "reset") => {
+    lastMutationRef.current = Date.now();
     // เก็บค่าเก่าไว้ก่อน
     const previousSessions = [...sessions];
     
@@ -209,6 +219,7 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
       if (response.ok) {
         const actionText = action === "reset" ? "reset" : action === "start" ? "started" : "ended";
         toast.success(`Session ${actionText} successfully`);
+        lastMutationRef.current = Date.now();
         fetchSessions(); // อัปเดต state ตัวจริงจาก server ให้ตรงกัน
       } else {
         const data = await response.json();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
     Table,
     TableBody,
@@ -62,12 +62,17 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
     const [eventToDelete, setEventToDelete] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const lastMutationRef = useRef<number>(0);
+
     const fetchEvents = useCallback(async () => {
+        const fetchTime = Date.now();
         try {
-            const response = await fetch("/api/admin/events");
+            const response = await fetch(`/api/admin/events?_t=${fetchTime}`, { cache: "no-store" });
             if (response.ok) {
                 const data = await response.json();
-                setEvents(data.events);
+                if (fetchTime >= lastMutationRef.current) {
+                    setEvents(data.events);
+                }
             }
         } catch (error) {
             console.error("Failed to fetch events:", error);
@@ -84,6 +89,7 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
     const handleDelete = async () => {
         if (!eventToDelete) return;
 
+        lastMutationRef.current = Date.now();
         const previousEvents = [...events];
         setEvents(prev => prev.filter(e => e.id !== eventToDelete));
 
@@ -94,6 +100,7 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
 
             if (response.ok) {
                 toast.success("Event deleted successfully");
+                lastMutationRef.current = Date.now();
                 fetchEvents();
             } else {
                 const data = await response.json();
@@ -110,6 +117,7 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
     };
 
     const handleTogglePublished = async (event: EventYear) => {
+        lastMutationRef.current = Date.now();
         const previousEvents = [...events];
         setEvents(prev => prev.map(e => e.id === event.id ? { ...e, published: !e.published } : e));
 
@@ -122,6 +130,7 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
 
             if (response.ok) {
                 toast.success(`Event ${!event.published ? "published" : "unpublished"} successfully`);
+                lastMutationRef.current = Date.now();
                 fetchEvents();
             } else {
                 setEvents(previousEvents);
