@@ -222,8 +222,8 @@ export function LiveViewer({
             {/* Left: Event info */}
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1E293B]/5 border border-[#1E293B]/10">
-                  <Radio className="h-5 w-5 text-[#D4A373]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1E293B]/5 dark:bg-muted border border-[#1E293B]/10 dark:border-border">
+                  <Radio className="h-5 w-5 text-[#D4A373] dark:text-[#D4A373]/90" />
                 </div>
                 <div>
                   <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold font-display text-[#1E293B] dark:text-foreground tracking-tight">
@@ -264,7 +264,7 @@ export function LiveViewer({
             {/* Right: Time and Connection status */}
             <div className="flex flex-row flex-wrap lg:flex-col items-center lg:items-end gap-3 mt-3 lg:mt-0">
               {/* Server time display */}
-              <div className="bg-white dark:bg-card rounded-xl px-4 py-1.5 border border-slate-200 dark:border-border shadow-sm text-slate-800 flex items-center min-h-[42px]">
+              <div className="bg-white dark:bg-card rounded-xl px-4 py-1.5 border border-slate-200 dark:border-border shadow-sm text-slate-800 dark:text-slate-200 flex items-center min-h-[42px]">
                 <ServerTimeDisplay
                   initialTime={status.serverTime}
                   timezone="Asia/Bangkok"

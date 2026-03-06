@@ -128,8 +128,8 @@ export function OnAirCard({ session }: OnAirCardProps) {
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
-              <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 dark:border-border shadow-sm">
-                <Radio className="h-5 w-5 text-slate-500" />
+              <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-muted flex items-center justify-center border border-slate-200 dark:border-border shadow-sm">
+                <Radio className="h-5 w-5 text-slate-500 dark:text-slate-400" />
               </div>
             </div>
 

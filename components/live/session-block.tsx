@@ -63,12 +63,12 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
           >
             <div className="space-y-2">
               {/* Time */}
-              <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
+              <div className="flex items-center gap-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
                 <Clock className="h-3 w-3" />
                 <span>
                   {formatTime(session.startAt)} - {formatTime(session.endAt)}
                 </span>
-                <span className="text-slate-400">({duration}m)</span>
+                <span className="text-slate-400 dark:text-slate-500">({duration}m)</span>
               </div>
 
               {/* Title & Status Badge */}
@@ -90,7 +90,7 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
 
               {/* Speaker */}
               <div className="flex items-center gap-1 text-xs font-medium text-slate-600 dark:text-slate-300">
-                <User className="h-3 w-3 text-slate-400" />
+                <User className="h-3 w-3 text-slate-400 dark:text-slate-500" />
                 <span className="truncate">{session.speakerName}</span>
               </div>
 

@@ -393,13 +393,13 @@
     --sunset-pink: 330 60% 65%;
 
     /* Night Ocean */
-    --ocean-light: 172 50% 40%;
+    --ocean-light: 172 50% 65%;
     --ocean: 172 60% 35%;
     --ocean-dark: 176 70% 20%;
     --ocean-deep: 180 80% 10%;
 
     /* Night Sand */
-    --sand-light: 30 30% 35%;
+    --sand-light: 30 60% 70%;
     --sand: 30 25% 30%;
     --sand-dark: 30 20% 25%;
 
