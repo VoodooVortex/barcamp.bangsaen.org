@@ -172,7 +172,9 @@ export function LiveViewer({
   const fetchSchedule = useCallback(async () => {
     try {
       setIsRefreshing(true);
-      const response = await fetch(`/api/public/${slug}/schedule`);
+      const response = await fetch(`/api/public/${slug}/schedule?_t=${Date.now()}`, {
+        cache: 'no-store'
+      });
       if (response.ok) {
         const data = await response.json();
         setSchedule(data);
@@ -188,7 +190,9 @@ export function LiveViewer({
   // Fetch status data
   const fetchStatus = useCallback(async () => {
     try {
-      const response = await fetch(`/api/public/${slug}/status`);
+      const response = await fetch(`/api/public/${slug}/status?_t=${Date.now()}`, {
+        cache: 'no-store'
+      });
       if (response.ok) {
         const data = await response.json();
         setStatus(data);
@@ -197,6 +201,11 @@ export function LiveViewer({
       console.error("Failed to fetch status:", error);
     }
   }, [slug]);
+
+  const handleRefresh = useCallback(() => {
+    fetchSchedule();
+    fetchStatus();
+  }, [fetchSchedule, fetchStatus]);
 
   // Polling fallback instead of WebSocket for serverless environments
   useEffect(() => {
@@ -307,7 +316,7 @@ export function LiveViewer({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={fetchSchedule}
+                  onClick={handleRefresh}
                   disabled={isRefreshing}
                   className="border-slate-200 dark:border-border bg-white dark:bg-card text-slate-700 dark:text-slate-200 hover:text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:bg-muted h-[38px]"
                 >

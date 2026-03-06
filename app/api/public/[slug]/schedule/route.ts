@@ -5,6 +5,8 @@ import { db } from "@/lib/db";
 import { eventYears, venues, sessions } from "@/lib/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ slug: string }> }
