@@ -167,7 +167,7 @@ export default function EventsPage() {
                             <DialogDescription>
                                 {editingEvent
                                     ? "Update event year details and settings."
-                                    : "Create a new event year for Barcamp Bangsaen."}
+                                    : "Create a new event year for Barcamp."}
                             </DialogDescription>
                         </DialogHeader>
                         <EventForm
