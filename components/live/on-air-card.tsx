@@ -111,8 +111,9 @@ export function OnAirCard({ session }: OnAirCardProps) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="h-full"
     >
-      <Card className="relative overflow-hidden border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm hover:shadow-md transition-shadow">
+      <Card className="relative overflow-hidden border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm hover:shadow-md transition-shadow h-full">
         {/* Live indicator pulse */}
         <div className="absolute top-3 right-3 flex items-center gap-2">
           <span className="relative flex h-3 w-3">
@@ -124,15 +125,15 @@ export function OnAirCard({ session }: OnAirCardProps) {
           </span>
         </div>
 
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
+        <CardContent className="p-4 h-full flex flex-col">
+          <div className="flex items-start gap-3 h-full">
             <div className="flex-shrink-0">
               <div className="h-11 w-11 rounded-full bg-slate-100 dark:bg-muted flex items-center justify-center border border-slate-200 dark:border-border shadow-sm">
                 <Radio className="h-6 w-6 text-slate-500 dark:text-slate-400" />
               </div>
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 flex flex-col h-full">
               {/* Title */}
               <h3 className="text-base sm:text-lg min-[1920px]:text-2xl font-bold leading-tight mb-2 pr-16 font-display text-[#1E293B] dark:text-foreground tracking-tight">
                 {session.title}
@@ -157,7 +158,7 @@ export function OnAirCard({ session }: OnAirCardProps) {
               </div>
 
               {/* Speaker and Venue */}
-              <div className="flex flex-wrap items-center gap-3 text-sm min-[1920px]:text-base text-slate-500 mb-2">
+              <div className="flex flex-wrap items-center gap-3 text-sm min-[1920px]:text-base text-slate-500 mb-2 mt-auto pt-2">
                 <div className="flex items-center gap-1.5">
                   <User className="h-4 w-4 text-slate-400" />
                   <span className="font-medium text-slate-600 dark:text-slate-300">
