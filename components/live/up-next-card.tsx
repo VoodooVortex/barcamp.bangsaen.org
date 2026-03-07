@@ -46,14 +46,14 @@ export function UpNextCard({ session }: UpNextCardProps) {
     >
       <Card className="group h-full hover:shadow-md transition-all border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm">
         <CardContent className="p-4 h-full flex flex-col">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3 h-full">
             <div className="flex-shrink-0">
               <div className="h-11 w-11 rounded-full bg-slate-100 dark:bg-muted flex items-center justify-center border border-slate-200 dark:border-border">
                 <ArrowRight className="h-6 w-6 text-slate-500 dark:text-slate-400" />
               </div>
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 flex flex-col h-full">
               <div className="flex items-start justify-between gap-2 mb-2">
                 <h4 className="text-base sm:text-lg min-[1920px]:text-2xl font-bold leading-tight font-display text-[#1E293B] dark:text-foreground tracking-tight flex-1">
                   {session.title}
@@ -71,7 +71,7 @@ export function UpNextCard({ session }: UpNextCardProps) {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 text-sm min-[1920px]:text-base text-slate-500 mb-2">
+              <div className="flex flex-wrap items-center gap-3 text-sm min-[1920px]:text-base text-slate-500 mb-2 mt-auto pt-2">
                 <div className="flex items-center gap-1.5">
                   <User className="h-4 w-4 text-slate-400" />
                   <span className="font-medium text-slate-600 dark:text-slate-300">
