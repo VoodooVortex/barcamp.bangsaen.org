@@ -29,7 +29,12 @@ interface SessionBlockProps {
   onClick?: () => void;
 }
 
-export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlockProps) {
+export function SessionBlock({
+  session,
+  isOnAir,
+  isPast,
+  onClick,
+}: SessionBlockProps) {
   const formatTime = (dateStr: string) => {
     return new Date(dateStr).toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -37,7 +42,6 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
       hour12: false,
     });
   };
-
 
   const duration =
     (new Date(session.endAt).getTime() - new Date(session.startAt).getTime()) /
@@ -54,10 +58,11 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
             whileHover={{ scale: 1.02 }}
             onClick={onClick}
             className={`
-              relative p-3 rounded-lg cursor-pointer transition-all shadow-sm
-              ${isPast
-                ? "border border-slate-200 dark:border-border bg-slate-50 dark:bg-muted/50 dark:bg-muted/20 opacity-75 grayscale-[0.2]"
-                : "bg-white dark:bg-card border border-slate-200 dark:border-border hover:border-slate-300 hover:shadow-md"
+              relative p-3 rounded-lg cursor-pointer transition-all shadow-sm h-full
+              ${
+                isPast
+                  ? "border border-slate-200 dark:border-border bg-slate-50 dark:bg-muted/50 dark:bg-muted/20 opacity-75 grayscale-[0.2]"
+                  : "bg-white dark:bg-card border border-slate-200 dark:border-border hover:border-slate-300 hover:shadow-md"
               }
             `}
           >
@@ -68,21 +73,31 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
                 <span>
                   {formatTime(session.startAt)} - {formatTime(session.endAt)}
                 </span>
-                <span className="text-slate-400 dark:text-slate-500">({duration}m)</span>
+                <span className="text-slate-400 dark:text-slate-500">
+                  ({duration}m)
+                </span>
               </div>
 
               {/* Title & Status Badge */}
               <div className="flex items-start gap-2">
-                <h4 className={`font-bold text-sm leading-tight line-clamp-2 ${isPast ? "text-slate-500 line-through decoration-slate-300" : "text-[#1E293B] dark:text-foreground"}`}>
+                <h4
+                  className={`font-bold text-sm leading-tight line-clamp-2 ${isPast ? "text-slate-500 line-through decoration-slate-300" : "text-[#1E293B] dark:text-foreground"}`}
+                >
                   {session.title}
                 </h4>
                 {isOnAir && (
-                  <Badge variant="default" className="text-[9px] px-1.5 py-0 h-4 bg-red-500 hover:bg-red-600 text-white shrink-0 animate-pulse">
+                  <Badge
+                    variant="default"
+                    className="text-[9px] px-1.5 py-0 h-4 bg-red-500 hover:bg-red-600 text-white shrink-0 animate-pulse"
+                  >
                     LIVE
                   </Badge>
                 )}
                 {isPast && (
-                  <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 shrink-0">
+                  <Badge
+                    variant="secondary"
+                    className="text-[9px] px-1.5 py-0 h-4 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 shrink-0"
+                  >
                     Ended
                   </Badge>
                 )}
@@ -106,7 +121,10 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
                   </Badge>
                 ))}
                 {session.tags.length > 2 && (
-                  <Badge variant="outline" className="text-[10px] px-1 py-0 bg-slate-50 dark:bg-muted text-slate-600 dark:text-slate-300 border-slate-200 dark:border-border">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] px-1 py-0 bg-slate-50 dark:bg-muted text-slate-600 dark:text-slate-300 border-slate-200 dark:border-border"
+                  >
                     +{session.tags.length - 2}
                   </Badge>
                 )}
@@ -126,6 +144,6 @@ export function SessionBlock({ session, isOnAir, isPast, onClick }: SessionBlock
           </div>
         </TooltipContent>
       </Tooltip>
-    </TooltipProvider >
+    </TooltipProvider>
   );
 }

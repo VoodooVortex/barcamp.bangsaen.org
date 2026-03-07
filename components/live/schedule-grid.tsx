@@ -148,14 +148,19 @@ export function ScheduleGrid({
 
   // Group time slots by date
   const timeSlotsGroupedByDate = useMemo(() => {
-    const groups: Array<{ date: string; dateLabel: string; slots: string[] }> = [];
+    const groups: Array<{ date: string; dateLabel: string; slots: string[] }> =
+      [];
     let currentDate = "";
 
     for (const slot of timeSlots) {
       const dateKey = getDateKey(slot);
       if (dateKey !== currentDate) {
         currentDate = dateKey;
-        groups.push({ date: dateKey, dateLabel: formatDateHeader(slot), slots: [] });
+        groups.push({
+          date: dateKey,
+          dateLabel: formatDateHeader(slot),
+          slots: [],
+        });
       }
       groups[groups.length - 1].slots.push(slot);
     }
@@ -232,7 +237,10 @@ export function ScheduleGrid({
                     );
 
                     return (
-                      <div key={venue.id} className={`p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l" : ""}`}>
+                      <div
+                        key={venue.id}
+                        className={`h-full flex flex-col gap-2 p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l" : ""}`}
+                      >
                         {venueSessions?.map((session) => (
                           <SessionBlock
                             key={session.id}
@@ -265,8 +273,8 @@ export function ScheduleGrid({
             )}
 
             {venues.map((venue) => {
-              const venueSessions = (sessionsByVenue[venue.id] || []).filter((s) =>
-                dateGroup.slots.includes(s.startAt)
+              const venueSessions = (sessionsByVenue[venue.id] || []).filter(
+                (s) => dateGroup.slots.includes(s.startAt),
               );
 
               if (venueSessions.length === 0) return null;

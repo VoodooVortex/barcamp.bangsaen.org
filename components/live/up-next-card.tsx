@@ -42,9 +42,10 @@ export function UpNextCard({ session }: UpNextCardProps) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="h-full"
     >
-      <Card className="group hover:shadow-md transition-all border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm">
-        <CardContent className="p-4">
+      <Card className="group h-full hover:shadow-md transition-all border border-slate-200 dark:border-border bg-white dark:bg-card shadow-sm">
+        <CardContent className="p-4 h-full flex flex-col">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0">
               <div className="h-11 w-11 rounded-full bg-slate-100 dark:bg-muted flex items-center justify-center border border-slate-200 dark:border-border">
