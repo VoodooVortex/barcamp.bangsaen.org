@@ -182,19 +182,19 @@ export function ScheduleGrid({
   return (
     <div className="space-y-6">
       {/* Desktop view: Grid */}
-      <div className="hidden md:block w-full overflow-x-auto pb-4">
+      <div className="hidden md:block w-full pb-4">
         <div
           className="grid min-w-[800px] lg:min-w-full relative"
           style={{ gridTemplateColumns: `100px repeat(${venues.length}, 1fr)` }}
         >
           {/* Header row */}
-          <div className="sticky top-0 z-10 bg-[#FFFDF5]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FFFDF5]/60 border-b border-r border-slate-200 dark:border-border">
+          <div className="sticky top-20 z-10 bg-[#FFFDF5]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FFFDF5]/60 border-b border-r border-slate-200 dark:border-border">
             <div className="h-10 bg-white dark:bg-card"></div>
           </div>
           {venues.map((venue, index) => (
             <div
               key={venue.id}
-              className={`sticky top-0 z-10 bg-white dark:bg-card shadow-sm p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l border-slate-200 dark:border-border" : ""}`}
+              className={`sticky top-20 z-10 bg-white dark:bg-card shadow-sm p-3 border-b border-slate-200 dark:border-border ${index > 0 ? "border-l border-slate-200 dark:border-border" : ""}`}
             >
               <div className="flex items-center gap-1 text-sm font-bold text-[#1E293B] dark:text-foreground">
                 <MapPin className="h-3.5 w-3.5 text-[#B45309] dark:text-[#D4A373]" />

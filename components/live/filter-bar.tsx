@@ -44,7 +44,7 @@ export function FilterBar({
   const hasFilters = selectedVenue || searchQuery || selectedTags.length > 0;
 
   return (
-    <div className="space-y-3 p-4 bg-white dark:bg-card shadow-sm rounded-lg border border-slate-200 dark:border-border">
+    <div className="space-y-3 p-4 bg-white sticky top-0 z-20 dark:bg-card shadow-sm rounded-lg border border-slate-200 dark:border-border">
       {/* Search and Venue row */}
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
@@ -100,10 +100,11 @@ export function FilterBar({
             >
               <Badge
                 variant={selectedTags.includes(tag) ? "default" : "outline"}
-                className={`cursor-pointer text-xs ${selectedTags.includes(tag)
-                  ? "bg-ocean dark:bg-ocean-dark hover:bg-ocean-dark dark:hover:bg-ocean text-white dark:text-ocean-light border-ocean dark:border-ocean-dark"
-                  : "hover:bg-ocean/10 dark:hover:bg-ocean/20 hover:text-ocean-dark dark:hover:text-ocean-light hover:border-ocean/30 dark:hover:border-ocean/40"
-                  }`}
+                className={`cursor-pointer text-xs ${
+                  selectedTags.includes(tag)
+                    ? "bg-ocean dark:bg-ocean-dark hover:bg-ocean-dark dark:hover:bg-ocean text-white dark:text-ocean-light border-ocean dark:border-ocean-dark"
+                    : "hover:bg-ocean/10 dark:hover:bg-ocean/20 hover:text-ocean-dark dark:hover:text-ocean-light hover:border-ocean/30 dark:hover:border-ocean/40"
+                }`}
               >
                 {tag}
               </Badge>
