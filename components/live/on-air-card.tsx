@@ -134,7 +134,7 @@ export function OnAirCard({ session }: OnAirCardProps) {
 
             <div className="flex-1 min-w-0">
               {/* Title */}
-              <h3 className="text-base sm:text-lg min-[1920px]:text-2xl leading-tight mb-2 pr-16 font-display text-[#1E293B] dark:text-foreground tracking-tight">
+              <h3 className="text-base sm:text-lg min-[1920px]:text-2xl font-bold leading-tight mb-2 pr-16 font-display text-[#1E293B] dark:text-foreground tracking-tight">
                 {session.title}
               </h3>
 
