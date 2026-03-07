@@ -15,6 +15,40 @@ interface LivePageProps {
   params: Promise<{ slug: string }>;
 }
 
+export async function generateMetadata({
+  params,
+}: LivePageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  const eventYear = await db.query.eventYears.findFirst({
+    where: eq(eventYears.slug, slug),
+  });
+
+  if (!eventYear || !eventYear.published) {
+    return {
+      title: "Event Not Found",
+    };
+  }
+
+  return {
+    title: `Live Sessions: ${eventYear.name}`,
+    description: `Track real-time sessions and schedules for ${eventYear.name} at Barcamp Bangsaen.`,
+    openGraph: {
+      title: `Live Sessions: ${eventYear.name} | Barcamp Bangsaen`,
+      description: `Track real-time sessions and schedules for ${eventYear.name}. Join the unconference!`,
+      type: "website",
+      // Ideally, an event-specific image could go here:
+      images: [{ url: `/og-${slug}.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Live Sessions: ${eventYear.name} | Barcamp Bangsaen`,
+      description: `Track real-time sessions and schedules for ${eventYear.name}.`,
+      images: [{ url: `/og-${slug}.png`, width: 1200, height: 630 }],
+    },
+  };
+}
+
 async function getSchedule(slug: string) {
   try {
     const eventYear = await db.query.eventYears.findFirst({
@@ -72,10 +106,10 @@ async function getSchedule(slug: string) {
         venueId: session.venueId,
         venue: session.venue
           ? {
-            id: session.venue.id,
-            name: session.venue.name,
-            order: session.venue.order,
-          }
+              id: session.venue.id,
+              name: session.venue.name,
+              order: session.venue.order,
+            }
           : { id: "", name: "", order: 0 },
       })),
     };
@@ -130,7 +164,7 @@ async function getStatus(slug: string) {
     });
 
     const upNext = allSessions.filter(
-      (s) => !s.actualStartAt && !s.actualEndAt && new Date(s.startAt) > now
+      (s) => !s.actualStartAt && !s.actualEndAt && new Date(s.startAt) > now,
     );
 
     return {
@@ -148,12 +182,16 @@ async function getStatus(slug: string) {
         livestreamUrl: session.livestreamUrl ?? undefined,
         venue: session.venue
           ? {
-            id: session.venue.id,
-            name: session.venue.name,
-            order: session.venue.order,
-          }
+              id: session.venue.id,
+              name: session.venue.name,
+              order: session.venue.order,
+            }
           : { id: "", name: "", order: 0 },
-        progress: calculateProgress(session.actualStartAt || session.startAt, session.endAt, now),
+        progress: calculateProgress(
+          session.actualStartAt || session.startAt,
+          session.endAt,
+          now,
+        ),
       })),
       upNext: upNext.map((session) => ({
         id: session.id,
@@ -164,10 +202,10 @@ async function getStatus(slug: string) {
         tags: session.tags,
         venue: session.venue
           ? {
-            id: session.venue.id,
-            name: session.venue.name,
-            order: session.venue.order,
-          }
+              id: session.venue.id,
+              name: session.venue.name,
+              order: session.venue.order,
+            }
           : { id: "", name: "", order: 0 },
         startsIn: calculateTimeUntil(session.startAt, now),
       })),
@@ -176,17 +214,6 @@ async function getStatus(slug: string) {
     console.error("Failed to fetch status:", error);
     return null;
   }
-}
-
-export async function generateMetadata({
-  params,
-}: LivePageProps): Promise<Metadata> {
-  const { slug } = await params;
-
-  return {
-    title: `Barcamp Bangsaen`,
-    description: `View live sessions and schedule for Barcamp Bangsaen ${slug}`,
-  };
 }
 
 async function LivePageContent({ slug }: { slug: string }) {
