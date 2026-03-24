@@ -35,6 +35,12 @@ interface ScheduleGridProps {
   selectedTags?: string[];
 }
 
+type SessionsByVenueAndDate = Record<string, Record<string, Session[]>>;
+type SessionsByVenueAndStartAt = Record<
+  string,
+  Record<string, Record<string, Session[]>>
+>;
+
 export function ScheduleGrid({
   venues,
   sessions,
@@ -75,18 +81,36 @@ export function ScheduleGrid({
     });
   }, [sessions, selectedVenue, searchQuery, selectedTags]);
 
-  // Group sessions by venue
-  const sessionsByVenue = useMemo(() => {
-    const grouped: Record<string, Session[]> = {};
+  // Group once so render-time lookups stay O(1) instead of rescanning arrays.
+  const groupedSessions = useMemo(() => {
+    const byVenueAndDate: SessionsByVenueAndDate = {};
+    const byVenueAndStartAt: SessionsByVenueAndStartAt = {};
 
-    for (const venue of venues) {
-      grouped[venue.id] = filteredSessions.filter(
-        (s) => s.venueId === venue.id,
-      );
+    for (const session of filteredSessions) {
+      const dateKey = getDateKey(session.startAt);
+
+      const venueDateGroup =
+        byVenueAndDate[session.venueId] ?? (byVenueAndDate[session.venueId] = {});
+      const venueSessionsForDate =
+        venueDateGroup[dateKey] ?? (venueDateGroup[dateKey] = []);
+      venueSessionsForDate.push(session);
+
+      const venueStartAtGroup =
+        byVenueAndStartAt[session.venueId] ??
+        (byVenueAndStartAt[session.venueId] = {});
+      const venueDateStartAtGroup =
+        venueStartAtGroup[dateKey] ?? (venueStartAtGroup[dateKey] = {});
+      const venueSessionsForStartAt =
+        venueDateStartAtGroup[session.startAt] ??
+        (venueDateStartAtGroup[session.startAt] = []);
+      venueSessionsForStartAt.push(session);
     }
 
-    return grouped;
-  }, [filteredSessions, venues]);
+    return { byVenueAndDate, byVenueAndStartAt };
+  }, [filteredSessions]);
+
+  const { byVenueAndDate: sessionsByVenueAndDate, byVenueAndStartAt } =
+    groupedSessions;
 
   // Get all unique time slots
   const timeSlots = useMemo(() => {
@@ -232,9 +256,8 @@ export function ScheduleGrid({
 
                   {/* Sessions for each venue */}
                   {venues.map((venue, index) => {
-                    const venueSessions = sessionsByVenue[venue.id]?.filter(
-                      (s) => s.startAt === timeSlot,
-                    );
+                    const venueSessions =
+                      byVenueAndStartAt[venue.id]?.[dateGroup.date]?.[timeSlot];
 
                     return (
                       <div
@@ -273,11 +296,10 @@ export function ScheduleGrid({
             )}
 
             {venues.map((venue) => {
-              const venueSessions = (sessionsByVenue[venue.id] || []).filter(
-                (s) => dateGroup.slots.includes(s.startAt),
-              );
+              const venueSessions =
+                sessionsByVenueAndDate[venue.id]?.[dateGroup.date];
 
-              if (venueSessions.length === 0) return null;
+              if (!venueSessions || venueSessions.length === 0) return null;
 
               return (
                 <div key={venue.id} className="space-y-2">
