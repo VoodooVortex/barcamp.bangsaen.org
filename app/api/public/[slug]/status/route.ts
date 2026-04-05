@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentServerTime } from "@/lib/time/ntp";
 import {
   buildLiveStatusData,
-  getPublishedLiveEventYear,
+  getLiveEventYear,
 } from "@/lib/public-live-data";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ export async function GET(
       return NextResponse.json({ error: "Invalid slug parameter" }, { status: 400 });
     }
 
-    const eventYear = await getPublishedLiveEventYear(slug);
+    const eventYear = await getLiveEventYear(slug);
 
     if (!eventYear) {
       return NextResponse.json({ error: "Event year not found" }, { status: 404 });

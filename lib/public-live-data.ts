@@ -9,18 +9,17 @@ import type {
 import { eventYears, sessions, venues } from "@/lib/db/schema";
 import { getCurrentServerTime } from "@/lib/time/ntp";
 
-export interface PublicLiveEventYear
-  extends Pick<
-    EventYearRow,
-    | "id"
-    | "slug"
-    | "name"
-    | "location"
-    | "timezone"
-    | "startDate"
-    | "endDate"
-    | "published"
-  > {}
+export type PublicLiveEventYear = Pick<
+  EventYearRow,
+  | "id"
+  | "slug"
+  | "name"
+  | "location"
+  | "timezone"
+  | "startDate"
+  | "endDate"
+  | "published"
+>;
 
 interface PublicLiveScheduleSession
   extends Pick<
@@ -38,7 +37,7 @@ interface PublicLiveScheduleSession
     | "livestreamUrl"
     | "venueId"
   > {
-  venue: VenueRow | null;
+  venue: VenueRow;
 }
 
 interface PublicLiveStatusSession
@@ -54,7 +53,7 @@ interface PublicLiveStatusSession
     | "tags"
     | "livestreamUrl"
   > {
-  venue: VenueRow | null;
+  venue: VenueRow;
 }
 
 interface PublicLiveSerializedEventYear {
@@ -80,7 +79,7 @@ interface PublicLiveSerializedScheduleSession {
   tags: string[];
   livestreamUrl: string | null;
   venueId: string;
-  venue: VenueRow | null;
+  venue: VenueRow;
 }
 
 interface PublicLiveSerializedStatusSession {
@@ -92,8 +91,8 @@ interface PublicLiveSerializedStatusSession {
   actualStartAt: string | null;
   actualEndAt: string | null;
   tags: string[];
-  livestreamUrl: string | null;
-  venue: VenueRow | null;
+  livestreamUrl?: string | null;
+  venue: VenueRow;
   progress?: number;
   startsIn?: string;
 }
@@ -111,7 +110,7 @@ export interface PublicLiveStatusData {
   upNext: PublicLiveSerializedStatusSession[];
 }
 
-export async function getPublishedLiveEventYear(
+export async function getLiveEventYear(
   slug: string,
 ): Promise<PublicLiveEventYear | null> {
   const eventYear = await db.query.eventYears.findFirst({
@@ -127,6 +126,14 @@ export async function getPublishedLiveEventYear(
       published: true,
     },
   });
+
+  return eventYear ?? null;
+}
+
+export async function getPublishedLiveEventYear(
+  slug: string,
+): Promise<PublicLiveEventYear | null> {
+  const eventYear = await getLiveEventYear(slug);
 
   if (!eventYear || !eventYear.published) {
     return null;
@@ -221,7 +228,7 @@ export async function buildLiveScheduleData(
     sessions: sessionsList.map((session) =>
       serializeScheduleSession({
         ...session,
-        venue: session.venue ?? null,
+        venue: session.venue!,
       }),
     ),
   };
@@ -263,7 +270,7 @@ export async function buildLiveStatusData(
     onAir: onAir.map((session) =>
       serializeStatusSession({
         ...session,
-        venue: session.venue ?? null,
+        venue: session.venue!,
       }, now),
     ),
     upNext: upNext.map((session) => ({
@@ -275,6 +282,7 @@ export async function buildLiveStatusData(
       actualStartAt: session.actualStartAt?.toISOString() ?? null,
       actualEndAt: session.actualEndAt?.toISOString() ?? null,
       tags: session.tags,
+      livestreamUrl: session.livestreamUrl ?? null,
       venue: session.venue,
       startsIn: calculateTimeUntil(session.startAt, now),
     })),
