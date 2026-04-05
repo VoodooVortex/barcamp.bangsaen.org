@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sessions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireEventManager } from "@/lib/auth/admin";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
 
 // POST /api/admin/sessions/[id]/control
@@ -12,8 +12,6 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { id } = await params;
         const body = await request.json();
         const { action } = body;
@@ -38,6 +36,8 @@ export async function POST(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(existingSession.eventYear);
 
         const now = new Date();
         const updateData: Record<string, unknown> = { updatedAt: now };

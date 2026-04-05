@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { eventYears } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 import { eventSchema, validateEventDateRange } from "@/lib/validations/event";
 
 // GET /api/admin/events
 export async function GET() {
     try {
-        await requireAuthenticated();
+        await requireAdmin();
 
         // Query all event years, sorted by slug
         const eventsList = await db.query.eventYears.findMany({
@@ -54,7 +54,7 @@ export async function GET() {
 // POST /api/admin/events
 export async function POST(request: NextRequest) {
     try {
-        await requireAuthenticated();
+        await requireAdmin();
 
         const body = await request.json();
         const validation = eventSchema.safeParse(body);

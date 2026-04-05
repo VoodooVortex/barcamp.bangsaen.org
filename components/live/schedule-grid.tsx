@@ -41,6 +41,11 @@ type SessionsByVenueAndStartAt = Record<
   Record<string, Record<string, Session[]>>
 >;
 
+function getDateKey(timeStr: string) {
+  const d = new Date(timeStr);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 export function ScheduleGrid({
   venues,
   sessions,
@@ -148,11 +153,6 @@ export function ScheduleGrid({
       minute: "2-digit",
       hour12: false,
     });
-  };
-
-  const getDateKey = (timeStr: string) => {
-    const d = new Date(timeStr);
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   };
 
   const formatDateHeader = (timeStr: string) => {

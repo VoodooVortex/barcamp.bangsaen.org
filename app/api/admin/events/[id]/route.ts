@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { eventYears } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 import { eventUpdateSchema, validateEventDateRange } from "@/lib/validations/event";
 
 // PATCH /api/admin/events/[id]
@@ -11,7 +11,7 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
+        await requireAdmin();
 
         const { id } = await params;
 
@@ -104,7 +104,7 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
+        await requireAdmin();
 
         const { id } = await params;
 

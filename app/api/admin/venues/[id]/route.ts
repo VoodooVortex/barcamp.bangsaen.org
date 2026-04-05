@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { venues, sessions } from "@/lib/db/schema";
 import { eq, and, ne } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireEventManager } from "@/lib/auth/admin";
 import { venueUpdateSchema } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
 
@@ -14,8 +14,6 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { id } = await params;
 
         const existingVenue = await db.query.venues.findFirst({
@@ -31,6 +29,8 @@ export async function PATCH(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(existingVenue.eventYear);
 
         const body = await request.json();
         const validation = venueUpdateSchema.safeParse(body);
@@ -97,8 +97,6 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { id } = await params;
 
         const existingVenue = await db.query.venues.findFirst({
@@ -114,6 +112,8 @@ export async function DELETE(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(existingVenue.eventYear);
 
         // Check if venue has sessions
         const venueSessions = await db.query.sessions.findMany({

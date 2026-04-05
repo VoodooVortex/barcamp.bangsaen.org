@@ -2,9 +2,9 @@
 // CRUD operations for sessions (admin only)
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sessions, eventYears } from "@/lib/db/schema";
+import { sessions, eventYears, venues } from "@/lib/db/schema";
 import { eq, and, asc } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireEventManager } from "@/lib/auth/admin";
 import { sessionSchema, validateTimeRange, sessionsOverlap } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
 
@@ -14,8 +14,6 @@ export async function GET(
     { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { slug } = await params;
 
         if (!slug) {
@@ -35,6 +33,8 @@ export async function GET(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(eventYear);
 
         const sessionsList = await db.query.sessions.findMany({
             where: eq(sessions.eventYearId, eventYear.id),
@@ -68,8 +68,6 @@ export async function POST(
     { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { slug } = await params;
 
         if (!slug) {
@@ -90,6 +88,8 @@ export async function POST(
             );
         }
 
+        await requireEventManager(eventYear);
+
         const body = await request.json();
         const validation = sessionSchema.safeParse(body);
 
@@ -101,6 +101,20 @@ export async function POST(
         }
 
         const data = validation.data;
+
+        const selectedVenue = await db.query.venues.findFirst({
+            where: and(
+                eq(venues.id, data.venueId),
+                eq(venues.eventYearId, eventYear.id)
+            ),
+        });
+
+        if (!selectedVenue) {
+            return NextResponse.json(
+                { error: "Venue does not belong to this event year" },
+                { status: 400 }
+            );
+        }
 
         // Validate time range
         if (!validateTimeRange(data.startAt, data.endAt)) {

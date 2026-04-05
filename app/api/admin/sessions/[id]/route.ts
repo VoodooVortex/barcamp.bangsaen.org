@@ -2,9 +2,9 @@
 // Update and delete individual sessions
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sessions } from "@/lib/db/schema";
+import { sessions, venues } from "@/lib/db/schema";
 import { eq, and, ne } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireEventManager } from "@/lib/auth/admin";
 import { sessionUpdateSchema, validateTimeRange, sessionsOverlap } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
 
@@ -14,8 +14,6 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { id } = await params;
 
         const existingSession = await db.query.sessions.findFirst({
@@ -32,6 +30,8 @@ export async function PATCH(
             );
         }
 
+        await requireEventManager(existingSession.eventYear);
+
         const body = await request.json();
         const validation = sessionUpdateSchema.safeParse(body);
 
@@ -43,6 +43,22 @@ export async function PATCH(
         }
 
         const data = validation.data;
+
+        if (data.venueId) {
+            const selectedVenue = await db.query.venues.findFirst({
+                where: and(
+                    eq(venues.id, data.venueId),
+                    eq(venues.eventYearId, existingSession.eventYearId)
+                ),
+            });
+
+            if (!selectedVenue) {
+                return NextResponse.json(
+                    { error: "Venue does not belong to this event year" },
+                    { status: 400 }
+                );
+            }
+        }
 
         // Validate time range if both are provided
         const startAt = data.startAt ? new Date(data.startAt) : new Date(existingSession.startAt);
@@ -131,8 +147,6 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { id } = await params;
 
         const existingSession = await db.query.sessions.findFirst({
@@ -148,6 +162,8 @@ export async function DELETE(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(existingSession.eventYear);
 
         await db.delete(sessions).where(eq(sessions.id, id));
 

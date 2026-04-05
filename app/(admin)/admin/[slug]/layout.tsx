@@ -1,10 +1,11 @@
 // Year-specific admin layout
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { eventYears } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { Calendar, MapPin } from "lucide-react";
 import { YearSwitcher } from "@/components/admin/year-switcher";
+import { getCurrentUser } from "@/lib/auth/admin";
 
 interface YearLayoutProps {
   children: React.ReactNode;
@@ -29,10 +30,22 @@ export default async function YearLayout({
     notFound();
   }
 
+  const user = await getCurrentUser();
+
+  if (!user || !user.isWhitelisted) {
+    redirect(`/auth/login?redirect=/admin/${slug}/dashboard`);
+  }
+
+  if (!user.isAdmin && !eventYear.isCurrentYear) {
+    redirect("/auth/unauthorized");
+  }
+
   // Get all years for the selector
-  const allYears = await db.query.eventYears.findMany({
-    orderBy: desc(eventYears.createdAt),
-  });
+  const allYears = user.isAdmin
+    ? await db.query.eventYears.findMany({
+        orderBy: desc(eventYears.createdAt),
+      })
+    : [eventYear];
 
   return (
     <div className="space-y-6">

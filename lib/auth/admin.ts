@@ -1,8 +1,11 @@
 // Admin authentication utilities
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
+import type { EventYear } from "@/lib/db/schema";
 import { adminUsers } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+
+export type AuthenticatedUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;
 
 /**
  * Check if the current user is an admin
@@ -22,15 +25,37 @@ export async function requireAdmin(): Promise<void> {
     }
 }
 
-/**
- * Require authenticated access, throw error if no active user session
- */
-export async function requireAuthenticated(): Promise<void> {
+async function requireWhitelistedUser(): Promise<AuthenticatedUser> {
     const user = await getCurrentUser();
 
     if (!user || !user.isWhitelisted) {
         throw new Error("Unauthorized: Authentication and whitelist required");
     }
+
+    return user;
+}
+
+/**
+ * Require authenticated access, throw error if no active user session
+ */
+export async function requireAuthenticated(): Promise<void> {
+    await requireWhitelistedUser();
+}
+
+export async function requireEventManager(
+    eventYear: Pick<EventYear, "isCurrentYear">
+): Promise<AuthenticatedUser> {
+    const user = await requireWhitelistedUser();
+
+    if (user.isAdmin) {
+        return user;
+    }
+
+    if (user.isStaff && eventYear.isCurrentYear) {
+        return user;
+    }
+
+    throw new Error("Unauthorized: Admin or current-year staff access required");
 }
 
 /**

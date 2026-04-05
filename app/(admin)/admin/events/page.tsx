@@ -1,15 +1,15 @@
 import { db } from "@/lib/db";
 import { eventYears } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 import { redirect } from "next/navigation";
 import EventsClient from "./events-client";
 
 export default async function EventsPage() {
     try {
-        await requireAuthenticated();
+        await requireAdmin();
     } catch {
-        redirect("/auth/login?redirect=/admin/events");
+        redirect("/auth/unauthorized");
     }
 
     const eventsList = await db.query.eventYears.findMany({

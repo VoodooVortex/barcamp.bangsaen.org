@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { venues, eventYears } from "@/lib/db/schema";
 import { eq, and, asc } from "drizzle-orm";
-import { requireAuthenticated } from "@/lib/auth/admin";
+import { requireEventManager } from "@/lib/auth/admin";
 import { venueSchema } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
 
@@ -14,8 +14,6 @@ export async function GET(
     { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { slug } = await params;
 
         if (!slug) {
@@ -35,6 +33,8 @@ export async function GET(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(eventYear);
 
         const venuesList = await db.query.venues.findMany({
             where: eq(venues.eventYearId, eventYear.id),
@@ -65,8 +65,6 @@ export async function POST(
     { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        await requireAuthenticated();
-
         const { slug } = await params;
 
         if (!slug) {
@@ -86,6 +84,8 @@ export async function POST(
                 { status: 404 }
             );
         }
+
+        await requireEventManager(eventYear);
 
         const body = await request.json();
         const validation = venueSchema.safeParse(body);
