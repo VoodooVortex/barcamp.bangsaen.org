@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { LiveViewer } from "@/components/live/live-viewer";
+import { getOgImage } from "@/lib/seo";
 import {
   buildLiveViewerData,
   getPublishedLiveEventYear,
@@ -32,20 +33,26 @@ export async function generateMetadata({
     };
   }
 
+  const ogImage = getOgImage({
+    alt: `${eventYear.name} share image`,
+    slug,
+  });
+
   return {
     title: `Live Sessions: ${eventYear.name}`,
     description: `Track real-time sessions and schedules for ${eventYear.name} at Barcamp Bangsaen.`,
     openGraph: {
+      url: `/live/${slug}`,
       title: `Live Sessions: ${eventYear.name} | Barcamp Bangsaen`,
       description: `Track real-time sessions and schedules for ${eventYear.name}. Join the unconference!`,
       type: "website",
-      images: [{ url: `/og-${slug}.png`, width: 1200, height: 630 }],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `Live Sessions: ${eventYear.name} | Barcamp Bangsaen`,
       description: `Track real-time sessions and schedules for ${eventYear.name}.`,
-      images: [{ url: `/og-${slug}.png`, width: 1200, height: 630 }],
+      images: [ogImage.url],
     },
   };
 }

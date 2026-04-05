@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Quicksand } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+
+import { getOgImage } from "@/lib/seo";
 import "./globals.css";
+
+const homeOgImage = getOgImage({
+  alt: "Barcamp Bangsaen #4 2026",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://barcamp.bangsaen.org"),
@@ -32,21 +38,14 @@ export const metadata: Metadata = {
     description:
       "An unconference by the sea where ideas flow freely. Join us for talks, and networking at Bangsaen beach.",
     siteName: "Barcamp Bangsaen",
-    images: [
-      {
-        url: "/og-image.png", // Make sure to add this image to /public
-        width: 1200,
-        height: 630,
-        alt: "Barcamp Bangsaen",
-      },
-    ],
+    images: [homeOgImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Barcamp Bangsaen",
     description:
       "An unconference by the sea where ideas flow freely. Join us for talks, and networking at Bangsaen beach.",
-    images: ["/og-image.png"],
+    images: [homeOgImage.url],
   },
   robots: {
     index: true,
