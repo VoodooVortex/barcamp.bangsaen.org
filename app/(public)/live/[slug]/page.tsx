@@ -69,6 +69,8 @@ async function LivePageContent({ slug }: { slug: string }) {
       slug={slug}
       initialData={data.schedule}
       initialStatus={normalizeLiveViewerStatus(data.status)}
+      photos={data.photos}
+      eventName={data.schedule.eventYear.name}
     />
   );
 }

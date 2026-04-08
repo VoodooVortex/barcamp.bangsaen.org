@@ -21,6 +21,7 @@ import { FilterBar } from "./filter-bar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PhotoGallery } from "@/components/photo-gallery";
 
 interface EventYear {
   id: string;
@@ -84,16 +85,27 @@ interface ScheduleData {
   sessions: Session[];
 }
 
+interface LivePhoto {
+  id: string;
+  imageUrl: string;
+  caption: string | null;
+  order: number;
+}
+
 interface LiveViewerProps {
   slug: string;
   initialData: ScheduleData;
   initialStatus: LiveStatus;
+  photos: LivePhoto[];
+  eventName: string;
 }
 
 export function LiveViewer({
   slug,
   initialData,
   initialStatus,
+  photos,
+  eventName,
 }: LiveViewerProps) {
   const [schedule, setSchedule] = useState<ScheduleData>(initialData);
   const [status, setStatus] = useState<LiveStatus>(initialStatus);
@@ -351,8 +363,8 @@ export function LiveViewer({
       </div>
 
       {/* Main content tabs */}
-      <Tabs defaultValue="live" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-flex bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm rounded-lg p-1">
+      <Tabs defaultValue={eventStatus === "ended" && photos.length > 0 ? "photos" : "live"} className="space-y-4">
+        <TabsList className={`grid w-full ${eventStatus === "ended" && photos.length > 0 ? "grid-cols-3" : "grid-cols-2"} lg:w-auto lg:inline-flex bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm rounded-lg p-1`}>
           <TabsTrigger
             value="live"
             className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 dark:text-slate-300 rounded-md"
@@ -365,6 +377,14 @@ export function LiveViewer({
           >
             Full Schedule
           </TabsTrigger>
+          {eventStatus === "ended" && photos.length > 0 && (
+            <TabsTrigger
+              value="photos"
+              className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 dark:text-slate-300 rounded-md"
+            >
+              Photos
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="live" className="space-y-6">
@@ -490,6 +510,17 @@ export function LiveViewer({
             selectedTags={selectedTags}
           />
         </TabsContent>
+
+        {eventStatus === "ended" && photos.length > 0 && (
+          <TabsContent value="photos" className="space-y-4">
+            <div className="text-center mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold font-display text-[#1E293B] dark:text-foreground">
+                Moments from {eventName}
+              </h2>
+            </div>
+            <PhotoGallery photos={photos} eventName={eventName} />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

@@ -1,0 +1,112 @@
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { eventPhotos, eventYears } from "@/lib/db/schema";
+import { eq, asc, desc } from "drizzle-orm";
+import { requireEventManager } from "@/lib/auth/admin";
+import { uploadEventPhoto } from "@/lib/supabase/storage";
+import {
+    ALLOWED_MIME_TYPES,
+    MAX_FILE_SIZE_BYTES,
+} from "@/lib/validations/photo";
+
+export async function GET(
+    _request: NextRequest,
+    { params }: { params: Promise<{ slug: string }> }
+) {
+    try {
+        const { slug } = await params;
+
+        const eventYear = await db.query.eventYears.findFirst({
+            where: eq(eventYears.slug, slug),
+        });
+        if (!eventYear) {
+            return NextResponse.json({ error: "Event year not found" }, { status: 404 });
+        }
+
+        await requireEventManager(eventYear);
+
+        const photos = await db.query.eventPhotos.findMany({
+            where: eq(eventPhotos.eventYearId, eventYear.id),
+            orderBy: asc(eventPhotos.order),
+        });
+
+        return NextResponse.json({ photos });
+    } catch (error) {
+        if (error instanceof Error && error.message.includes("Unauthorized")) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+        console.error("Failed to fetch photos:", error);
+        return NextResponse.json({ error: "Failed to fetch photos" }, { status: 500 });
+    }
+}
+
+export async function POST(
+    request: NextRequest,
+    { params }: { params: Promise<{ slug: string }> }
+) {
+    try {
+        const { slug } = await params;
+
+        const eventYear = await db.query.eventYears.findFirst({
+            where: eq(eventYears.slug, slug),
+        });
+        if (!eventYear) {
+            return NextResponse.json({ error: "Event year not found" }, { status: 404 });
+        }
+
+        await requireEventManager(eventYear);
+
+        const formData = await request.formData();
+        const file = formData.get("file") as File | null;
+
+        if (!file) {
+            return NextResponse.json({ error: "No file provided" }, { status: 400 });
+        }
+        if (!ALLOWED_MIME_TYPES.includes(file.type as typeof ALLOWED_MIME_TYPES[number])) {
+            return NextResponse.json(
+                { error: "Invalid file type. Allowed: JPEG, PNG, WebP, GIF" },
+                { status: 400 }
+            );
+        }
+        if (file.size > MAX_FILE_SIZE_BYTES) {
+            return NextResponse.json({ error: "File too large (max 10 MB)" }, { status: 400 });
+        }
+
+        // Auto-increment order: max existing order + 1
+        const lastPhoto = await db.query.eventPhotos.findFirst({
+            where: eq(eventPhotos.eventYearId, eventYear.id),
+            orderBy: desc(eventPhotos.order),
+            columns: { order: true },
+        });
+        const nextOrder = lastPhoto ? lastPhoto.order + 1 : 0;
+
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        const { imageUrl, storagePath } = await uploadEventPhoto(
+            slug,
+            buffer,
+            file.name,
+            file.type
+        );
+
+        const [newPhoto] = await db
+            .insert(eventPhotos)
+            .values({
+                eventYearId: eventYear.id,
+                imageUrl,
+                storagePath,
+                caption: null,
+                order: nextOrder,
+            })
+            .returning();
+
+        return NextResponse.json({ photo: newPhoto }, { status: 201 });
+    } catch (error) {
+        if (error instanceof Error && error.message.includes("Unauthorized")) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+        console.error("Failed to upload photo:", error);
+        return NextResponse.json({ error: "Failed to upload photo" }, { status: 500 });
+    }
+}

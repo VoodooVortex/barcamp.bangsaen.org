@@ -6,7 +6,7 @@ import type {
   Session as SessionRow,
   Venue as VenueRow,
 } from "@/lib/db/schema";
-import { eventYears, sessions, venues } from "@/lib/db/schema";
+import { eventPhotos, eventYears, sessions, venues } from "@/lib/db/schema";
 import { getCurrentServerTime } from "@/lib/time/ntp";
 
 export type PublicLiveEventYear = Pick<
@@ -289,6 +289,13 @@ export async function buildLiveStatusData(
   };
 }
 
+export interface PublicLivePhoto {
+  id: string;
+  imageUrl: string;
+  caption: string | null;
+  order: number;
+}
+
 export async function buildLiveViewerData(
   slug: string,
   now: Date = getCurrentServerTime(),
@@ -296,6 +303,7 @@ export async function buildLiveViewerData(
   | {
       schedule: PublicLiveScheduleData;
       status: PublicLiveStatusData;
+      photos: PublicLivePhoto[];
     }
   | null
 > {
@@ -305,12 +313,17 @@ export async function buildLiveViewerData(
     return null;
   }
 
-  const [schedule, status] = await Promise.all([
+  const [schedule, status, photos] = await Promise.all([
     buildLiveScheduleData(eventYear),
     buildLiveStatusData(eventYear, now),
+    db.query.eventPhotos.findMany({
+      where: eq(eventPhotos.eventYearId, eventYear.id),
+      orderBy: asc(eventPhotos.order),
+      columns: { id: true, imageUrl: true, caption: true, order: true },
+    }),
   ]);
 
-  return { schedule, status };
+  return { schedule, status, photos };
 }
 
 function calculateProgress(

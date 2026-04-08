@@ -1,9 +1,9 @@
 // Home page for Barcamp Bangsaen
 // Landing page with event info and links to live sessions
 import { db } from "@/lib/db";
-import { eventYears, sessions } from "@/lib/db/schema";
-import { desc, eq } from "drizzle-orm";
-// import Link from "next/link";
+import { eventYears, sessions, eventPhotos } from "@/lib/db/schema";
+import { desc, eq, asc } from "drizzle-orm";
+import Link from "next/link";
 import { Hero } from "@/components/hero";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,9 @@ import { Badge } from "@/components/ui/badge";
 //   Wifi,
 //   Sparkles,
 // } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { EventTicket } from "@/components/event-ticket";
+import { PhotoGallery } from "@/components/photo-gallery";
 
 export default async function HomePage() {
   // Get published years
@@ -26,11 +28,15 @@ export default async function HomePage() {
       sessions: {
         where: eq(sessions.isPublished, true),
       },
+      photos: {
+        orderBy: asc(eventPhotos.order),
+      },
     },
   });
 
   const latestYear = publishedYears[0]?.slug;
   const currentEvent = publishedYears[0];
+  const currentPhotos = publishedYears[0]?.photos ?? [];
 
   return (
     <div className="min-h-screen">
@@ -116,6 +122,34 @@ export default async function HomePage() {
 
             {/* Ticket Style Event Card */}
             <EventTicket event={currentEvent} />
+          </div>
+        </section>
+      )}
+
+      {/* Photo Highlights Section */}
+      {currentEvent && currentPhotos.length > 0 && (
+        <section className="py-16 px-4 bg-background">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-10">
+              <Badge variant="secondary" className="mb-4 text-base px-4 py-1">
+                Photo Highlights
+              </Badge>
+              <h2 className="text-2xl md:text-4xl font-display font-bold text-foreground">
+                Moments from {currentEvent.name}
+              </h2>
+            </div>
+            <PhotoGallery photos={currentPhotos.slice(0, 6)} eventName={currentEvent.name} />
+            {currentPhotos.length > 6 && (
+              <div className="text-center mt-8">
+                <Link
+                  href={`/live/${latestYear}`}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  View all {currentPhotos.length} photos
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            )}
           </div>
         </section>
       )}

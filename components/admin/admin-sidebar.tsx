@@ -18,6 +18,8 @@ import {
   ChevronRight,
   Menu,
   X,
+  ImageIcon,
+  type LucideIcon,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -55,8 +57,11 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   const venuesHref = actualSlug
     ? `/admin/${actualSlug}/venues`
     : "/admin/venues";
+  const photosHref = actualSlug
+    ? `/admin/${actualSlug}/photos`
+    : "/admin/photos";
 
-  const navItems = [
+  const navItems: { href: string; label: string; icon: LucideIcon; isActive: boolean }[] = [
     {
       href: dashboardHref,
       label: "Dashboard",
@@ -76,6 +81,13 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
       icon: MapPin,
       isActive:
         pathname === venuesHref || pathname.startsWith(`${venuesHref}/`),
+    },
+    {
+      href: photosHref,
+      label: "Photos",
+      icon: ImageIcon,
+      isActive:
+        pathname === photosHref || pathname.startsWith(`${photosHref}/`),
     },
   ];
 

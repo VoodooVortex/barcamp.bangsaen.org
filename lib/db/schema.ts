@@ -39,6 +39,7 @@ export const eventYears = pgTable(
 export const eventYearsRelations = relations(eventYears, ({ many }) => ({
     venues: many(venues),
     sessions: many(sessions),
+    photos: many(eventPhotos),
 }));
 
 // Venues table
@@ -122,6 +123,35 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
     }),
 }));
 
+// Event Photos table
+export const eventPhotos = pgTable(
+    "event_photos",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        eventYearId: uuid("event_year_id")
+            .references(() => eventYears.id)
+            .notNull(),
+        imageUrl: text("image_url").notNull(),
+        storagePath: text("storage_path").notNull(),
+        caption: text("caption"),
+        order: integer("order").default(0).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        eventYearIdx: index("event_photos_event_year_id_idx").on(table.eventYearId),
+        orderIdx: index("event_photos_order_idx").on(table.order),
+    })
+);
+
+export const eventPhotosRelations = relations(eventPhotos, ({ one }) => ({
+    eventYear: one(eventYears, {
+        fields: [eventPhotos.eventYearId],
+        references: [eventYears.id],
+    }),
+}));
+
 export const roleEnum = pgEnum("role", ["admin", "staff"]);
 
 // Admin Users table (Whitelist)
@@ -153,3 +183,5 @@ export type Session = typeof sessions.$inferSelect;
 export type NewSession = typeof sessions.$inferInsert;
 export type AdminUser = typeof adminUsers.$inferSelect;
 export type NewAdminUser = typeof adminUsers.$inferInsert;
+export type EventPhoto = typeof eventPhotos.$inferSelect;
+export type NewEventPhoto = typeof eventPhotos.$inferInsert;
