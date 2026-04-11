@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Calendar, Clock, MapPin, Mic2, Timer } from "lucide-react";
 import Link from "next/link";
 
@@ -101,7 +102,11 @@ export function EventTicket({ event }: EventTicketProps) {
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       className={`mt-8 overflow-hidden rounded-2xl border-0 shadow-xl flex flex-col md:flex-row transition-all ${
         isLive ? "bg-white/90 dark:bg-card/90 shadow-navy/5" : "bg-card/70"
       }`}
@@ -210,6 +215,6 @@ export function EventTicket({ event }: EventTicketProps) {
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

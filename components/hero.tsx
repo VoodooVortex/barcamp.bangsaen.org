@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Radio } from "lucide-react";
+import { ChevronDown, Radio } from "lucide-react";
 
 // Palm Tree SVG Component
 function PalmTree({ className }: { className?: string }) {
@@ -79,7 +80,7 @@ interface HeroProps {
 
 export function Hero({ latestSlug }: HeroProps) {
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative h-svh md:h-screen overflow-hidden">
       {/* Sky Gradient Background */}
       <div className="absolute inset-0 bg-sky-gradient" />
 
@@ -132,7 +133,7 @@ export function Hero({ latestSlug }: HeroProps) {
       <div className="absolute bottom-0 left-0 right-0 h-[8%] bg-beach-gradient" />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
           {/* Title */}
           <div className="space-y-2">
@@ -148,8 +149,7 @@ export function Hero({ latestSlug }: HeroProps) {
 
           {/* Tagline */}
           <p className="text-lg md:text-xl text-white/90 font-medium max-w-2xl mx-auto text-shadow">
-            Beach meets technology. An unconference by the sea where ideas flow
-            freely.
+            An unconference by the sea where ideas flow freely.
           </p>
 
           {/* CTA Buttons */}
@@ -169,6 +169,15 @@ export function Hero({ latestSlug }: HeroProps) {
           )}
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-2 md:bottom-6 inset-x-0 z-10 flex justify-center text-white/60"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <ChevronDown className="h-8 w-8" />
+      </motion.div>
 
       {/* Birds */}
       <div className="absolute top-[35%] left-[20%] text-silhouette/40 animate-float">

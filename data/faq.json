@@ -1,0 +1,26 @@
+[
+  {
+    "question": "What is Barcamp? — Barcamp คืออะไร?",
+    "answer": "Barcamp is an unconference where anyone can propose and lead a session. There is no fixed agenda. Attendees decide what gets discussed on the day.\n\nBarcamp เป็นงาน unconference ที่ผู้เข้าร่วมเป็นคนกำหนดเนื้อหา ใครก็สามารถเสนอหัวข้อและนำเสนอได้ ไม่มีตารางล่วงหน้า ผู้เข้าร่วมจะตัดสินใจกันในวันงาน"
+  },
+  {
+    "question": "Who can join? — ใครเข้าร่วมได้บ้าง?",
+    "answer": "Everyone is welcome! Tech or non-tech — it doesn't matter. Barcamp is open to all backgrounds and interests.\n\nทุกคนเข้าร่วมได้! ไม่ว่าจะสาย tech หรือ non-tech ก็มาได้หมด Barcamp เปิดรับทุกสาขาและทุกความสนใจ"
+  },
+  {
+    "question": "How do I participate? — ต้องเตรียมตัวยังไง?",
+    "answer": "Just show up! Register online before the event, then arrive on the day. In the morning you can propose a topic on the session board. Attendees vote and the most popular topics make it to the schedule.\n\nแค่มาเลย! ลงทะเบียนออนไลน์ก่อนวันงาน แล้วมาในวันจริง ตอนเช้าสามารถเสนอหัวข้อบนบอร์ดได้ จากนั้นผู้เข้าร่วมจะโหวตเลือกหัวข้อที่สนใจ"
+  },
+  {
+    "question": "Is it free? — เข้าร่วมฟรีไหม?",
+    "answer": "Yes! Barcamp Bangsaen is completely free. We believe in open knowledge sharing and community-driven learning.\n\nฟรี! Barcamp Bangsaen เปิดให้เข้าร่วมฟรีทุกคน เราเชื่อในการแบ่งปันความรู้อย่างเปิดกว้าง"
+  },
+  {
+    "question": "Do I have to present? — ต้องเป็น speaker ไหม?",
+    "answer": "Not at all! You're welcome to attend as a listener. But we encourage everyone to share. Even a 5-minute lightning talk counts!\n\nไม่จำเป็น! มาฟังอย่างเดียวก็ได้ แต่เราสนับสนุนให้ทุกคนแชร์ แม้แค่ lightning talk 5 นาทีก็มีค่า"
+  },
+  {
+    "question": "How to get there? — การเดินทางและที่จอดรถ?",
+    "answer": "The event is held at Burapha University, Bangsaen. Free parking is available on campus. The venue is a short walk from Bangsaen Beach.\n\nงานจัดที่มหาวิทยาลัยบูรพา บางแสน มีที่จอดรถฟรีภายในมหาวิทยาลัย สถานที่จัดงานอยู่ใกล้หาดบางแสน"
+  }
+]

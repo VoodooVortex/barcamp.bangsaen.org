@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { LiveViewer } from "@/components/live/live-viewer";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { getOgImage } from "@/lib/seo";
 import {
   buildLiveViewerData,
@@ -113,6 +114,9 @@ function LivePageFallback() {
 export default function LivePage({ params }: LivePageProps) {
   return (
     <div className="min-h-screen bg-[#FFFDF5] dark:bg-background">
+      <div className="fixed bottom-4 right-4 z-50 rounded-full bg-background/80 backdrop-blur-sm border border-border shadow-sm">
+        <ThemeSwitcher />
+      </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 w-full max-w-[2560px]">
         <Suspense fallback={<LivePageFallback />}>
           <LivePageRouteContent params={params} />
