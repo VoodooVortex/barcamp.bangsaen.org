@@ -15,7 +15,6 @@ interface Photo {
 
 interface PhotoGalleryProps {
     photos: Photo[];
-    eventName: string;
 }
 
 export function PhotoGallery({ photos }: PhotoGalleryProps) {
@@ -26,16 +25,11 @@ export function PhotoGallery({ photos }: PhotoGalleryProps) {
     return (
         <>
             {/* Masonry grid — CSS columns, no external library */}
-            <div
-                style={{
-                    columns: "2 180px",
-                    columnGap: "1rem",
-                }}
-            >
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
                 {photos.map((photo, i) => (
                     <motion.div
                         key={photo.id}
-                        style={{ breakInside: "avoid", marginBottom: "1rem" }}
+                        className="break-inside-avoid mb-4"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}

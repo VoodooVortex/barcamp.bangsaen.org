@@ -363,13 +363,20 @@ export function LiveViewer({
       </div>
 
       {/* Main content tabs */}
-      <Tabs defaultValue={eventStatus === "ended" && photos.length > 0 ? "photos" : "live"} className="space-y-4">
-        <TabsList className={`grid w-full ${eventStatus === "ended" && photos.length > 0 ? "grid-cols-3" : "grid-cols-2"} lg:w-auto lg:inline-flex bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm rounded-lg p-1`}>
+      <Tabs
+        defaultValue={
+          eventStatus === "ended" && photos.length > 0 ? "photos" : "live"
+        }
+        className="space-y-4"
+      >
+        <TabsList
+          className={`grid w-full ${eventStatus === "ended" && photos.length > 0 ? "grid-cols-3" : "grid-cols-2"} lg:w-auto lg:inline-flex bg-white dark:bg-card border border-slate-200 dark:border-border shadow-sm rounded-lg p-1`}
+        >
           <TabsTrigger
             value="live"
             className="data-[state=active]:bg-[#1E293B] data-[state=active]:text-white text-slate-600 dark:text-slate-300 rounded-md"
           >
-            Live Now
+            {eventStatus === "ended" ? "Summary" : "Live Now"}
           </TabsTrigger>
           <TabsTrigger
             value="schedule"
@@ -388,102 +395,146 @@ export function LiveViewer({
         </TabsList>
 
         <TabsContent value="live" className="space-y-6">
-          {/* On Air section */}
-          <section>
-            <h2 className="text-base sm:text-lg font-bold mb-3 flex items-center gap-2 font-display text-[#1E293B] dark:text-foreground">
-              <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-red-500"></span>
-              </span>
-              On Air Now
-            </h2>
-
-            <AnimatePresence mode="popLayout">
-              {status.onAir.length > 0 ? (
-                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-3">
-                  {status.onAir.map((session) => (
-                    <OnAirCard key={session.id} session={session} />
-                  ))}
+          {eventStatus === "ended" ? (
+            <motion.section
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-2xl border border-border bg-card p-8 sm:p-12 text-center shadow-sm"
+            >
+              <div className="mb-6">
+                <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-sunset-orange/10 mb-4">
+                  <Radio className="h-8 w-8 text-sunset-orange" />
                 </div>
-              ) : eventStatus === "upcoming" && eventStartDate ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-12 bg-gradient-to-br from-[#FEFAE0]/80 to-white dark:from-muted/40 dark:to-card rounded-xl border border-[#D4A373]/20 dark:border-border"
-                >
-                  <Timer className="h-8 w-8 text-[#D4A373] dark:text-[#D4A373]/80 mx-auto mb-3" />
-                  <p className="text-sm text-slate-500 dark:text-muted-foreground mb-1">
-                    Event starts in
-                  </p>
-                  <p
-                    className="text-4xl font-bold text-[#1E293B] dark:text-foreground tracking-tight"
-                    suppressHydrationWarning
-                  >
-                    {countdownText}
-                  </p>
-                  <p className="text-sm text-slate-500 mt-2">
-                    {eventStartDate.toLocaleDateString("en-US", {
+                <h2 className="text-2xl sm:text-3xl font-bold font-display text-foreground mb-2">
+                  Event has ended
+                </h2>
+                <p className="text-muted-foreground">
+                  Thank you for joining {eventName}!
+                </p>
+                {eventEndDate && (
+                  <p className="text-sm text-muted-foreground/70 mt-2">
+                    {eventEndDate.toLocaleDateString("en-US", {
                       weekday: "long",
                       month: "long",
                       day: "numeric",
                       year: "numeric",
                     })}
                   </p>
-                </motion.div>
-              ) : eventStatus === "ended" ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
-                >
-                  <p className="text-lg font-semibold text-muted-foreground">
-                    🏁 Event has ended
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Thank you for joining!
-                  </p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
-                >
-                  <p className="text-muted-foreground">
-                    No sessions currently on air
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Check the schedule for upcoming sessions
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </section>
+                )}
+              </div>
 
-          {/* Up Next section */}
-          <section>
-            <h2 className="text-base sm:text-lg font-bold mb-3 font-display text-[#1E293B] dark:text-foreground">
-              Up Next
-            </h2>
-
-            <AnimatePresence mode="popLayout">
-              {status.upNext.length > 0 ? (
-                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-3">
-                  {status.upNext.map((session) => (
-                    <UpNextCard key={session.id} session={session} />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto mb-8">
+                {[
+                  { Icon: Mic2, value: schedule.sessions.length, label: "Sessions", show: true },
+                  { Icon: MapPin, value: schedule.venues.length, label: "Venues", show: true },
+                  { Icon: Calendar, value: photos.length, label: "Photos", show: photos.length > 0, wide: true },
+                ]
+                  .filter((s) => s.show)
+                  .map(({ Icon, value, label, wide }) => (
+                    <div
+                      key={label}
+                      className={`rounded-xl bg-muted/40 border border-border p-4 ${wide ? "col-span-2 sm:col-span-1" : ""}`}
+                    >
+                      <Icon className="h-5 w-5 text-sunset-orange mx-auto mb-2" />
+                      <p className="text-2xl font-bold text-foreground">{value}</p>
+                      <p className="text-xs text-muted-foreground">{label}</p>
+                    </div>
                   ))}
-                </div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
-                >
-                  <p className="text-muted-foreground">No upcoming sessions</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </section>
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                {photos.length > 0
+                  ? "Check out the Photos tab for moments from the event, or browse the Full Schedule to see all sessions."
+                  : "Browse the Full Schedule tab to see all sessions from the event."}
+              </p>
+            </motion.section>
+          ) : (
+            <>
+              <section>
+                <h2 className="text-base sm:text-lg font-bold mb-3 flex items-center gap-2 font-display text-[#1E293B] dark:text-foreground">
+                  <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-red-500"></span>
+                  </span>
+                  On Air Now
+                </h2>
+
+                <AnimatePresence mode="popLayout">
+                  {status.onAir.length > 0 ? (
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-3">
+                      {status.onAir.map((session) => (
+                        <OnAirCard key={session.id} session={session} />
+                      ))}
+                    </div>
+                  ) : eventStatus === "upcoming" && eventStartDate ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center py-12 bg-gradient-to-br from-[#FEFAE0]/80 to-white dark:from-muted/40 dark:to-card rounded-xl border border-[#D4A373]/20 dark:border-border"
+                    >
+                      <Timer className="h-8 w-8 text-[#D4A373] dark:text-[#D4A373]/80 mx-auto mb-3" />
+                      <p className="text-sm text-slate-500 dark:text-muted-foreground mb-1">
+                        Event starts in
+                      </p>
+                      <p
+                        className="text-4xl font-bold text-[#1E293B] dark:text-foreground tracking-tight"
+                        suppressHydrationWarning
+                      >
+                        {countdownText}
+                      </p>
+                      <p className="text-sm text-slate-500 mt-2">
+                        {eventStartDate.toLocaleDateString("en-US", {
+                          weekday: "long",
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
+                    >
+                      <p className="text-muted-foreground">
+                        No sessions currently on air
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Check the schedule for upcoming sessions
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </section>
+
+              <section>
+                <h2 className="text-base sm:text-lg font-bold mb-3 font-display text-[#1E293B] dark:text-foreground">
+                  Up Next
+                </h2>
+
+                <AnimatePresence mode="popLayout">
+                  {status.upNext.length > 0 ? (
+                    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1920px]:grid-cols-3">
+                      {status.upNext.map((session) => (
+                        <UpNextCard key={session.id} session={session} />
+                      ))}
+                    </div>
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-center py-8 bg-muted/50 dark:bg-muted/20 rounded-lg"
+                    >
+                      <p className="text-muted-foreground">
+                        No upcoming sessions
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </section>
+            </>
+          )}
         </TabsContent>
 
         <TabsContent value="schedule" className="space-y-4">
@@ -518,7 +569,7 @@ export function LiveViewer({
                 Moments from {eventName}
               </h2>
             </div>
-            <PhotoGallery photos={photos} eventName={eventName} />
+            <PhotoGallery photos={photos} />
           </TabsContent>
         )}
       </Tabs>
