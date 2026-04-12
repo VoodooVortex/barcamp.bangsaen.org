@@ -272,12 +272,6 @@ export function LiveViewer({
 
               {/* Event metadata */}
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
-                  <Calendar className="h-3.5 w-3.5 text-[#D4A373]" />
-                  <span className="text-slate-700 dark:text-slate-200 font-medium">
-                    {slug}
-                  </span>
-                </div>
                 {schedule.eventYear.location && (
                   <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-muted border border-slate-200 dark:border-border">
                     <MapPin className="h-3.5 w-3.5 text-[#14B8A6]" />
@@ -399,16 +393,16 @@ export function LiveViewer({
             <motion.section
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-border bg-card p-8 sm:p-12 text-center shadow-sm"
+              className="rounded-2xl border border-border bg-card p-5 sm:p-12 text-center shadow-sm"
             >
-              <div className="mb-6">
-                <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-sunset-orange/10 mb-4">
-                  <Radio className="h-8 w-8 text-sunset-orange" />
+              <div className="mb-5 sm:mb-6">
+                <div className="inline-flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-sunset-orange/10 mb-3 sm:mb-4">
+                  <Radio className="h-7 w-7 sm:h-8 sm:w-8 text-sunset-orange" />
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold font-display text-foreground mb-2">
+                <h2 className="text-xl sm:text-3xl font-bold font-display text-foreground mb-1 sm:mb-2">
                   Event has ended
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground text-balance">
                   Thank you for joining {eventName}!
                 </p>
                 {eventEndDate && (
@@ -423,20 +417,20 @@ export function LiveViewer({
                 )}
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto mb-8">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto mb-6 sm:mb-8">
                 {[
                   { Icon: Mic2, value: schedule.sessions.length, label: "Sessions", show: true },
                   { Icon: MapPin, value: schedule.venues.length, label: "Venues", show: true },
-                  { Icon: Calendar, value: photos.length, label: "Photos", show: photos.length > 0, wide: true },
+                  { Icon: Calendar, value: photos.length, label: "Photos", show: photos.length > 0 },
                 ]
                   .filter((s) => s.show)
-                  .map(({ Icon, value, label, wide }) => (
+                  .map(({ Icon, value, label }) => (
                     <div
                       key={label}
-                      className={`rounded-xl bg-muted/40 border border-border p-4 ${wide ? "col-span-2 sm:col-span-1" : ""}`}
+                      className="rounded-xl bg-muted/40 border border-border p-3 sm:p-4"
                     >
                       <Icon className="h-5 w-5 text-sunset-orange mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-foreground">{value}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-foreground">{value}</p>
                       <p className="text-xs text-muted-foreground">{label}</p>
                     </div>
                   ))}
@@ -566,7 +560,9 @@ export function LiveViewer({
           <TabsContent value="photos" className="space-y-4">
             <div className="text-center mb-6">
               <h2 className="text-xl sm:text-2xl font-bold font-display text-[#1E293B] dark:text-foreground">
-                Moments from {eventName}
+                Moments from
+                <br className="sm:hidden" />{" "}
+                {eventName}
               </h2>
             </div>
             <PhotoGallery photos={photos} />

@@ -77,7 +77,7 @@ export function FilterBar({
             <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
             <SelectValue placeholder="All rooms" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="w-[var(--radix-select-trigger-width)] min-w-0">
             <SelectItem value="all">All rooms</SelectItem>
             {venues.map((venue) => (
               <SelectItem key={venue.id} value={venue.id}>

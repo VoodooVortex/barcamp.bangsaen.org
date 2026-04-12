@@ -68,7 +68,7 @@ export default async function HomePage() {
       {currentEvent && (
         <section className="py-20 px-4 bg-gradient-to-b from-sand-light/30 to-background">
           <div className="container mx-auto max-w-4xl">
-            <div className="text-center mb-10">
+            <div className="text-center mb-12">
               <Badge variant="secondary" className="mb-4 text-base px-4 py-1">
                 {currentEvent.slug} Event
               </Badge>
@@ -87,14 +87,14 @@ export default async function HomePage() {
       {currentEvent && currentPhotos.length > 0 && (
         <section className="py-20 px-4 bg-silhouette text-sand-light">
           <div className="container mx-auto max-w-6xl">
-            <div className="text-center mb-10">
+            <div className="text-center mb-12">
               <Badge
                 variant="outline"
                 className="mb-4 text-base px-4 py-1 border-sand-light/30 text-sand-light/80"
               >
                 Photo Highlights
               </Badge>
-              <h2 className="text-2xl md:text-4xl font-display font-bold text-sand-light">
+              <h2 className="text-lg md:text-4xl font-display font-bold text-sand-light text-balance">
                 Moments from {currentEvent.name}
               </h2>
             </div>
@@ -115,12 +115,12 @@ export default async function HomePage() {
       )}
 
       {/* CTA Banner — Join Us */}
-      <section className="py-16 px-4 bg-gradient-to-b from-ocean-dark to-silhouette text-sand-light">
+      <section className="py-12 md:py-16 px-4 bg-gradient-to-b from-ocean-dark to-silhouette text-sand-light">
         <div className="container mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl md:text-4xl font-display font-bold text-sand-light mb-4">
+          <h2 className="text-2xl md:text-4xl font-display font-bold text-sand-light mb-3">
             Connect the Dots
           </h2>
-          <p className="text-sand-light/70 text-sm md:text-base mb-8">
+          <p className="text-sand-light/70 text-sm md:text-base mb-6">
             Barcamp Bangsaen เปิดให้ทุกคนเข้าร่วมฟรี!
           </p>
           <a

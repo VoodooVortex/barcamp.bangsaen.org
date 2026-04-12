@@ -137,11 +137,11 @@ export function Hero({ latestSlug }: HeroProps) {
         <div className="text-center space-y-8 max-w-4xl mx-auto">
           {/* Title */}
           <div className="space-y-2">
-            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold text-white text-shadow tracking-tight">
+            <h1 className="font-display text-5xl md:text-8xl lg:text-9xl font-bold text-white text-shadow tracking-tight">
               Barcamp
             </h1>
             <div className="flex items-center justify-center gap-4">
-              <span className="text-2xl md:text-3xl font-display font-semibold text-white/90 tracking-widest uppercase text-shadow">
+              <span className="text-xl md:text-3xl font-display font-semibold text-white/90 tracking-widest uppercase text-shadow">
                 Bangsaen
               </span>
             </div>
@@ -157,7 +157,7 @@ export function Hero({ latestSlug }: HeroProps) {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
               <Button
                 size="lg"
-                className="bg-sunset-orange hover:bg-sunset-orange/80 text-white border-0 shadow-lg shadow-sunset-orange/30 text-lg px-8 py-6"
+                className="bg-sunset-orange hover:bg-sunset-orange/80 text-white border-0 shadow-lg shadow-sunset-orange/30 text-base md:text-lg px-6 md:px-8 py-5 md:py-6"
                 asChild
               >
                 <Link href={`/live/${latestSlug}`}>

@@ -52,7 +52,7 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-8"
+          className="text-center mb-12"
         >
           <Badge variant="secondary" className="mb-4 text-base px-4 py-1">
             What to Expect

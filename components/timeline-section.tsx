@@ -14,7 +14,7 @@ export function TimelineSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <Badge variant="secondary" className="mb-4 text-base px-4 py-1">
             Our Journey
@@ -68,7 +68,7 @@ function TimelineItem({
   const headerDirection = alignRight ? "" : "md:flex-row-reverse";
 
   return (
-    <li className="relative pl-14 md:pl-0 md:grid md:grid-cols-[1fr_24px_1fr] md:gap-6">
+    <li className="relative pl-12 md:pl-0 md:grid md:grid-cols-[1fr_24px_1fr] md:gap-6">
       {/* Dot */}
       <motion.span
         aria-hidden
@@ -105,13 +105,13 @@ function TimelineItem({
       >
         <motion.article
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
-          className="rounded-2xl border border-border bg-card p-4 shadow-sm hover:shadow-lg transition-shadow duration-200"
+          className="rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-lg transition-shadow duration-200"
         >
-          <header className={`flex items-baseline justify-between gap-3 mb-3 ${headerDirection}`}>
+          <header className={`flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 md:gap-3 mb-3 ${headerDirection}`}>
             <span className="font-display text-2xl font-bold text-sunset-orange leading-none tracking-tight">
               {event.year}
             </span>
-            <h3 className="font-display text-lg md:text-xl font-bold text-foreground leading-tight">
+            <h3 className="font-display text-base md:text-xl font-bold text-foreground leading-tight">
               {event.title}
             </h3>
           </header>

@@ -113,7 +113,7 @@ export function EventTicket({ event }: EventTicketProps) {
     >
       {/* Left part: Countdown / Status - Cream styling */}
       <div
-        className={`p-8 md:p-10 flex-col justify-center items-center text-center flex md:w-5/12 ${
+        className={`p-6 md:p-10 flex-col justify-center items-center text-center flex md:w-5/12 ${
           isLive
             ? "bg-sand-light/60 dark:bg-muted/40 text-foreground"
             : "bg-background/40"
@@ -171,7 +171,7 @@ export function EventTicket({ event }: EventTicketProps) {
 
       {/* Right part: event specifics grid */}
       <div
-        className={`p-6 md:p-10 flex-1 grid grid-cols-2 gap-y-8 gap-x-6 ${isLive ? "bg-sand-light/30 dark:bg-card/40" : "bg-card/40"}`}
+        className={`p-6 md:p-10 flex-1 grid grid-cols-2 gap-y-6 gap-x-4 md:gap-y-8 md:gap-x-6 ${isLive ? "bg-sand-light/30 dark:bg-card/40" : "bg-card/40"}`}
       >
         <div>
           <div className="flex items-center gap-2 mb-2 text-muted-foreground">
