@@ -131,20 +131,25 @@ export function EventTicket({ event }: EventTicketProps) {
           </div>
           <div className="absolute top-20 -left-10 text-white/60 animate-bird-fly-delay">
             <svg
-              className="animate-bird-flap origin-center"
               width="18"
               height="10"
               viewBox="0 0 22 12"
               fill="none"
             >
               <path
-                d="M1 8 Q 5.5 1 11 7 Q 16.5 1 21 8"
                 stroke="currentColor"
                 strokeWidth="1.5"
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-              />
+              >
+                <animate
+                  attributeName="d"
+                  values="M1 9 Q 5.5 1 11 8 Q 16.5 1 21 9;M1 7 Q 5.5 9 11 6 Q 16.5 9 21 7;M1 9 Q 5.5 1 11 8 Q 16.5 1 21 9"
+                  dur="0.6s"
+                  repeatCount="indefinite"
+                />
+              </path>
             </svg>
           </div>
 
@@ -180,7 +185,13 @@ export function EventTicket({ event }: EventTicketProps) {
             />
           </svg>
 
-          {/* Palm silhouette */}
+          {/* Palm silhouettes */}
+          <div className="absolute bottom-[13%] right-6 md:right-10 text-3xl md:text-5xl select-none origin-bottom animate-palm-sway-slow">
+            🌴
+          </div>
+          <div className="absolute bottom-[14%] left-[38%] text-2xl md:text-4xl select-none origin-bottom animate-palm-sway-slow">
+            🌴
+          </div>
           <div className="absolute bottom-[14%] left-6 md:left-10 text-5xl md:text-7xl select-none origin-bottom animate-palm-sway">
             🌴
           </div>

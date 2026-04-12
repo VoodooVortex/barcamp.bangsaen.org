@@ -565,6 +565,10 @@
   .animate-palm-sway {
     animation: palm-sway 3s ease-in-out infinite;
   }
+  .animate-palm-sway-slow {
+    animation: palm-sway 4.5s ease-in-out infinite;
+    animation-delay: 0.5s;
+  }
 
   @keyframes sun-pulse {
     0%, 100% { box-shadow: 0 0 60px 20px rgba(246, 183, 60, 0.5); }
