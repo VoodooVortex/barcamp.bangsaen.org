@@ -69,15 +69,22 @@ export default async function HomePage() {
         <section className="py-20 px-4 bg-gradient-to-b from-sand-light/30 to-background">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-12">
-              <Badge variant="secondary" className="mb-4 text-base px-4 py-1">
-                {currentEvent.slug} Event
-              </Badge>
               <h2 className="text-2xl md:text-4xl font-display font-bold text-foreground">
                 {currentEvent.name}
               </h2>
+              {currentEvent.startDate && (
+                <p className="mt-3 text-sm md:text-base text-muted-foreground">
+                  {new Intl.DateTimeFormat("en-US", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                    timeZone: "Asia/Bangkok",
+                  }).format(new Date(currentEvent.startDate))}
+                </p>
+              )}
             </div>
 
-            {/* Ticket Style Event Card */}
             <EventTicket event={currentEvent} />
           </div>
         </section>
