@@ -558,6 +558,64 @@
   }
 }
 @layer utilities {
+  @keyframes palm-sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  .animate-palm-sway {
+    animation: palm-sway 3s ease-in-out infinite;
+  }
+
+  @keyframes sun-pulse {
+    0%, 100% { box-shadow: 0 0 60px 20px rgba(246, 183, 60, 0.5); }
+    50% { box-shadow: 0 0 80px 30px rgba(246, 183, 60, 0.65); }
+  }
+  .animate-sun-pulse {
+    animation: sun-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes cloud-drift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(700px); }
+  }
+  .animate-cloud-drift {
+    animation: cloud-drift 35s linear infinite;
+  }
+  .animate-cloud-drift-slow {
+    animation: cloud-drift 55s linear infinite;
+  }
+  .animate-cloud-drift-fast {
+    animation: cloud-drift 22s linear infinite;
+  }
+
+  @keyframes wave-drift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-wave-drift {
+    animation: wave-drift 12s linear infinite;
+  }
+  .animate-wave-drift-slow {
+    animation: wave-drift 18s linear infinite;
+  }
+
+  @keyframes bird-fly {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(700px, -25px); opacity: 0; }
+  }
+  .animate-bird-fly {
+    animation: bird-fly 20s linear infinite;
+  }
+  .animate-bird-fly-delay {
+    animation: bird-fly 24s linear infinite;
+    animation-delay: 6s;
+  }
+
+}
+
+@layer utilities {
   .p-safe {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);

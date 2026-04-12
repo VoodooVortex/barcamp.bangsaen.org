@@ -41,8 +41,10 @@ export function EventTicket({ event }: EventTicketProps) {
     const diffMs = start.getTime() - now.getTime();
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    if (days > 0) countdownText = `arriving in ${days}d ${hours}h`;
-    else countdownText = `arriving in ${hours}h`;
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    if (days > 0) countdownText = `Starts in ${days}d ${hours}h`;
+    else if (hours > 0) countdownText = `Starts in ${hours}h ${minutes}m`;
+    else countdownText = `Starts in ${minutes}m`;
   }
 
   if (!isClient) countdownText = "";
@@ -85,7 +87,9 @@ export function EventTicket({ event }: EventTicketProps) {
       className="relative mt-8"
     >
       <div
-        className="relative flex flex-col md:flex-row overflow-hidden rounded-lg border border-border bg-card shadow-2xl"
+        className={`relative flex flex-col md:flex-row overflow-hidden rounded-lg border border-border bg-card shadow-2xl transition ${
+          isEnded ? "saturate-[0.65]" : ""
+        }`}
         style={{
           boxShadow:
             "0 20px 60px -15px rgba(0,0,0,0.25), 0 4px 10px -5px rgba(0,0,0,0.1)",
@@ -94,7 +98,55 @@ export function EventTicket({ event }: EventTicketProps) {
         {/* FRONT (left) — scenic */}
         <div className="relative md:w-[55%] min-h-[260px] md:min-h-[340px] overflow-hidden bg-sky-gradient">
           {/* Sun */}
-          <div className="absolute top-8 right-10 h-16 w-16 rounded-full bg-sunset-gold shadow-[0_0_60px_20px_rgba(246,183,60,0.5)]" />
+          <div className="absolute top-8 right-10 h-16 w-16 rounded-full bg-sunset-gold shadow-[0_0_60px_20px_rgba(246,183,60,0.5)] animate-sun-pulse" />
+
+          {/* Drifting clouds */}
+          <div className="absolute top-6 -left-20 w-24 h-6 rounded-full bg-white/40 blur-sm animate-cloud-drift-slow" />
+          <div className="absolute top-16 -left-32 w-32 h-5 rounded-full bg-white/30 blur-sm animate-cloud-drift" />
+          <div className="absolute top-24 -left-24 w-20 h-4 rounded-full bg-white/35 blur-sm animate-cloud-drift-fast" />
+
+          {/* Seagulls */}
+          <div className="absolute top-12 -left-10 text-white/70 animate-bird-fly">
+            <svg
+              width="22"
+              height="12"
+              viewBox="0 0 22 12"
+              fill="none"
+            >
+              <path
+                stroke="currentColor"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <animate
+                  attributeName="d"
+                  values="M1 9 Q 5.5 1 11 8 Q 16.5 1 21 9;M1 7 Q 5.5 9 11 6 Q 16.5 9 21 7;M1 9 Q 5.5 1 11 8 Q 16.5 1 21 9"
+                  dur="0.5s"
+                  repeatCount="indefinite"
+                />
+              </path>
+            </svg>
+          </div>
+          <div className="absolute top-20 -left-10 text-white/60 animate-bird-fly-delay">
+            <svg
+              className="animate-bird-flap origin-center"
+              width="18"
+              height="10"
+              viewBox="0 0 22 12"
+              fill="none"
+            >
+              <path
+                d="M1 8 Q 5.5 1 11 7 Q 16.5 1 21 8"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
 
           {/* Ocean band */}
           <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-b from-ocean/60 to-ocean-dark/80" />
@@ -102,28 +154,43 @@ export function EventTicket({ event }: EventTicketProps) {
           {/* Sand */}
           <div className="absolute bottom-0 left-0 right-0 h-[18%] bg-gradient-to-b from-sand-light to-sand" />
 
-          {/* Wave lines */}
+          {/* Wave lines — animated */}
           <svg
-            className="absolute bottom-[18%] left-0 right-0 w-full h-4 text-sand-light/60"
-            viewBox="0 0 400 16"
+            className="absolute bottom-[20%] left-0 w-[200%] h-4 text-sand-light/60 animate-wave-drift"
+            viewBox="0 0 800 16"
             preserveAspectRatio="none"
           >
             <path
-              d="M0 8 Q 25 0 50 8 T 100 8 T 150 8 T 200 8 T 250 8 T 300 8 T 350 8 T 400 8"
+              d="M0 8 Q 25 0 50 8 T 100 8 T 150 8 T 200 8 T 250 8 T 300 8 T 350 8 T 400 8 T 450 8 T 500 8 T 550 8 T 600 8 T 650 8 T 700 8 T 750 8 T 800 8"
               stroke="currentColor"
               strokeWidth="1.5"
               fill="none"
             />
           </svg>
+          <svg
+            className="absolute bottom-[26%] left-0 w-[200%] h-3 text-white/40 animate-wave-drift-slow"
+            viewBox="0 0 800 16"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0 8 Q 30 2 60 8 T 120 8 T 180 8 T 240 8 T 300 8 T 360 8 T 420 8 T 480 8 T 540 8 T 600 8 T 660 8 T 720 8 T 780 8 T 800 8"
+              stroke="currentColor"
+              strokeWidth="1"
+              fill="none"
+            />
+          </svg>
 
           {/* Palm silhouette */}
-          <div className="absolute bottom-[14%] left-6 md:left-10 text-5xl md:text-7xl select-none">
+          <div className="absolute bottom-[14%] left-6 md:left-10 text-5xl md:text-7xl select-none origin-bottom animate-palm-sway">
             🌴
           </div>
 
           {/* Headline */}
-          <div className="relative z-10 p-6 md:p-8 text-shadow">
-            <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/90 mb-2">
+          <div className="relative z-10 p-6 md:p-8">
+            <p
+              className="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-white mb-2"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}
+            >
               Greetings from
             </p>
             <h3
@@ -132,13 +199,19 @@ export function EventTicket({ event }: EventTicketProps) {
             >
               Bangsaen
             </h3>
-            <p className="mt-3 font-display italic text-white/90 text-sm md:text-base">
+            <p
+              className="mt-3 font-display italic text-white text-sm md:text-base"
+              style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}
+            >
               Beach meets technology
             </p>
           </div>
 
           {/* Corner tag */}
-          <div className="absolute bottom-4 right-4 z-10 font-mono text-[9px] uppercase tracking-widest text-white/70">
+          <div
+            className="absolute bottom-4 right-4 z-10 font-mono text-[9px] uppercase tracking-widest text-white"
+            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}
+          >
             Chonburi · Thailand
           </div>
         </div>
@@ -165,12 +238,18 @@ export function EventTicket({ event }: EventTicketProps) {
           <div
             className={`absolute top-6 right-24 md:top-8 md:right-28 w-20 h-20 md:w-24 md:h-24 rounded-full border-[2px] flex flex-col items-center justify-center rotate-[-8deg] ${
               isLive
-                ? "border-destructive text-destructive"
+                ? "border-destructive text-destructive animate-pulse"
                 : isEnded
                   ? "border-ocean-dark text-ocean-dark"
                   : "border-sand-dark/60 text-sand-dark/80"
             }`}
           >
+            {isLive && (
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-destructive opacity-75" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-destructive" />
+              </span>
+            )}
             <span className="font-mono text-[8px] md:text-[9px] tracking-widest uppercase">
               {isLive ? "Live Now" : isEnded ? "Delivered" : "Posted"}
             </span>
@@ -184,16 +263,41 @@ export function EventTicket({ event }: EventTicketProps) {
           </div>
 
           {/* Message */}
-          <div className="pr-2 md:pr-4 max-w-[60%] md:max-w-[55%]">
+          <div className="pr-2 md:pr-4 max-w-[55%] md:max-w-[55%]">
             <p className="font-display italic text-base md:text-lg text-foreground leading-snug">
-              Dear friend,
+              {isLive
+                ? "Happening now!"
+                : isEnded
+                  ? "Until next time,"
+                  : "Save the date,"}
             </p>
             <p className="mt-2 font-display italic text-sm md:text-base text-muted-foreground leading-relaxed">
-              Wish you were here at{" "}
-              <span className="text-foreground font-bold not-italic">
-                Barcamp Bangsaen #4
-              </span>
-              .
+              {isLive ? (
+                <>
+                  Join us at{" "}
+                  <span className="text-foreground font-bold not-italic">
+                    Barcamp Bangsaen #4
+                  </span>{" "}
+                  — live right now.
+                </>
+              ) : isEnded ? (
+                <>
+                  <span className="text-foreground font-bold not-italic">
+                    Barcamp Bangsaen #4
+                  </span>{" "}
+                  <span className="text-xs md:text-sm">
+                    has ended. See you next year!
+                  </span>
+                </>
+              ) : (
+                <>
+                  See you soon at{" "}
+                  <span className="text-foreground font-bold not-italic">
+                    Barcamp Bangsaen #4
+                  </span>
+                  .
+                </>
+              )}
             </p>
           </div>
 
@@ -220,7 +324,7 @@ export function EventTicket({ event }: EventTicketProps) {
           </div>
 
           {/* Countdown / CTA */}
-          <div className="mt-6 flex items-center justify-between gap-3">
+          <div className="mt-6 md:mt-12 flex items-center justify-between gap-3">
             {countdownText && !isLive && !isEnded && (
               <p className="font-display italic text-xs md:text-sm text-sunset-orange">
                 {countdownText}
@@ -228,7 +332,7 @@ export function EventTicket({ event }: EventTicketProps) {
             )}
             {isEnded && (
               <p className="font-display italic text-xs md:text-sm text-muted-foreground">
-                Thank you for joining ♡
+                Event has ended · Thank you for joining ♡
               </p>
             )}
             {isLive && (
