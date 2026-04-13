@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Radio } from "lucide-react";
@@ -49,21 +50,6 @@ function PalmTreeSmall({ className }: { className?: string }) {
   );
 }
 
-// Wave SVG Component
-function Wave({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 1440 120"
-      fill="currentColor"
-      className={className}
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" />
-    </svg>
-  );
-}
-
 // Sun SVG Component
 function Sun({ className }: { className?: string }) {
   return (
@@ -94,39 +80,63 @@ export function Hero({ latestSlug }: HeroProps) {
       <div className="absolute top-[25%] right-[30%] w-48 h-16 bg-white/15 rounded-full blur-xl" />
       <div className="absolute top-[30%] left-[40%] w-40 h-14 bg-white/10 rounded-full blur-xl" />
 
-      {/* Palm Trees - Silhouettes */}
-      <div className="absolute bottom-[25%] left-[5%] text-silhouette/80">
+      {/* Palm Trees - Silhouettes (animated sway) */}
+      <div className="absolute bottom-[25%] left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
         <PalmTree className="w-24 h-36 md:w-40 md:h-60" />
       </div>
-      <div className="absolute bottom-[22%] left-[15%] text-silhouette/70">
-        <PalmTreeSmall className="w-16 h-24 md:w-24 md:h-36" />
-      </div>
-      <div className="absolute bottom-[20%] right-[20%] text-silhouette/60">
-        <PalmTreeSmall className="w-14 h-20 md:w-20 md:h-32" />
-      </div>
-      <div className="absolute bottom-[23%] right-[8%] text-silhouette/75">
-        <PalmTree className="w-20 h-32 md:w-32 md:h-48" />
+      {/* Island dome under big left palm */}
+      <div className="absolute bottom-[24%] left-[5%] text-silhouette/80 pointer-events-none">
+        <div className="w-24 md:w-40 h-6 md:h-8 rounded-[50%] bg-current" />
       </div>
 
-      {/* Island Silhouette */}
-      <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 text-silhouette/50">
-        <svg viewBox="0 0 200 60" className="w-48 h-16 md:w-72 md:h-24">
-          <ellipse cx="100" cy="50" rx="100" ry="50" />
-        </svg>
+      <div className="absolute bottom-[22%] left-[15%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-16 h-24 md:w-24 md:h-36" />
+      </div>
+      <div className="absolute bottom-[21%] left-[15%] text-silhouette/70 pointer-events-none">
+        <div className="w-16 md:w-24 h-5 md:h-6 rounded-[50%] bg-current" />
+      </div>
+
+      <div className="absolute bottom-[20%] right-[20%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-14 h-20 md:w-20 md:h-32" />
+      </div>
+      <div className="absolute bottom-[19%] right-[20%] text-silhouette/60 pointer-events-none">
+        <div className="w-14 md:w-20 h-4 md:h-5 rounded-[50%] bg-current" />
+      </div>
+
+      <div className="absolute bottom-[23%] right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
+        <PalmTree className="w-20 h-32 md:w-32 md:h-48" />
+      </div>
+      <div className="absolute bottom-[22%] right-[8%] text-silhouette/75 pointer-events-none">
+        <div className="w-20 md:w-32 h-6 md:h-8 rounded-[50%] bg-current" />
       </div>
 
       {/* Ocean */}
-      <div className="absolute bottom-0 left-0 right-0 h-[25%] bg-ocean-gradient">
-        {/* Wave layers */}
-        <div className="absolute -top-8 left-0 right-0 text-ocean-light animate-wave">
-          <Wave className="w-full h-16 opacity-60" />
-        </div>
-        <div
-          className="absolute -top-4 left-0 right-0 text-ocean animate-wave"
-          style={{ animationDelay: "1s" }}
+      <div className="absolute bottom-0 left-0 right-0 h-[25%] bg-ocean-gradient overflow-hidden">
+        {/* Wave layers — horizontal drift */}
+        <svg
+          className="absolute -top-8 left-0 w-[200%] h-16 text-ocean-light opacity-60 animate-wave-drift-slow"
+          viewBox="0 0 2880 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
         >
-          <Wave className="w-full h-12 opacity-80" />
-        </div>
+          <path
+            d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 C1680,120 1920,0 2160,60 C2400,120 2640,0 2880,60 L2880,120 L0,120 Z"
+            fill="currentColor"
+          />
+        </svg>
+        <svg
+          className="absolute -top-4 left-0 w-[200%] h-12 text-ocean opacity-80 animate-wave-drift"
+          viewBox="0 0 2880 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0,60 C240,0 480,120 720,60 C960,0 1200,120 1440,60 C1680,0 1920,120 2160,60 C2400,0 2640,120 2880,60 L2880,120 L0,120 Z"
+            fill="currentColor"
+          />
+        </svg>
+        {/* Shimmer on water */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent animate-pulse-slow" />
       </div>
 
       {/* Beach/Sand */}
@@ -134,27 +144,32 @@ export function Hero({ latestSlug }: HeroProps) {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
-        <div className="text-center space-y-8 max-w-4xl mx-auto">
-          {/* Title */}
-          <div className="space-y-2">
-            <h1 className="font-display text-5xl md:text-8xl lg:text-9xl font-bold text-white text-shadow tracking-tight">
-              Barcamp
-            </h1>
-            <div className="flex items-center justify-center gap-4">
-              <span className="text-xl md:text-3xl font-display font-semibold text-white/90 tracking-widest uppercase text-shadow">
-                Bangsaen
-              </span>
-            </div>
-          </div>
+        <div className="text-center max-w-4xl mx-auto">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex justify-center"
+          >
+            <Image
+              src="/logo-barcamp-bangsaen.png"
+              alt="Barcamp Bangsaen"
+              width={600}
+              height={696}
+              priority
+              className="w-[240px] sm:w-[260px] md:w-[280px] lg:w-[320px] max-w-[60vw] max-h-[45vh] h-auto object-contain drop-shadow-2xl"
+            />
+          </motion.div>
 
           {/* Tagline */}
-          <p className="text-lg md:text-xl text-white/90 font-medium max-w-2xl mx-auto text-shadow">
+          <p className="hidden md:block text-base md:text-xl text-white/95 font-medium max-w-2xl mx-auto text-shadow mt-4">
             An unconference by the sea where ideas flow freely.
           </p>
 
           {/* CTA Buttons */}
           {latestSlug && (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 -mt-3 md:mt-4">
               <Button
                 size="lg"
                 className="bg-sunset-orange hover:bg-sunset-orange/80 text-white border-0 shadow-lg shadow-sunset-orange/30 text-base md:text-lg px-6 md:px-8 py-5 md:py-6"

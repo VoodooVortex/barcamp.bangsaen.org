@@ -81,7 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.className} ${quicksand.variable} antialiased`}
+        className={`${geistSans.className} ${quicksand.variable} antialiased overflow-x-clip`}
       >
         <ThemeProvider
           attribute="class"

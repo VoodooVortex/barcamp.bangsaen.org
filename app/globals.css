@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow-x: clip;
+}
+
 /* React Datepicker Custom Styles - Sunset Beach Theme */
 
 /* Base datepicker */

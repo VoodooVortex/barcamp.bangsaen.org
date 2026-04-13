@@ -74,14 +74,14 @@ function TimelineItem({
         aria-hidden
         initial={{ scale: 0, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
+        viewport={{ once: true, margin: "-20px" }}
         transition={{
           duration: 0.4,
           delay,
           type: "spring",
           stiffness: 200,
         }}
-        className="absolute left-[16px] top-8 h-4 w-4 rounded-full bg-sunset-orange ring-4 ring-background z-10 md:static md:col-start-2 md:row-start-1 md:self-center md:justify-self-center"
+        className="absolute left-[14px] top-8 h-5 w-5 rounded-full bg-sunset-orange border-4 border-background z-10 md:static md:col-start-2 md:row-start-1 md:self-center md:justify-self-center"
       />
 
       {/* Card */}
