@@ -81,34 +81,24 @@ export function Hero({ latestSlug }: HeroProps) {
       <div className="absolute top-[30%] left-[40%] w-40 h-14 bg-white/10 rounded-full blur-xl" />
 
       {/* Palm Trees - Silhouettes (animated sway) */}
-      <div className="absolute bottom-[25%] left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
-        <PalmTree className="w-24 h-36 md:w-40 md:h-60" />
-      </div>
-      {/* Island dome under big left palm */}
-      <div className="absolute bottom-[24%] left-[5%] text-silhouette/80 pointer-events-none">
-        <div className="w-24 md:w-40 h-6 md:h-8 rounded-[50%] bg-current" />
+      <div className="absolute bottom-[22%] -left-[4%] md:left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
+        <PalmTree className="w-20 h-32 md:w-40 md:h-60" />
       </div>
 
-      <div className="absolute bottom-[22%] left-[15%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="w-16 h-24 md:w-24 md:h-36" />
-      </div>
-      <div className="absolute bottom-[21%] left-[15%] text-silhouette/70 pointer-events-none">
-        <div className="w-16 md:w-24 h-5 md:h-6 rounded-[50%] bg-current" />
+      <div className="absolute bottom-[22%] left-[8%] md:left-[15%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-12 h-20 md:w-24 md:h-36" />
       </div>
 
-      <div className="absolute bottom-[20%] right-[20%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="w-14 h-20 md:w-20 md:h-32" />
-      </div>
-      <div className="absolute bottom-[19%] right-[20%] text-silhouette/60 pointer-events-none">
-        <div className="w-14 md:w-20 h-4 md:h-5 rounded-[50%] bg-current" />
+      <div className="absolute bottom-[20%] right-[8%] md:right-[20%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-12 h-20 md:w-20 md:h-32" />
       </div>
 
-      <div className="absolute bottom-[23%] right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
-        <PalmTree className="w-20 h-32 md:w-32 md:h-48" />
+      <div className="absolute bottom-[23%] -right-[4%] md:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
+        <PalmTree className="w-16 h-28 md:w-32 md:h-48" />
       </div>
-      <div className="absolute bottom-[22%] right-[8%] text-silhouette/75 pointer-events-none">
+      {/*<div className="absolute bottom-[22%] right-[8%] text-silhouette/75 pointer-events-none">
         <div className="w-20 md:w-32 h-6 md:h-8 rounded-[50%] bg-current" />
-      </div>
+      </div>*/}
 
       {/* Ocean */}
       <div className="absolute bottom-0 left-0 right-0 h-[25%] bg-ocean-gradient overflow-hidden">
@@ -158,7 +148,7 @@ export function Hero({ latestSlug }: HeroProps) {
               width={600}
               height={696}
               priority
-              className="w-[240px] sm:w-[260px] md:w-[280px] lg:w-[320px] max-w-[60vw] max-h-[45vh] h-auto object-contain drop-shadow-2xl"
+              className="w-[180px] sm:w-[220px] md:w-[280px] lg:w-[320px] max-w-[45vw] max-h-[40vh] h-auto object-contain drop-shadow-2xl"
             />
           </motion.div>
 
@@ -169,7 +159,7 @@ export function Hero({ latestSlug }: HeroProps) {
 
           {/* CTA Buttons */}
           {latestSlug && (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 -mt-3 md:mt-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 md:mt-8">
               <Button
                 size="lg"
                 className="bg-sunset-orange hover:bg-sunset-orange/80 text-white border-0 shadow-lg shadow-sunset-orange/30 text-base md:text-lg px-6 md:px-8 py-5 md:py-6"
