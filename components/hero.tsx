@@ -6,6 +6,46 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Radio } from "lucide-react";
 
+// Island Base Left SVG
+function IslandBaseLeft({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 200 60"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+      preserveAspectRatio="none"
+    > 
+      {/* Distant background dune */}
+      <path d="M 0 60 L 0 12 C 10 12, 30 12, 45 12 C 60 12, 75 18, 95 18 C 115 18, 130 35, 160 35 C 180 35, 195 45, 200 60 Z" fillOpacity="0.15" />
+      {/* Midground dune */}
+      <path d="M 0 60 L 0 15 C 15 15, 25 15, 35 15 C 50 15, 55 28, 70 28 C 85 28, 100 22, 125 22 C 150 22, 170 38, 200 60 Z" fillOpacity="0.35" />
+      {/* Foreground solid island supporting trees */}
+      <path d="M 0 60 L 0 22 C 5 22, 15 22, 25 22 C 35 22, 45 26, 50 26 C 55 26, 65 24, 75 24 C 85 24, 100 30, 120 31 C 140 32, 150 34, 165 35 C 180 36, 190 45, 200 60 Z" />
+    </svg>
+  );
+}
+
+// Island Base Right SVG
+function IslandBaseRight({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 200 60"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+      preserveAspectRatio="none"
+    > 
+      {/* Distant background dune */}
+      <path d="M 0 60 L 0 8 C 10 8, 30 8, 50 8 C 70 8, 80 12, 100 12 C 120 12, 140 30, 180 30 C 190 30, 195 45, 200 60 Z" fillOpacity="0.15" />
+      {/* Midground dune */}
+      <path d="M 0 60 L 0 15 C 10 15, 25 15, 35 15 C 45 15, 65 28, 85 28 C 105 28, 120 22, 140 22 C 160 22, 180 35, 200 60 Z" fillOpacity="0.35" />
+      {/* Foreground solid island supporting trees */}
+      <path d="M 0 60 L 0 18 C 2 18, 10 18, 28 18 C 38 18, 50 25, 60 25 C 70 25, 75 22, 85 22 C 95 22, 120 28, 140 30 C 160 32, 165 34, 175 35 C 185 36, 190 40, 200 60 Z" />
+    </svg>
+  );
+}
+
 // Palm Tree SVG Component
 function PalmTree({ className }: { className?: string }) {
   return (
@@ -80,21 +120,32 @@ export function Hero({ latestSlug }: HeroProps) {
       <div className="absolute top-[25%] right-[30%] w-48 h-16 bg-white/15 rounded-full blur-xl" />
       <div className="absolute top-[30%] left-[40%] w-40 h-14 bg-white/10 rounded-full blur-xl" />
 
-      {/* Palm Trees - Silhouettes (animated sway) */}
-      <div className="absolute bottom-[22%] -left-[4%] md:left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
-        <PalmTree className="w-20 h-32 md:w-40 md:h-60" />
+      {/* Island Base Left */}
+      <div className="absolute bottom-[20%] -left-[10%] md:-left-[5%] lg:-left-[5%] w-[75vw] md:w-[50vw] lg:w-[45vw] h-[12vh] pointer-events-none text-silhouette">
+        <IslandBaseLeft className="w-full h-full drop-shadow-md" />
       </div>
 
-      <div className="absolute bottom-[22%] left-[8%] md:left-[15%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="w-12 h-20 md:w-24 md:h-36" />
+      {/* Palm Trees - Silhouettes (animated sway) Left*/}
+      <div className="absolute bottom-[23%] md:bottom-[22%] -left-[4%] md:left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
+        <PalmTree className="w-24 h-40 md:w-40 md:h-60" />
       </div>
 
-      <div className="absolute bottom-[20%] right-[8%] md:right-[20%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="w-12 h-20 md:w-20 md:h-32" />
+      <div className="absolute bottom-[24%] md:bottom-[22%] left-[8%] md:left-[15%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-14 h-24 md:w-24 md:h-36" />
       </div>
 
-      <div className="absolute bottom-[23%] -right-[4%] md:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
-        <PalmTree className="w-16 h-28 md:w-32 md:h-48" />
+      {/* Island Base Right */}
+      <div className="absolute bottom-[20%] -right-[5%] md:-right-[5%] lg:-right-[5%] w-[75vw] md:w-[50vw] lg:w-[45vw] h-[12vh] pointer-events-none text-silhouette">
+        <IslandBaseRight className="w-full h-full scale-x-[-1] drop-shadow-md" />
+      </div>
+
+      {/* Palm Trees - Silhouettes (animated sway) Right */}
+      <div className="absolute bottom-[25%] md:bottom-[22%] right-[8%] md:right-[20%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-14 h-24 md:w-20 md:h-32" />
+      </div>
+
+      <div className="absolute bottom-[24%] md:bottom-[23%] -right-[4%] md:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
+        <PalmTree className="w-24 h-40 md:w-32 md:h-48" />
       </div>
       {/*<div className="absolute bottom-[22%] right-[8%] text-silhouette/75 pointer-events-none">
         <div className="w-20 md:w-32 h-6 md:h-8 rounded-[50%] bg-current" />
