@@ -113,15 +113,15 @@ export function Hero({ latestSlug }: HeroProps) {
       {/* Palm Trees - Silhouettes (animated sway) Left*/}
       {/* Extra Desktop Tree (Far Left) */}
       <div className="absolute hidden md:block md:bottom-[19%] lg:bottom-[18%] md:-left-[5%] lg:-left-[2%] text-silhouette/65 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="md:w-64 md:h-64 lg:w-72 lg:h-72" />
+        <PalmTreeSmall className="md:w-48 md:h-48 lg:w-56 lg:h-56" />
       </div>
 
       <div className="absolute bottom-[20%] md:bottom-[18%] lg:bottom-[17%] -left-[4%] md:left-[2%] lg:left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
-        <PalmTree className="w-24 h-40 md:w-80 md:h-80 lg:w-96 lg:h-96" />
+        <PalmTree className="w-24 h-40 md:w-64 md:h-64 lg:w-72 lg:h-72" />
       </div>
 
-      <div className="absolute bottom-[24%] md:bottom-[21%] lg:bottom-[19%] left-[8%] md:left-[15%] lg:left-[18%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="w-14 h-24 md:w-56 md:h-56 lg:w-64 lg:h-64" />
+      <div className="absolute bottom-[21%] md:bottom-[21%] lg:bottom-[19%] left-[8%] md:left-[15%] lg:left-[18%] text-silhouette/70 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-14 h-24 md:w-44 md:h-44 lg:w-52 lg:h-52" />
       </div>
 
       {/* Island Base Right */}
@@ -132,15 +132,15 @@ export function Hero({ latestSlug }: HeroProps) {
       {/* Palm Trees - Silhouettes (animated sway) Right */}
       {/* Extra Desktop Tree (Far Right) */}
       <div className="absolute hidden md:block md:bottom-[19%] lg:bottom-[18%] md:-right-[2%] lg:right-[0%] text-silhouette/65 origin-bottom animate-palm-sway">
-        <PalmTreeSmall className="md:w-56 md:h-56 lg:w-64 lg:h-64" />
+        <PalmTreeSmall className="md:w-44 md:h-44 lg:w-52 lg:h-52" />
       </div>
 
-      <div className="absolute bottom-[25%] md:bottom-[22%] lg:bottom-[20%] right-[8%] md:right-[15%] lg:right-[18%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
-        <PalmTreeSmall className="w-14 h-24 md:w-48 md:h-48 lg:w-56 lg:h-56" />
+      <div className="absolute bottom-[21%] md:bottom-[22%] lg:bottom-[20%] right-[8%] md:right-[15%] lg:right-[18%] text-silhouette/60 origin-bottom animate-palm-sway-slow">
+        <PalmTreeSmall className="w-14 h-24 md:w-40 md:h-40 lg:w-48 lg:h-48" />
       </div>
 
-      <div className="absolute bottom-[21%] md:bottom-[19%] lg:bottom-[18%] -right-[4%] md:right-[5%] lg:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
-        <PalmTree className="w-24 h-40 md:w-72 md:h-72 lg:w-80 lg:h-80" />
+      <div className="absolute bottom-[20%] md:bottom-[19%] lg:bottom-[18%] -right-[4%] md:right-[5%] lg:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
+        <PalmTree className="w-24 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64" />
       </div>
       {/*<div className="absolute bottom-[22%] right-[8%] text-silhouette/75 pointer-events-none">
         <div className="w-20 md:w-32 h-6 md:h-8 rounded-[50%] bg-current" />
