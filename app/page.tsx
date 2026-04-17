@@ -51,7 +51,13 @@ export default async function HomePage() {
 
   const latestYear = publishedYears[0]?.slug;
   const currentEvent = publishedYears[0];
-  const currentPhotos = publishedYears[0]?.photos ?? [];
+
+  // Photo Highlights: prefer latest ended event with photos, fallback to any with photos
+  const now = new Date();
+  const photoEvent = publishedYears.find(
+    (e) => e.endDate && new Date(e.endDate) < now && e.photos.length > 0
+  ) ?? publishedYears.find((e) => e.photos.length > 0);
+  const currentPhotos = photoEvent?.photos ?? [];
   const pastEvents = await getPastEvents(latestYear);
 
   return (
@@ -93,7 +99,7 @@ export default async function HomePage() {
       )}
 
       {/* Photo Highlights Section — dark bg to make photos pop */}
-      {currentEvent && currentPhotos.length > 0 && (
+      {photoEvent && currentPhotos.length > 0 && (
         <section className="py-20 px-4 bg-silhouette text-sand-light">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-12">
@@ -104,14 +110,14 @@ export default async function HomePage() {
                 Photo Highlights
               </Badge>
               <h2 className="text-lg md:text-4xl font-display font-bold text-sand-light text-balance">
-                Moments from {currentEvent.name}
+                Moments from {photoEvent.name}
               </h2>
             </div>
             <PhotoGallery photos={currentPhotos.slice(0, 6)} />
             {currentPhotos.length > 6 && (
               <div className="text-center mt-8">
                 <Link
-                  href={`/live/${latestYear}`}
+                  href={`/live/${photoEvent.slug}`}
                   className="inline-flex items-center gap-2 text-sm font-medium text-sand-light/60 hover:text-sand-light transition-colors"
                 >
                   View all {currentPhotos.length} photos

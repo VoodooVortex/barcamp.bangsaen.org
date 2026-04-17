@@ -81,7 +81,7 @@ function EventCard({
         )}
 
         {/* Year overlay */}
-        <span className="absolute bottom-3 right-4 z-10 font-display text-4xl md:text-5xl font-black text-white/20 leading-none select-none">
+        <span className="absolute bottom-3 right-4 z-10 font-display text-4xl md:text-5xl font-black text-white/50 leading-none select-none">
           {event.year}
         </span>
       </div>
