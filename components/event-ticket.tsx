@@ -7,10 +7,15 @@ import Link from "next/link";
 interface EventTicketProps {
   event: {
     slug: string;
+    name: string;
+    edition?: number | null;
     startDate: string | Date | null;
     endDate: string | Date | null;
     location: string | null;
     sessions: { id: string }[];
+    ticketUrl?: string | null;
+    ticketOpenDate?: string | Date | null;
+    ticketCloseDate?: string | Date | null;
   };
 }
 
@@ -25,6 +30,10 @@ export function EventTicket({ event }: EventTicketProps) {
   }, []);
 
   if (!event.startDate) return null;
+
+  const eventDisplayName = event.edition
+    ? `Barcamp Bangsaen #${event.edition}`
+    : "Barcamp Bangsaen";
 
   const start = new Date(event.startDate);
   const end = event.endDate ? new Date(event.endDate) : null;
@@ -48,6 +57,17 @@ export function EventTicket({ event }: EventTicketProps) {
   }
 
   if (!isClient) countdownText = "";
+
+  // Ticket availability
+  const ticketOpen = event.ticketOpenDate ? new Date(event.ticketOpenDate) : null;
+  const ticketClose = event.ticketCloseDate ? new Date(event.ticketCloseDate) : null;
+  const ticketAvailable = !!(
+    event.ticketUrl &&
+    ticketOpen &&
+    ticketClose &&
+    now >= ticketOpen &&
+    now <= ticketClose
+  );
 
   const dateStr = new Intl.DateTimeFormat("en-US", {
     weekday: "short",
@@ -287,14 +307,14 @@ export function EventTicket({ event }: EventTicketProps) {
                 <>
                   Join us at{" "}
                   <span className="text-foreground font-bold not-italic">
-                    Barcamp Bangsaen #4
-                  </span>{" "}
-                  — live right now.
+                    {eventDisplayName}
+                  </span>
+                  .
                 </>
               ) : isEnded ? (
                 <>
                   <span className="text-foreground font-bold not-italic">
-                    Barcamp Bangsaen #4
+                    {eventDisplayName}
                   </span>{" "}
                   <span className="text-xs md:text-sm">
                     has ended. See you next year!
@@ -304,7 +324,7 @@ export function EventTicket({ event }: EventTicketProps) {
                 <>
                   See you soon at{" "}
                   <span className="text-foreground font-bold not-italic">
-                    Barcamp Bangsaen #4
+                    {eventDisplayName}
                   </span>
                   .
                 </>
@@ -335,16 +355,21 @@ export function EventTicket({ event }: EventTicketProps) {
           </div>
 
           {/* Countdown / CTA */}
-          <div className="mt-6 md:mt-12 flex items-center justify-between gap-3">
+          <div className="mt-4 md:mt-6 flex flex-wrap items-center justify-between gap-3">
             {countdownText && !isLive && !isEnded && (
               <p className="font-display italic text-xs md:text-sm text-sunset-orange">
                 {countdownText}
               </p>
             )}
-            {isEnded && (
-              <p className="font-display italic text-xs md:text-sm text-muted-foreground">
-                Event has ended · Thank you for joining ♡
-              </p>
+            {!isLive && !isEnded && ticketAvailable && (
+              <a
+                href={event.ticketUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-sunset-orange px-5 py-2 text-xs md:text-sm font-bold text-white shadow-md transition hover:bg-sunset-orange/90"
+              >
+                Get Tickets →
+              </a>
             )}
             {isLive && (
               <Link
@@ -353,6 +378,19 @@ export function EventTicket({ event }: EventTicketProps) {
               >
                 Watch Live →
               </Link>
+            )}
+            {isEnded && (
+              <div className="flex items-center justify-between gap-3 w-full">
+                <p className="font-display italic text-xs md:text-sm text-muted-foreground leading-relaxed">
+                  Event has ended<br />Thank you for joining ♡
+                </p>
+                <Link
+                  href={`/live/${event.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full bg-ocean-dark px-5 py-2 text-xs md:text-sm font-bold text-white shadow-md transition hover:bg-ocean-dark/90 shrink-0"
+                >
+                  View Event →
+                </Link>
+              </div>
             )}
           </div>
         </div>
