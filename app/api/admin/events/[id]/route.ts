@@ -62,7 +62,11 @@ export async function PATCH(
         if (data.slug !== undefined) updateData.slug = data.slug;
         if (data.name !== undefined) updateData.name = data.name;
         if (data.year !== undefined) updateData.year = data.year;
+        if (data.edition !== undefined) updateData.edition = data.edition;
         if (data.location !== undefined) updateData.location = data.location;
+        if (data.ticketUrl !== undefined) updateData.ticketUrl = data.ticketUrl;
+        if (data.ticketOpenDate !== undefined) updateData.ticketOpenDate = data.ticketOpenDate ? new Date(data.ticketOpenDate) : null;
+        if (data.ticketCloseDate !== undefined) updateData.ticketCloseDate = data.ticketCloseDate ? new Date(data.ticketCloseDate) : null;
         if (data.timezone !== undefined) updateData.timezone = data.timezone;
         if (data.startDate !== undefined) updateData.startDate = data.startDate ? new Date(data.startDate) : null;
         if (data.endDate !== undefined) updateData.endDate = data.endDate ? new Date(data.endDate) : null;

@@ -13,10 +13,14 @@ interface EventYear {
     slug: string;
     name: string;
     year?: number | null;
+    edition?: number | null;
     location?: string | null;
     timezone: string;
     startDate: string | null;
     endDate: string | null;
+    ticketUrl?: string | null;
+    ticketOpenDate?: string | null;
+    ticketCloseDate?: string | null;
     published: boolean;
     isCurrentYear: boolean;
 }
@@ -39,10 +43,14 @@ export function EventForm({
         slug: event?.slug || "",
         name: event?.name || "",
         year: event?.year ?? null as number | null,
+        edition: event?.edition ?? null as number | null,
         location: event?.location || "",
         timezone: event?.timezone || "Asia/Bangkok",
         startDate: event?.startDate ? new Date(event.startDate).toISOString() : "",
         endDate: event?.endDate ? new Date(event.endDate).toISOString() : "",
+        ticketUrl: event?.ticketUrl || "",
+        ticketOpenDate: event?.ticketOpenDate ? new Date(event.ticketOpenDate).toISOString() : "",
+        ticketCloseDate: event?.ticketCloseDate ? new Date(event.ticketCloseDate).toISOString() : "",
         published: event?.published ?? false,
         isCurrentYear: event?.isCurrentYear ?? false,
     });
@@ -77,9 +85,13 @@ export function EventForm({
             const payload = {
                 ...formData,
                 year: formData.year || null,
+                edition: formData.edition || null,
                 location: formData.location || null,
                 startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
                 endDate: formData.endDate ? new Date(formData.endDate).toISOString() : null,
+                ticketUrl: formData.ticketUrl || null,
+                ticketOpenDate: formData.ticketOpenDate ? new Date(formData.ticketOpenDate).toISOString() : null,
+                ticketCloseDate: formData.ticketCloseDate ? new Date(formData.ticketCloseDate).toISOString() : null,
             };
 
             const response = await fetch(url, {
@@ -135,6 +147,20 @@ export function EventForm({
                         min={2000}
                         max={2100}
                     />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="edition">Edition #</Label>
+                    <Input
+                        id="edition"
+                        type="number"
+                        value={formData.edition ?? ""}
+                        onChange={(e) => setFormData({ ...formData, edition: e.target.value ? parseInt(e.target.value) : null })}
+                        placeholder="e.g. 4"
+                        min={1}
+                        max={99}
+                    />
+                    <p className="text-xs text-muted-foreground">Shown as badge on Past Events cards</p>
                 </div>
             </div>
 
@@ -192,6 +218,38 @@ export function EventForm({
                     onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
                     placeholder="Asia/Bangkok"
                 />
+            </div>
+
+            {/* Ticket Sales */}
+            <div className="space-y-4 pt-2 border-t border-border">
+                <p className="text-sm font-semibold text-foreground pt-2">Ticket Sales</p>
+                <div className="space-y-2">
+                    <Label htmlFor="ticketUrl">Ticket URL</Label>
+                    <Input
+                        id="ticketUrl"
+                        type="url"
+                        value={formData.ticketUrl}
+                        onChange={(e) => setFormData({ ...formData, ticketUrl: e.target.value })}
+                        placeholder="https://www.eventpop.me/e/..."
+                    />
+                    <p className="text-xs text-muted-foreground">Eventpop or other ticket platform URL</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2 flex flex-col">
+                        <Label htmlFor="ticketOpenDate">Ticket Open Date</Label>
+                        <DateTimePicker
+                            date={formData.ticketOpenDate ? new Date(formData.ticketOpenDate) : undefined}
+                            setDate={(date) => setFormData({ ...formData, ticketOpenDate: date ? date.toISOString() : "" })}
+                        />
+                    </div>
+                    <div className="space-y-2 flex flex-col">
+                        <Label htmlFor="ticketCloseDate">Ticket Close Date</Label>
+                        <DateTimePicker
+                            date={formData.ticketCloseDate ? new Date(formData.ticketCloseDate) : undefined}
+                            setDate={(date) => setFormData({ ...formData, ticketCloseDate: date ? date.toISOString() : "" })}
+                        />
+                    </div>
+                </div>
             </div>
 
             <div className="space-y-3 pt-2">

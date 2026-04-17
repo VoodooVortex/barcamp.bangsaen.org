@@ -1,0 +1,1 @@
+ALTER TABLE "event_years" ADD COLUMN "edition" integer;

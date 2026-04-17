@@ -40,6 +40,7 @@ interface EventYear {
     slug: string;
     name: string;
     year?: number | null;
+    edition?: number | null;
     location?: string | null;
     timezone: string;
     startDate: string | null;
@@ -230,6 +231,7 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Slug</TableHead>
+                                <TableHead>Edition</TableHead>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Dates</TableHead>
                                 <TableHead>Stats</TableHead>
@@ -240,7 +242,7 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
                         <TableBody>
                             {filteredEvents.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={6} className="text-center py-8">
+                                    <TableCell colSpan={7} className="text-center py-8">
                                         <p className="text-muted-foreground mb-4">No events found</p>
                                         {searchQuery ? (
                                             <Button variant="outline" onClick={() => setSearchQuery("")}>
@@ -268,6 +270,9 @@ export default function EventsClient({ initialEvents }: EventsClientProps) {
                                                     </Badge>
                                                 )}
                                             </div>
+                                        </TableCell>
+                                        <TableCell className="text-center font-mono text-sm text-muted-foreground">
+                                            {event.edition ? `#${event.edition}` : "–"}
                                         </TableCell>
                                         <TableCell className="font-medium">
                                             <div>{event.name}</div>
