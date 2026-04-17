@@ -15,7 +15,7 @@ function IslandBaseLeft({ className }: { className?: string }) {
       className={className}
       aria-hidden="true"
       preserveAspectRatio="none"
-    > 
+    >
       {/* Distant background dune */}
       <path d="M 0 60 L 0 12 C 10 12, 30 12, 45 12 C 60 12, 75 18, 95 18 C 115 18, 130 35, 160 35 C 180 35, 195 45, 200 60 Z" fillOpacity="0.15" />
       {/* Midground dune */}
@@ -35,7 +35,7 @@ function IslandBaseRight({ className }: { className?: string }) {
       className={className}
       aria-hidden="true"
       preserveAspectRatio="none"
-    > 
+    >
       {/* Distant background dune */}
       <path d="M 0 60 L 0 8 C 10 8, 30 8, 50 8 C 70 8, 80 12, 100 12 C 120 12, 140 30, 180 30 C 190 30, 195 45, 200 60 Z" fillOpacity="0.15" />
       {/* Midground dune */}
@@ -50,21 +50,12 @@ function IslandBaseRight({ className }: { className?: string }) {
 function PalmTree({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 100 150"
+      viewBox="0 0 512 512"
       fill="currentColor"
       className={className}
       aria-hidden="true"
     >
-      {/* Trunk */}
-      <path d="M48 150 C48 150, 45 120, 46 100 C47 80, 50 60, 52 50 L48 150 Z" />
-      {/* Leaves */}
-      <path d="M52 50 Q80 30, 95 45 Q80 40, 52 50" />
-      <path d="M52 50 Q85 25, 98 35 Q82 32, 52 50" />
-      <path d="M52 50 Q75 20, 90 20 Q78 22, 52 50" />
-      <path d="M52 50 Q50 15, 60 5 Q55 18, 52 50" />
-      <path d="M52 50 Q30 20, 15 25 Q28 25, 52 50" />
-      <path d="M52 50 Q20 30, 5 40 Q22 35, 52 50" />
-      <path d="M52 50 Q25 45, 10 55 Q26 48, 52 50" />
+      <path d="M179.125 20.625c-28.052.12-54.046 5.813-66.72 9.78c0 0 114.968 19.51 124.532 98.876C149.573 3.32 54.28 155.657 54.28 155.657c19.868-5.212 76.76-20.682 114.75-14.156c25.992 4.465 51.33 28.03 50.236 27.733c-61.943 15.24-160.35 290.92-143.64 313.308c14.9 17.12 29.816 11.28 44.718 2.595c7.376-58.425 64.938-314.765 135.375-294.072c.01.003.02-.003.03 0c5.93 2.03 11.54 5.59 11.844 11.03c.58 10.363-6.11 27.3-4.53 39.063c3.662 27.296 9.007 36.79 16.78 46.313c18.564-10.435 36.326-48.057 40-67.564c16.634 7.284 43.373 24.155 65.187 86.813c11.404-58.716-5.042-105.03-59.03-125.595c23.38-10.105 125.142 41.03 137.563 69.53C475.648 199.264 390.167 136.378 319 139.72c13.644-3.56 28.638.6 42.906-9.907c19.146-14.098 41.474-26.24 62.28-39.282c-69.972-30.435-134.545-15.407-139.092 16.095c-3.573-69.916-57.83-86.204-105.97-86z" />
     </svg>
   );
 }
@@ -73,19 +64,13 @@ function PalmTree({ className }: { className?: string }) {
 function PalmTreeSmall({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 80 120"
+      viewBox="0 0 512 512"
       fill="currentColor"
       className={className}
+      style={{ transform: "scaleX(-1)" }}
       aria-hidden="true"
     >
-      <path d="M38 120 C38 120, 36 96, 37 80 C38 64, 40 48, 42 40 L38 120 Z" />
-      <path d="M42 40 Q65 24, 78 36 Q65 32, 42 40" />
-      <path d="M42 40 Q68 20, 80 28 Q66 26, 42 40" />
-      <path d="M42 40 Q60 16, 74 16 Q62 18, 42 40" />
-      <path d="M42 40 Q40 12, 50 4 Q45 14, 42 40" />
-      <path d="M42 40 Q24 16, 12 20 Q24 20, 42 40" />
-      <path d="M42 40 Q16 24, 4 32 Q18 28, 42 40" />
-      <path d="M42 40 Q20 36, 8 44 Q22 38, 42 40" />
+      <path d="M179.125 20.625c-28.052.12-54.046 5.813-66.72 9.78c0 0 114.968 19.51 124.532 98.876C149.573 3.32 54.28 155.657 54.28 155.657c19.868-5.212 76.76-20.682 114.75-14.156c25.992 4.465 51.33 28.03 50.236 27.733c-61.943 15.24-160.35 290.92-143.64 313.308c14.9 17.12 29.816 11.28 44.718 2.595c7.376-58.425 64.938-314.765 135.375-294.072c.01.003.02-.003.03 0c5.93 2.03 11.54 5.59 11.844 11.03c.58 10.363-6.11 27.3-4.53 39.063c3.662 27.296 9.007 36.79 16.78 46.313c18.564-10.435 36.326-48.057 40-67.564c16.634 7.284 43.373 24.155 65.187 86.813c11.404-58.716-5.042-105.03-59.03-125.595c23.38-10.105 125.142 41.03 137.563 69.53C475.648 199.264 390.167 136.378 319 139.72c13.644-3.56 28.638.6 42.906-9.907c19.146-14.098 41.474-26.24 62.28-39.282c-69.972-30.435-134.545-15.407-139.092 16.095c-3.573-69.916-57.83-86.204-105.97-86z" />
     </svg>
   );
 }
@@ -126,7 +111,7 @@ export function Hero({ latestSlug }: HeroProps) {
       </div>
 
       {/* Palm Trees - Silhouettes (animated sway) Left*/}
-      <div className="absolute bottom-[23%] md:bottom-[22%] -left-[4%] md:left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
+      <div className="absolute bottom-[20%] md:bottom-[19%] -left-[4%] md:left-[5%] text-silhouette/80 origin-bottom animate-palm-sway">
         <PalmTree className="w-24 h-40 md:w-40 md:h-60" />
       </div>
 
@@ -144,7 +129,7 @@ export function Hero({ latestSlug }: HeroProps) {
         <PalmTreeSmall className="w-14 h-24 md:w-20 md:h-32" />
       </div>
 
-      <div className="absolute bottom-[24%] md:bottom-[23%] -right-[4%] md:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
+      <div className="absolute bottom-[21%] md:bottom-[20%] -right-[4%] md:right-[8%] text-silhouette/75 origin-bottom animate-palm-sway">
         <PalmTree className="w-24 h-40 md:w-32 md:h-48" />
       </div>
       {/*<div className="absolute bottom-[22%] right-[8%] text-silhouette/75 pointer-events-none">
