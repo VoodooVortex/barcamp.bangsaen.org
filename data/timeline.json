@@ -13,7 +13,8 @@
     "title": "Barcamp Bangsaen 3",
     "date": "February 22, 2025",
     "time": "08:00 - 17:00",
-    "location": "EASTPark BUU — Eastern Economic Corridor Science Park, Burapha University"
+    "location": "EASTPark BUU — Eastern Economic Corridor Science Park, Burapha University",
+    "photoUrl": "/events/barcamp-3.jpg"
   },
   {
     "edition": 2,
@@ -21,7 +22,8 @@
     "title": "Barcamp Bangsaen 2",
     "date": "February 17, 2024",
     "time": "08:00 - 17:00",
-    "location": "EASTPark BUU — Eastern Economic Corridor Science Park, Burapha University"
+    "location": "EASTPark BUU — Eastern Economic Corridor Science Park, Burapha University",
+    "photoUrl": "/events/barcamp-2.jpg"
   },
   {
     "edition": 1,
@@ -29,6 +31,7 @@
     "title": "Barcamp Bangsaen 1",
     "date": "April 2, 2022",
     "time": "08:00 - 17:00",
-    "location": "Faculty of Informatics, Burapha University (6th Floor)"
+    "location": "Faculty of Informatics, Burapha University (6th Floor)",
+    "photoUrl": "/events/barcamp-1.jpg"
   }
 ]

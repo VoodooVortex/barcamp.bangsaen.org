@@ -15,7 +15,8 @@ import { EventTicket } from "@/components/event-ticket";
 import { PhotoGallery } from "@/components/photo-gallery";
 import { FeaturesSection } from "@/components/features-section";
 import { FAQSection } from "@/components/faq-section";
-import { TimelineSection } from "@/components/timeline-section";
+import { PastEventsSection } from "@/components/past-events-section";
+import { getPastEvents } from "@/lib/data/past-events";
 import { SponsorsSection } from "@/components/sponsors-section";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 
@@ -51,6 +52,7 @@ export default async function HomePage() {
   const latestYear = publishedYears[0]?.slug;
   const currentEvent = publishedYears[0];
   const currentPhotos = publishedYears[0]?.photos ?? [];
+  const pastEvents = await getPastEvents(latestYear);
 
   return (
     <div className="min-h-screen">
@@ -142,8 +144,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Timeline Section — Event History */}
-      <TimelineSection />
+      {/* Past Events — grid cards */}
+      <PastEventsSection events={pastEvents} />
 
       {/* Sponsors Section */}
       <SponsorsSection />
