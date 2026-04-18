@@ -4,6 +4,7 @@ import { eventYears } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/auth/admin";
 import { eventUpdateSchema, validateEventDateRange } from "@/lib/validations/event";
+import { handleApiError } from "@/lib/api/error-handler";
 
 // PATCH /api/admin/events/[id]
 export async function PATCH(
@@ -86,19 +87,7 @@ export async function PATCH(
 
         return NextResponse.json({ event: updatedEvent });
     } catch (error) {
-        console.error("Error updating event year:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to update event year" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to update event year");
     }
 }
 
@@ -154,18 +143,6 @@ export async function DELETE(
 
         return NextResponse.json({ success: true, message: "Event year deleted" });
     } catch (error) {
-        console.error("Error deleting event year:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to delete event year" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to delete event year");
     }
 }

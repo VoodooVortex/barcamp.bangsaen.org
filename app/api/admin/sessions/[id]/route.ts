@@ -7,6 +7,7 @@ import { eq, and, ne } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { sessionUpdateSchema, validateTimeRange, sessionsOverlap } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
+import { handleApiError } from "@/lib/api/error-handler";
 
 // PATCH /api/admin/sessions/[id]
 export async function PATCH(
@@ -125,19 +126,7 @@ export async function PATCH(
 
         return NextResponse.json({ session: updatedSession });
     } catch (error) {
-        console.error("Error updating session:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to update session" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to update session");
     }
 }
 
@@ -172,18 +161,6 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error deleting session:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to delete session" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to delete session");
     }
 }

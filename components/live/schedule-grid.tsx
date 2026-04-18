@@ -1,11 +1,14 @@
-// Schedule grid component
-// Displays sessions organized by venue and time
 "use client";
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { SessionBlock } from "./session-block";
+import {
+  formatDateHeader,
+  formatTime,
+  getDateKey,
+} from "@/lib/time/format";
 
 interface Venue {
   id: string;
@@ -40,11 +43,6 @@ type SessionsByVenueAndStartAt = Record<
   string,
   Record<string, Record<string, Session[]>>
 >;
-
-function getDateKey(timeStr: string) {
-  const d = new Date(timeStr);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
 
 export function ScheduleGrid({
   venues,
@@ -147,23 +145,6 @@ export function ScheduleGrid({
     return end <= currentTime;
   };
 
-  const formatTimeSlot = (timeStr: string) => {
-    return new Date(timeStr).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
-  const formatDateHeader = (timeStr: string) => {
-    return new Date(timeStr).toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  // Check if sessions span multiple days
   const hasMultipleDays = useMemo(() => {
     if (timeSlots.length === 0) return false;
     const firstDate = getDateKey(timeSlots[0]);
@@ -251,7 +232,7 @@ export function ScheduleGrid({
                 >
                   {/* Time label */}
                   <div className="text-sm font-bold text-slate-500 py-3 pr-4 border-r border-slate-200 dark:border-border border-b flex items-start">
-                    {formatTimeSlot(timeSlot)}
+                    {formatTime(timeSlot)}
                   </div>
 
                   {/* Sessions for each venue */}

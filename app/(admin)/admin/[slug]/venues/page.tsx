@@ -1,8 +1,9 @@
 import { db } from "@/lib/db";
-import { eventYears, venues } from "@/lib/db/schema";
+import { venues } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { requireAuthenticated } from "@/lib/auth/admin";
 import { notFound, redirect } from "next/navigation";
+import { getEventYearBySlug } from "@/lib/db/queries";
 import VenuesClient from "./venues-client";
 
 interface VenuesPageProps {
@@ -22,9 +23,7 @@ export default async function VenuesPage({ params }: VenuesPageProps) {
         notFound();
     }
 
-    const eventYear = await db.query.eventYears.findFirst({
-        where: eq(eventYears.slug, slug),
-    });
+    const eventYear = await getEventYearBySlug(slug);
 
     if (!eventYear) {
         notFound();

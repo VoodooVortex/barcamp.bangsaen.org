@@ -7,6 +7,7 @@ import { eq, and, ne } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { venueUpdateSchema } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
+import { handleApiError } from "@/lib/api/error-handler";
 
 // PATCH /api/admin/venues/[id]
 export async function PATCH(
@@ -75,19 +76,7 @@ export async function PATCH(
 
         return NextResponse.json({ venue: updatedVenue });
     } catch (error) {
-        console.error("Error updating venue:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to update venue" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to update venue");
     }
 }
 
@@ -133,18 +122,6 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error deleting venue:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to delete venue" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to delete venue");
     }
 }

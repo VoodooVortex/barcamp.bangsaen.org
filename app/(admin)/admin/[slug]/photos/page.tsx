@@ -1,8 +1,9 @@
 import { db } from "@/lib/db";
-import { eventYears, eventPhotos } from "@/lib/db/schema";
+import { eventPhotos } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { requireAuthenticated } from "@/lib/auth/admin";
 import { notFound, redirect } from "next/navigation";
+import { getEventYearBySlug } from "@/lib/db/queries";
 import PhotosClient from "./photos-client";
 
 interface PhotosPageProps {
@@ -19,9 +20,7 @@ export default async function PhotosPage({ params }: PhotosPageProps) {
     const { slug } = await params;
     if (!slug) notFound();
 
-    const eventYear = await db.query.eventYears.findFirst({
-        where: eq(eventYears.slug, slug),
-    });
+    const eventYear = await getEventYearBySlug(slug);
     if (!eventYear) notFound();
 
     const photosList = await db.query.eventPhotos.findMany({

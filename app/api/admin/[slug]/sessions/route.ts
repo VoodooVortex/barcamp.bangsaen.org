@@ -2,11 +2,13 @@
 // CRUD operations for sessions (admin only)
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sessions, eventYears, venues } from "@/lib/db/schema";
+import { sessions, venues } from "@/lib/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { sessionSchema, validateTimeRange, sessionsOverlap } from "@/lib/validations/session";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
+import { handleApiError } from "@/lib/api/error-handler";
+import { getEventYearBySlug } from "@/lib/db/queries";
 
 // GET /api/admin/[slug]/sessions
 export async function GET(
@@ -23,9 +25,7 @@ export async function GET(
             );
         }
 
-        const eventYear = await db.query.eventYears.findFirst({
-            where: eq(eventYears.slug, slug),
-        });
+        const eventYear = await getEventYearBySlug(slug);
 
         if (!eventYear) {
             return NextResponse.json(
@@ -46,19 +46,7 @@ export async function GET(
 
         return NextResponse.json({ sessions: sessionsList });
     } catch (error) {
-        console.error("Error fetching sessions:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to fetch sessions" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to fetch sessions");
     }
 }
 
@@ -77,9 +65,7 @@ export async function POST(
             );
         }
 
-        const eventYear = await db.query.eventYears.findFirst({
-            where: eq(eventYears.slug, slug),
-        });
+        const eventYear = await getEventYearBySlug(slug);
 
         if (!eventYear) {
             return NextResponse.json(
@@ -167,18 +153,6 @@ export async function POST(
 
         return NextResponse.json({ session: newSession }, { status: 201 });
     } catch (error) {
-        console.error("Error creating session:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to create session" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to create session");
     }
 }

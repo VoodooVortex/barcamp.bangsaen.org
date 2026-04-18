@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { eventPhotos, eventYears } from "@/lib/db/schema";
+import { eventPhotos } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
+import { getEventYearBySlug } from "@/lib/db/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function GET(
     _request: NextRequest,
@@ -12,9 +13,7 @@ export async function GET(
     try {
         const { slug } = await params;
 
-        const eventYear = await db.query.eventYears.findFirst({
-            where: eq(eventYears.slug, slug),
-        });
+        const eventYear = await getEventYearBySlug(slug);
         if (!eventYear || !eventYear.published) {
             return NextResponse.json({ error: "Event year not found" }, { status: 404 });
         }

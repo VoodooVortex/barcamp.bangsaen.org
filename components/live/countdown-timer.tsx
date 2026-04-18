@@ -1,39 +1,15 @@
-// Countdown timer component
-// Displays time remaining until session starts with live updates
 "use client";
 
 import { useState, useEffect } from "react";
+import {
+  calculateTimeRemaining,
+  formatTimeUnit,
+  type TimeRemaining,
+} from "@/lib/time/format";
 
 interface CountdownTimerProps {
   targetTime: string;
   className?: string;
-}
-
-interface TimeRemaining {
-  hours: number;
-  minutes: number;
-  seconds: number;
-  total: number;
-}
-
-function calculateTimeRemaining(targetTime: string): TimeRemaining {
-  const now = new Date().getTime();
-  const target = new Date(targetTime).getTime();
-  const total = target - now;
-
-  if (total <= 0) {
-    return { hours: 0, minutes: 0, seconds: 0, total: 0 };
-  }
-
-  const hours = Math.floor(total / (1000 * 60 * 60));
-  const minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((total % (1000 * 60)) / 1000);
-
-  return { hours, minutes, seconds, total };
-}
-
-function formatTimeUnit(value: number): string {
-  return value.toString().padStart(2, "0");
 }
 
 export function CountdownTimer({

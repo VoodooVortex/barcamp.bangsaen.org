@@ -1,5 +1,3 @@
-// Session block component for schedule grid
-// Displays a single session in the timeline
 "use client";
 
 import { motion } from "framer-motion";
@@ -11,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatTime } from "@/lib/time/format";
 
 interface Session {
   id: string;
@@ -35,14 +34,6 @@ export function SessionBlock({
   isPast,
   onClick,
 }: SessionBlockProps) {
-  const formatTime = (dateStr: string) => {
-    return new Date(dateStr).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
   const duration =
     (new Date(session.endAt).getTime() - new Date(session.startAt).getTime()) /
     (1000 * 60); // minutes

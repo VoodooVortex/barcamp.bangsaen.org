@@ -4,6 +4,7 @@ import { eventYears } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/auth/admin";
 import { eventSchema, validateEventDateRange } from "@/lib/validations/event";
+import { handleApiError } from "@/lib/api/error-handler";
 
 // GET /api/admin/events
 export async function GET() {
@@ -35,19 +36,7 @@ export async function GET() {
 
         return NextResponse.json({ events: enhancedEvents });
     } catch (error) {
-        console.error("Error fetching events:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to fetch events" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to fetch events");
     }
 }
 
@@ -117,18 +106,6 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ event: newEventYear }, { status: 201 });
     } catch (error) {
-        console.error("Error creating event:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to create event" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to create event");
     }
 }

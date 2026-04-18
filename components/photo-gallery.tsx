@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { X } from "lucide-react";
@@ -39,10 +40,13 @@ export function PhotoGallery({ photos }: PhotoGalleryProps) {
                             className="relative group cursor-pointer overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow"
                             onClick={() => setLightboxPhoto(photo)}
                         >
-                            <img
+                            <Image
                                 src={photo.imageUrl}
                                 alt={photo.caption ?? "Event photo"}
-                                className="w-full block object-cover transition-transform duration-300 group-hover:scale-105"
+                                width={0}
+                                height={0}
+                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                className="w-full h-auto block object-cover transition-transform duration-300 group-hover:scale-105"
                             />
                             {photo.caption && (
                                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -68,9 +72,12 @@ export function PhotoGallery({ photos }: PhotoGalleryProps) {
                     </button>
                     {lightboxPhoto && (
                         <div className="flex flex-col items-center">
-                            <img
+                            <Image
                                 src={lightboxPhoto.imageUrl}
                                 alt={lightboxPhoto.caption ?? "Event photo"}
+                                width={1600}
+                                height={1200}
+                                sizes="(max-width: 1024px) 100vw, 80vw"
                                 className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
                             />
                             {lightboxPhoto.caption && (

@@ -156,7 +156,9 @@ export const eventPhotosRelations = relations(eventPhotos, ({ one }) => ({
     }),
 }));
 
-export const roleEnum = pgEnum("role", ["admin", "staff"]);
+export const ROLES = ["admin", "staff"] as const;
+export type Role = (typeof ROLES)[number];
+export const roleEnum = pgEnum("role", ROLES);
 
 // Admin Users table (Whitelist)
 export const adminUsers = pgTable(

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { eventPhotos, eventYears } from "@/lib/db/schema";
+import { eventPhotos } from "@/lib/db/schema";
 import { eq, asc, desc } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { uploadEventPhoto } from "@/lib/supabase/storage";
@@ -8,6 +8,8 @@ import {
     ALLOWED_MIME_TYPES,
     MAX_FILE_SIZE_BYTES,
 } from "@/lib/validations/photo";
+import { handleApiError } from "@/lib/api/error-handler";
+import { getEventYearBySlug } from "@/lib/db/queries";
 
 export async function GET(
     _request: NextRequest,
@@ -16,9 +18,7 @@ export async function GET(
     try {
         const { slug } = await params;
 
-        const eventYear = await db.query.eventYears.findFirst({
-            where: eq(eventYears.slug, slug),
-        });
+        const eventYear = await getEventYearBySlug(slug);
         if (!eventYear) {
             return NextResponse.json({ error: "Event year not found" }, { status: 404 });
         }
@@ -32,11 +32,7 @@ export async function GET(
 
         return NextResponse.json({ photos });
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        console.error("Failed to fetch photos:", error);
-        return NextResponse.json({ error: "Failed to fetch photos" }, { status: 500 });
+        return handleApiError(error, "Failed to fetch photos");
     }
 }
 
@@ -47,9 +43,7 @@ export async function POST(
     try {
         const { slug } = await params;
 
-        const eventYear = await db.query.eventYears.findFirst({
-            where: eq(eventYears.slug, slug),
-        });
+        const eventYear = await getEventYearBySlug(slug);
         if (!eventYear) {
             return NextResponse.json({ error: "Event year not found" }, { status: 404 });
         }
@@ -103,10 +97,6 @@ export async function POST(
 
         return NextResponse.json({ photo: newPhoto }, { status: 201 });
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        console.error("Failed to upload photo:", error);
-        return NextResponse.json({ error: "Failed to upload photo" }, { status: 500 });
+        return handleApiError(error, "Failed to upload photo");
     }
 }

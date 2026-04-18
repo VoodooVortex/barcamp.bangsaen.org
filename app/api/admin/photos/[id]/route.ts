@@ -4,6 +4,7 @@ import { eventPhotos } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { deleteEventPhoto } from "@/lib/supabase/storage";
+import { handleApiError } from "@/lib/api/error-handler";
 
 export async function DELETE(
     _request: NextRequest,
@@ -29,10 +30,6 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        console.error("Failed to delete photo:", error);
-        return NextResponse.json({ error: "Failed to delete photo" }, { status: 500 });
+        return handleApiError(error, "Failed to delete photo");
     }
 }

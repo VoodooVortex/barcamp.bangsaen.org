@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { adminUsers } from "@/lib/db/schema";
+import { adminUsers, ROLES } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/auth/admin";
+import { handleApiError } from "@/lib/api/error-handler";
 import { z } from "zod";
 
 const userSchema = z.object({
     email: z.string().email(),
-    role: z.enum(["admin", "staff"]),
+    role: z.enum(ROLES),
     isActive: z.boolean().default(true),
 });
 
@@ -19,11 +20,7 @@ export async function GET() {
         });
         return NextResponse.json({ users });
     } catch (error) {
-        console.error("Error fetching users:", error);
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
+        return handleApiError(error, "Failed to fetch users");
     }
 }
 
@@ -55,10 +52,6 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ user: newUser }, { status: 201 });
     } catch (error) {
-        console.error("Error creating user:", error);
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+        return handleApiError(error, "Failed to create user");
     }
 }

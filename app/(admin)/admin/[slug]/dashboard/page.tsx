@@ -1,8 +1,9 @@
 // Admin dashboard page
 // Shows overview stats and quick actions
 import { db, withRetry } from "@/lib/db";
-import { eventYears, sessions, venues } from "@/lib/db/schema";
+import { sessions, venues } from "@/lib/db/schema";
 import { eq, and, count, gte, lte } from "drizzle-orm";
+import { getEventYearBySlug } from "@/lib/db/queries";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import {
@@ -23,9 +24,7 @@ interface DashboardPageProps {
 async function getDashboardData(slug: string) {
   return withRetry(
     async () => {
-      const eventYear = await db.query.eventYears.findFirst({
-        where: eq(eventYears.slug, slug),
-      });
+      const eventYear = await getEventYearBySlug(slug);
 
       if (!eventYear) {
         return null;

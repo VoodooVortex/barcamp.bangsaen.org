@@ -5,6 +5,7 @@ import { sessions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { broadcastScheduleUpdate } from "@/lib/socket/server";
+import { handleApiError } from "@/lib/api/error-handler";
 
 // POST /api/admin/sessions/[id]/control
 export async function POST(
@@ -88,18 +89,6 @@ export async function POST(
             message: `Session ${action === "reset" ? "reset" : action + "ed"} successfully`,
         });
     } catch (error) {
-        console.error("Error controlling session:", error);
-
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        return NextResponse.json(
-            { error: "Failed to control session" },
-            { status: 500 }
-        );
+        return handleApiError(error, "Failed to control session");
     }
 }

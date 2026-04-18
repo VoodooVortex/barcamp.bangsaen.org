@@ -2,10 +2,11 @@
 import { notFound, redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { eventYears } from "@/lib/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { Calendar, MapPin } from "lucide-react";
 import { YearSwitcher } from "@/components/admin/year-switcher";
 import { getCurrentUser } from "@/lib/auth/admin";
+import { getEventYearBySlug } from "@/lib/db/queries";
 
 interface YearLayoutProps {
   children: React.ReactNode;
@@ -22,9 +23,7 @@ export default async function YearLayout({
     notFound();
   }
 
-  const eventYear = await db.query.eventYears.findFirst({
-    where: eq(eventYears.slug, slug),
-  });
+  const eventYear = await getEventYearBySlug(slug);
 
   if (!eventYear) {
     notFound();

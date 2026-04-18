@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { adminUsers } from "@/lib/db/schema";
+import { adminUsers, ROLES } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/auth/admin";
+import { handleApiError } from "@/lib/api/error-handler";
 import { z } from "zod";
 
 const updateSchema = z.object({
-    role: z.enum(["admin", "staff"]).optional(),
+    role: z.enum(ROLES).optional(),
     isActive: z.boolean().optional(),
 });
 
@@ -39,11 +40,7 @@ export async function PATCH(
 
         return NextResponse.json({ user: updated });
     } catch (error) {
-        console.error("Error updating user:", error);
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
+        return handleApiError(error, "Failed to update user");
     }
 }
 
@@ -66,10 +63,6 @@ export async function DELETE(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Error deleting user:", error);
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
+        return handleApiError(error, "Failed to delete user");
     }
 }

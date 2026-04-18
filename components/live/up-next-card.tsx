@@ -1,5 +1,3 @@
-// Up Next card component
-// Displays upcoming sessions
 "use client";
 
 import { motion } from "framer-motion";
@@ -7,6 +5,7 @@ import { Clock, MapPin, User, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CountdownTimer } from "./countdown-timer";
+import { formatTime } from "@/lib/time/format";
 
 interface UpNextSession {
   id: string;
@@ -27,14 +26,6 @@ interface UpNextCardProps {
 }
 
 export function UpNextCard({ session }: UpNextCardProps) {
-  const formatTime = (dateStr: string) => {
-    return new Date(dateStr).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
-
   return (
     <motion.div
       layout

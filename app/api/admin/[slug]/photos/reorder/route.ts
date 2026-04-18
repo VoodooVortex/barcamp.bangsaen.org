@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
-import { eventPhotos, eventYears } from "@/lib/db/schema";
+import { eventPhotos } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
+import { handleApiError } from "@/lib/api/error-handler";
+import { getEventYearBySlug } from "@/lib/db/queries";
 
 const reorderSchema = z.object({
     orderedIds: z.array(z.string().uuid()),
@@ -16,9 +18,7 @@ export async function PATCH(
     try {
         const { slug } = await params;
 
-        const eventYear = await db.query.eventYears.findFirst({
-            where: eq(eventYears.slug, slug),
-        });
+        const eventYear = await getEventYearBySlug(slug);
         if (!eventYear) {
             return NextResponse.json({ error: "Event year not found" }, { status: 404 });
         }
@@ -47,10 +47,6 @@ export async function PATCH(
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Unauthorized")) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-        console.error("Failed to reorder photos:", error);
-        return NextResponse.json({ error: "Failed to reorder photos" }, { status: 500 });
+        return handleApiError(error, "Failed to reorder photos");
     }
 }

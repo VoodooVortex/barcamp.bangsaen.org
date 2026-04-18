@@ -1,5 +1,3 @@
-// On Air card component
-// Displays currently running sessions with live indicator
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,6 +5,12 @@ import { motion } from "framer-motion";
 import { Radio, MapPin, User, Clock, Hourglass } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  calculateTimeRemaining,
+  formatTime,
+  formatTimeUnit,
+  type TimeRemaining,
+} from "@/lib/time/format";
 
 interface OnAirSession {
   id: string;
@@ -25,33 +29,6 @@ interface OnAirSession {
 
 interface OnAirCardProps {
   session: OnAirSession;
-}
-
-interface TimeRemaining {
-  hours: number;
-  minutes: number;
-  seconds: number;
-  total: number;
-}
-
-function calculateTimeRemaining(endAt: string): TimeRemaining {
-  const now = new Date().getTime();
-  const end = new Date(endAt).getTime();
-  const total = end - now;
-
-  if (total <= 0) {
-    return { hours: 0, minutes: 0, seconds: 0, total: 0 };
-  }
-
-  const hours = Math.floor(total / (1000 * 60 * 60));
-  const minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((total % (1000 * 60)) / 1000);
-
-  return { hours, minutes, seconds, total };
-}
-
-function formatTimeUnit(value: number): string {
-  return value.toString().padStart(2, "0");
 }
 
 export function OnAirCard({ session }: OnAirCardProps) {
@@ -81,14 +58,6 @@ export function OnAirCard({ session }: OnAirCardProps) {
 
     return () => clearInterval(interval);
   }, [session.endAt]);
-
-  const formatTime = (dateStr: string) => {
-    return new Date(dateStr).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
 
   const formatTimeRemaining = () => {
     if (timeRemaining.total <= 0) {
