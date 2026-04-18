@@ -183,19 +183,19 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <h2 className="text-2xl font-bold ml-2 md:ml-0">Dashboard</h2>
         <div className="flex items-center gap-3">
           <Link
             href={`/live/${slug}`}
             target="_blank"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ExternalLink className="h-4 w-4" />
             View Live Page
           </Link>
           <div className="flex items-center gap-2">
             <Activity className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-muted-foreground">System Online</span>
+            <span className="text-xs md:text-sm text-muted-foreground">System Online</span>
           </div>
         </div>
       </div>
