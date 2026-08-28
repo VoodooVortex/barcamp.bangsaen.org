@@ -20,6 +20,7 @@ interface FileWithPreview {
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 10 * 1024 * 1024;
+const UPLOAD_CONCURRENCY = 4;
 
 export function PhotoUploadForm({ slug, onSuccess, onCancel }: PhotoUploadFormProps) {
     const [files, setFiles] = useState<FileWithPreview[]>([]);
@@ -98,31 +99,42 @@ export function PhotoUploadForm({ slug, onSuccess, onCancel }: PhotoUploadFormPr
         setError(null);
 
         let successCount = 0;
+        let done = 0;
+        let next = 0;
         const errors: string[] = [];
 
-        for (let i = 0; i < files.length; i++) {
-            setProgress(`Uploading ${i + 1}/${files.length}...`);
+        // Upload a few at a time: parallel is much faster than one-by-one, but an
+        // unbounded Promise.all would fire every file at once on a big selection.
+        const worker = async () => {
+            while (next < files.length) {
+                const { file } = files[next++];
 
-            try {
-                const formData = new FormData();
-                formData.append("file", files[i].file);
+                try {
+                    const formData = new FormData();
+                    formData.append("file", file);
 
-                const response = await fetch(`/api/admin/${slug}/photos`, {
-                    method: "POST",
-                    body: formData,
-                });
+                    const response = await fetch(`/api/admin/${slug}/photos`, {
+                        method: "POST",
+                        body: formData,
+                    });
 
-                if (!response.ok) {
-                    const data = await response.json();
-                    errors.push(data.error || `Failed: ${files[i].file.name}`);
-                    continue;
+                    if (response.ok) {
+                        successCount++;
+                    } else {
+                        const data = await response.json();
+                        errors.push(data.error || `Failed: ${file.name}`);
+                    }
+                } catch {
+                    errors.push(`Failed: ${file.name}`);
                 }
 
-                successCount++;
-            } catch {
-                errors.push(`Failed: ${files[i].file.name}`);
+                setProgress(`Uploading ${++done}/${files.length}...`);
             }
-        }
+        };
+
+        await Promise.all(
+            Array.from({ length: Math.min(UPLOAD_CONCURRENCY, files.length) }, worker)
+        );
 
         files.forEach((f) => URL.revokeObjectURL(f.preview));
 
