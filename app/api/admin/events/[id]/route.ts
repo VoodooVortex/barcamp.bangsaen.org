@@ -51,13 +51,6 @@ export async function PATCH(
             );
         }
 
-        // If setting this as current year, unset other current years first
-        if (data.isCurrentYear && !existingEvent.isCurrentYear) {
-            await db.update(eventYears)
-                .set({ isCurrentYear: false })
-                .where(eq(eventYears.isCurrentYear, true));
-        }
-
         // Remove undefined values
         const updateData: Record<string, unknown> = {};
         if (data.slug !== undefined) updateData.slug = data.slug;
@@ -79,11 +72,22 @@ export async function PATCH(
             updateData.updatedAt = new Date();
         }
 
-        const [updatedEvent] = await db
-            .update(eventYears)
-            .set(updateData)
-            .where(eq(eventYears.id, id))
-            .returning();
+        // Unset other current years and apply the update atomically
+        const updatedEvent = await db.transaction(async (tx) => {
+            if (data.isCurrentYear && !existingEvent.isCurrentYear) {
+                await tx.update(eventYears)
+                    .set({ isCurrentYear: false })
+                    .where(eq(eventYears.isCurrentYear, true));
+            }
+
+            const [event] = await tx
+                .update(eventYears)
+                .set(updateData)
+                .where(eq(eventYears.id, id))
+                .returning();
+
+            return event;
+        });
 
         return NextResponse.json({ event: updatedEvent });
     } catch (error) {

@@ -77,32 +77,35 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // If setting this as current year, must unset other current years first
-        if (data.isCurrentYear) {
-            await db.update(eventYears)
-                .set({ isCurrentYear: false })
-                .where(eq(eventYears.isCurrentYear, true));
-        }
+        // Unset other current years and insert the new one atomically
+        const newEventYear = await db.transaction(async (tx) => {
+            if (data.isCurrentYear) {
+                await tx.update(eventYears)
+                    .set({ isCurrentYear: false })
+                    .where(eq(eventYears.isCurrentYear, true));
+            }
 
-        // Insert new event
-        const [newEventYear] = await db
-            .insert(eventYears)
-            .values({
-                slug: data.slug,
-                name: data.name,
-                year: data.year ?? null,
-                edition: data.edition ?? null,
-                location: data.location ?? null,
-                ticketUrl: data.ticketUrl ?? null,
-                ticketOpenDate: data.ticketOpenDate ? new Date(data.ticketOpenDate) : null,
-                ticketCloseDate: data.ticketCloseDate ? new Date(data.ticketCloseDate) : null,
-                timezone: data.timezone,
-                startDate: data.startDate ? new Date(data.startDate) : null,
-                endDate: data.endDate ? new Date(data.endDate) : null,
-                published: data.published,
-                isCurrentYear: data.isCurrentYear,
-            })
-            .returning();
+            const [event] = await tx
+                .insert(eventYears)
+                .values({
+                    slug: data.slug,
+                    name: data.name,
+                    year: data.year ?? null,
+                    edition: data.edition ?? null,
+                    location: data.location ?? null,
+                    ticketUrl: data.ticketUrl ?? null,
+                    ticketOpenDate: data.ticketOpenDate ? new Date(data.ticketOpenDate) : null,
+                    ticketCloseDate: data.ticketCloseDate ? new Date(data.ticketCloseDate) : null,
+                    timezone: data.timezone,
+                    startDate: data.startDate ? new Date(data.startDate) : null,
+                    endDate: data.endDate ? new Date(data.endDate) : null,
+                    published: data.published,
+                    isCurrentYear: data.isCurrentYear,
+                })
+                .returning();
+
+            return event;
+        });
 
         return NextResponse.json({ event: newEventYear }, { status: 201 });
     } catch (error) {
