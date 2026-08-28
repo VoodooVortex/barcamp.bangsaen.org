@@ -8,21 +8,14 @@ import { eq } from "drizzle-orm";
 export type AuthenticatedUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;
 
 /**
- * Check if the current user is an admin
- */
-export async function isAdmin(): Promise<boolean> {
-    const user = await getCurrentUser();
-    return user?.isAdmin ?? false;
-}
-
-/**
  * Require admin access, throw error if not admin
  */
-export async function requireAdmin(): Promise<void> {
-    const admin = await isAdmin();
-    if (!admin) {
+export async function requireAdmin(): Promise<AuthenticatedUser> {
+    const user = await getCurrentUser();
+    if (!user?.isAdmin) {
         throw new Error("Unauthorized: Admin access required");
     }
+    return user;
 }
 
 async function requireWhitelistedUser(): Promise<AuthenticatedUser> {
