@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { eventPhotos } from "@/lib/db/schema";
-import { eq, asc, desc } from "drizzle-orm";
+import { eq, asc, desc, sql } from "drizzle-orm";
 import { requireEventManager } from "@/lib/auth/admin";
 import { uploadEventPhoto } from "@/lib/supabase/storage";
 import {
@@ -66,14 +66,6 @@ export async function POST(
             return NextResponse.json({ error: "File too large (max 10 MB)" }, { status: 400 });
         }
 
-        // Auto-increment order: max existing order + 1
-        const lastPhoto = await db.query.eventPhotos.findFirst({
-            where: eq(eventPhotos.eventYearId, eventYear.id),
-            orderBy: desc(eventPhotos.order),
-            columns: { order: true },
-        });
-        const nextOrder = lastPhoto ? lastPhoto.order + 1 : 0;
-
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
@@ -84,16 +76,34 @@ export async function POST(
             file.type
         );
 
-        const [newPhoto] = await db
-            .insert(eventPhotos)
-            .values({
-                eventYearId: eventYear.id,
-                imageUrl,
-                storagePath,
-                caption: null,
-                order: nextOrder,
-            })
-            .returning();
+        // Auto-increment order: max existing order + 1.
+        // Serialize per event year with an advisory lock so concurrent uploads
+        // cannot read the same max and end up with a duplicate order.
+        const newPhoto = await db.transaction(async (tx) => {
+            await tx.execute(
+                sql`select pg_advisory_xact_lock(hashtext(${eventYear.id}::text))`
+            );
+
+            const lastPhoto = await tx.query.eventPhotos.findFirst({
+                where: eq(eventPhotos.eventYearId, eventYear.id),
+                orderBy: desc(eventPhotos.order),
+                columns: { order: true },
+            });
+            const nextOrder = lastPhoto ? lastPhoto.order + 1 : 0;
+
+            const [photo] = await tx
+                .insert(eventPhotos)
+                .values({
+                    eventYearId: eventYear.id,
+                    imageUrl,
+                    storagePath,
+                    caption: null,
+                    order: nextOrder,
+                })
+                .returning();
+
+            return photo;
+        });
 
         return NextResponse.json({ photo: newPhoto }, { status: 201 });
     } catch (error) {
