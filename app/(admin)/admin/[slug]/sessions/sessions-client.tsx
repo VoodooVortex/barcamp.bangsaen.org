@@ -100,14 +100,22 @@ export default function SessionsClient({ initialSessions, slug }: SessionsClient
   }, [slug]);
 
   useEffect(() => {
-    fetchSessions();
-    
-    // ตั้งเวลา Fetch ข้อมูลใหม่ทุกๆ 5 วินาที (Polling) เพื่อให้อัปเดตแบบ quasi-realtime บน Vercel
-    const interval = setInterval(() => {
-      fetchSessions();
-    }, 5000);
+    // Fetch ข้อมูลใหม่ทุกๆ 5 วินาที (Polling) เพื่อให้อัปเดตแบบ quasi-realtime บน Vercel
+    // นับ 5 วินาทีหลัง request ก่อนหน้าเสร็จ ไม่ใช่ setInterval กัน request piling ตอน server ตอบช้า
+    let timer: ReturnType<typeof setTimeout>;
+    let cancelled = false;
 
-    return () => clearInterval(interval);
+    const poll = async () => {
+      await fetchSessions();
+      if (!cancelled) timer = setTimeout(poll, 5000);
+    };
+
+    poll();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [fetchSessions]);
 
   const handleDelete = async () => {

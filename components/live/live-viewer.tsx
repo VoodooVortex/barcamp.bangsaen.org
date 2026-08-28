@@ -218,14 +218,24 @@ export function LiveViewer({
     fetchStatus();
   }, [fetchSchedule, fetchStatus]);
 
-  // Polling fallback instead of WebSocket for serverless environments
+  // Polling fallback instead of WebSocket for serverless environments.
+  // Wait for the previous round to finish before scheduling the next one so slow
+  // responses cannot pile up requests.
   useEffect(() => {
-    const pollInterval = setInterval(() => {
-      fetchSchedule();
-      fetchStatus();
-    }, 10000); // Poll every 10 seconds
+    let timer: ReturnType<typeof setTimeout>;
+    let cancelled = false;
 
-    return () => clearInterval(pollInterval);
+    const poll = async () => {
+      await Promise.all([fetchSchedule(), fetchStatus()]);
+      if (!cancelled) timer = setTimeout(poll, 10000);
+    };
+
+    timer = setTimeout(poll, 10000);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [fetchSchedule, fetchStatus]);
 
   // Tag toggle handler
