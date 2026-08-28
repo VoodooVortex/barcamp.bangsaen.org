@@ -14,24 +14,40 @@ if (!databaseUrl) {
     );
 }
 
-// Create connection pool with optimized settings
-const pool = new Pool({
-    connectionString: databaseUrl,
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000, // Increased from 2000 to 10000ms
-    statement_timeout: 30000, // 30 seconds query timeout
-    query_timeout: 30000,
-    // Retry failed connections
-    keepAlive: true,
-    keepAliveInitialDelayMillis: 10000,
-});
+// Connection pool.
+// DATABASE_URL points at the Supabase pooler (pgbouncer), and on serverless every
+// instance opens its own pool, so keep `max` small: an instance handles very few
+// concurrent requests, and a large cap here multiplies across instances until the
+// pooler runs out of client slots.
+function createPool() {
+    const pool = new Pool({
+        connectionString: databaseUrl,
+        max: 5,
+        idleTimeoutMillis: 10000, // release idle connections quickly on serverless
+        connectionTimeoutMillis: 10000,
+        statement_timeout: 30000, // 30 seconds query timeout
+        query_timeout: 30000,
+        // Retry failed connections
+        keepAlive: true,
+        keepAliveInitialDelayMillis: 10000,
+    });
 
-// Handle pool errors to prevent crashes
-pool.on("error", (err) => {
-    console.error("Unexpected database pool error:", err);
-    // Don't exit - let the app try to recover
-});
+    // Handle pool errors to prevent crashes
+    pool.on("error", (err) => {
+        console.error("Unexpected database pool error:", err);
+        // Don't exit - let the app try to recover
+    });
+
+    return pool;
+}
+
+// Reuse one pool across dev hot reloads, which would otherwise leak a pool per reload
+const globalForDb = globalThis as typeof globalThis & { __dbPool?: Pool };
+const pool = globalForDb.__dbPool ?? createPool();
+
+if (process.env.NODE_ENV !== "production") {
+    globalForDb.__dbPool = pool;
+}
 
 // Create Drizzle client
 export const db = drizzle(pool, { schema });
