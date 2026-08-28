@@ -19,9 +19,9 @@ This skill provides a systematic, severity-rated approach to auditing web applic
 
 ## Quick Links
 
-- **Methodology**: Detailed audit process in [methodology.md](file:///c:/Users/warat/Documents/project/CorgiDev/cyber-security-skills/.agent/skills/owasp-audit/resources/methodology.md)
-- **Classification**: Severity framework in [severity_guidance.md](file:///c:/Users/warat/Documents/project/CorgiDev/cyber-security-skills/.agent/skills/owasp-audit/resources/severity_guidance.md)
-- **Checklist**: Actionable check items in [audit_checklist.md](file:///c:/Users/warat/Documents/project/CorgiDev/cyber-security-skills/.agent/skills/owasp-audit/resources/audit_checklist.md)
+- **Methodology**: Detailed audit process in [methodology.md](resources/methodology.md)
+- **Classification**: Severity framework in [severity_guidance.md](resources/severity_guidance.md)
+- **Checklist**: Actionable check items in [audit_checklist.md](resources/audit_checklist.md)
 
 ## Core Resources Reference
 
